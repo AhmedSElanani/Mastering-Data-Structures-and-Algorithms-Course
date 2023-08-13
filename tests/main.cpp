@@ -4,7 +4,7 @@
 /// @param argc
 /// @param argv
 /// @return status from executing the test cases
-int main(int argc, char *argv[]) {
+auto main(int argc, char *argv[]) -> int {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

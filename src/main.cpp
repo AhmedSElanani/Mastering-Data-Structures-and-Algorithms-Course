@@ -1,16 +1,17 @@
 #include <iostream>
+
 /// @brief return codes for main function
 namespace {
-static constexpr auto SUCCESS = 0;
-static constexpr auto GENERAL_ERROR = -1;
+constexpr auto kSuccess = 0;
+constexpr auto kGeneralError = -1;
 }  // namespace
 
 /// @brief main entry point
 /// @param argc
 /// @param argv
 /// @return SUCCESS or GENERAL_ERROR depending on the execution status
-int main(int argc, char* argv[]) {
+auto main(int, char *[]) -> int {
   std::cout << "Hello Data Structures and Algorithms!!" << std::endl;
 
-  return SUCCESS;
+  return kSuccess;
 }
