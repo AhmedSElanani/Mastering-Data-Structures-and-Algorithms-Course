@@ -10,6 +10,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS FALSE)
 
+# Enable the generation of the compilation database for all targets
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # add subdirectory for the source files
 add_subdirectory(src)
 
@@ -24,7 +27,7 @@ else()
 endif()
 
 # option for generating Doxygen
-option(BUILD_DOCS "Option to turn On/OFF generating Doxygen" ON)
+option(BUILD_DOCS "Option to turn On/OFF generating Doxygen" OFF)
 
 if(BUILD_DOCS)
     message(STATUS "Generating Doxygen: Enabled")
