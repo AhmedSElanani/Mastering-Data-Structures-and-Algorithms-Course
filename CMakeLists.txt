@@ -44,7 +44,6 @@ add_subdirectory(src)
 
 # option for building unit tests
 option(BUILD_TESTS "Option to turn On/OFF building tests" ON)
-
 if(BUILD_TESTS)
   message(STATUS "Building Tests: Enabled")
   add_subdirectory(test)
@@ -52,9 +51,24 @@ else()
   message(STATUS "Building Tests: Disabled")
 endif()
 
+# option for using ccache
+option(USE_CCACHE "Use ccache for compilation" ON)
+if(USE_CCACHE)
+  # Optionally, set the cache size
+  set(CCACHE_MAXSIZE
+      "1G"
+      CACHE STRING "Maximum size of ccache cache")
+
+  message(STATUS "Using ccache for compilation of max size: " ${CCACHE_MAXSIZE})
+  set(CMAKE_C_COMPILER_LAUNCHER "ccache")
+  set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
+  set(ENV{CCACHE_MAXSIZE} ${CCACHE_MAXSIZE})
+else()
+  message(STATUS "Not using ccache for compilation")
+endif()
+
 # option for generating Doxygen
 option(BUILD_DOCS "Option to turn On/OFF generating Doxygen" OFF)
-
 if(BUILD_DOCS)
   message(STATUS "Generating Doxygen: Enabled")
   add_subdirectory(docs)
