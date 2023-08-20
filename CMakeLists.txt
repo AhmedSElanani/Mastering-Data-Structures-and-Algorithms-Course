@@ -12,6 +12,9 @@ set(CMAKE_CXX_EXTENSIONS FALSE)
 
 # add compilation flags
 add_compile_options(
+  # stack protection flag
+  -fstack-protector-strong
+  # necessary warning flags for gcc
   -Wall
   -Wextra
   -Wshadow
