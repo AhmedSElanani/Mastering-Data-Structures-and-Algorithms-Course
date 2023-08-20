@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 # Require dot, treat the other components as optional
-find_package(Doxygen
-    REQUIRED dot
-    OPTIONAL_COMPONENTS mscgen dia)
+find_package(Doxygen REQUIRED dot OPTIONAL_COMPONENTS mscgen dia)
 
 # project-specific Doxygen options
 set(DOXYGEN_PROJECT_NAME "Mastering Data Structures and Algorithms Course")
@@ -16,7 +14,12 @@ set(DOXYGEN_DISTRIBUTE_GROUP_DOC YES)
 set(DOXYGEN_EXCLUDE "")
 set(DOXYGEN_EXTRACT_ALL YES)
 set(DOXYGEN_EXTRACT_LOCAL_CLASSES YES)
-set(DOXYGEN_FILE_PATTERNS *.dox *.cpp *.hpp *.in)
+set(DOXYGEN_FILE_PATTERNS
+    *.dox
+    *.cpp
+    *.hpp
+    *.h
+    *.in)
 set(DOXYGEN_GENERATE_TREEVIEW YES)
 set(DOXYGEN_HIDE_FRIEND_COMPOUNDS NO)
 set(DOXYGEN_HIDE_IN_BODY_DOCS YES)
@@ -31,9 +34,9 @@ set(DOXYGEN_SORT_MEMBER_DOCS NO)
 set(DOXYGEN_SOURCE_BROWSER YES)
 set(DOXYGEN_STRIP_CODE_COMMENTS NO)
 
-doxygen_add_docs(doc
-    "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/src"
-    "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/tests"
-    ALL
-    COMMENT "Generate HTML documentation"
-)
+doxygen_add_docs(
+  doc
+  "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/src"
+  "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/tests"
+  ALL
+  COMMENT "Generate HTML documentation")
