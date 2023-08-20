@@ -1,0 +1,15 @@
+// Depending on how the project is compiled, some code
+// snippets are unused. So, some of the functions are not called.
+unusedFunction
+
+// missingIncludeSystem: Cppcheck can handle whether a system header (e. g.
+// stdio.h) can not be found, so we do not want those warnings.
+missingIncludeSystem
+
+// Sometimes, Cppcheck doesn't find all the included headers (e. g.
+// gtest headers under build/_deps), so we do not want those warnings either.
+missingInclude
+
+// If Cppcheck does not find any errors to be suppressed,
+// it would raise a warning by default. This entry prevents that.
+unmatchedSuppression
