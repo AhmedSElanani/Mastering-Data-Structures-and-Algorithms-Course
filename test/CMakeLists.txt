@@ -25,9 +25,13 @@ set(DS_ALGO_TEST_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
 # set link libraries
 set(DS_ALGO_TEST_LINK_LIBRARIES gtest gmock)
 
+# set include directories
+set(DS_ALGO_TEST_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
+
 # add tests executable for the project
 add_executable(${TARGET_NAME} ${DS_ALGO_TEST_SRCS})
 target_compile_options(${TARGET_NAME} PRIVATE ${ADDITIONAL_COMPILE_OPTIONS})
+target_include_directories(${TARGET_NAME} PRIVATE ${DS_ALGO_TEST_INCLUDE_DIR})
 target_link_libraries(${TARGET_NAME} PRIVATE ${DS_ALGO_TEST_LINK_LIBRARIES})
 
 # set additional compile flags for sanitized targets
@@ -46,6 +50,7 @@ target_link_options(${TARGET_NAME_ADDRESS_SANITIZED} PRIVATE -fsanitize=address)
 set_target_properties(
   ${TARGET_NAME_ADDRESS_SANITIZED} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                               "${CMAKE_CURRENT_BINARY_DIR}/address-sanitized")
+target_include_directories(${TARGET_NAME_ADDRESS_SANITIZED} PRIVATE ${DS_ALGO_TEST_INCLUDE_DIR})
 target_link_libraries(${TARGET_NAME_ADDRESS_SANITIZED} PRIVATE ${DS_ALGO_TEST_LINK_LIBRARIES})
 
 # add another tests target with UndefinedBehaviorSanitizer
@@ -59,6 +64,7 @@ target_link_options(${TARGET_NAME_UNDEFINED_SANITIZED} PRIVATE -fsanitize=undefi
 set_target_properties(
   ${TARGET_NAME_UNDEFINED_SANITIZED} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                                 "${CMAKE_CURRENT_BINARY_DIR}/undefined-sanitized")
+target_include_directories(${TARGET_NAME_UNDEFINED_SANITIZED} PRIVATE ${DS_ALGO_TEST_INCLUDE_DIR})
 target_link_libraries(${TARGET_NAME_UNDEFINED_SANITIZED} PRIVATE ${DS_ALGO_TEST_LINK_LIBRARIES})
 
 # add another tests target with ThreadSanitizer
@@ -72,6 +78,7 @@ target_link_options(${TARGET_NAME_THREAD_SANITIZED} PRIVATE -fsanitize=thread)
 set_target_properties(
   ${TARGET_NAME_THREAD_SANITIZED} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                              "${CMAKE_CURRENT_BINARY_DIR}/thread-sanitized")
+target_include_directories(${TARGET_NAME_THREAD_SANITIZED} PRIVATE ${DS_ALGO_TEST_INCLUDE_DIR})
 target_link_libraries(${TARGET_NAME_THREAD_SANITIZED} PRIVATE ${DS_ALGO_TEST_LINK_LIBRARIES})
 
 # add another tests target with LeakSanitizer
@@ -85,4 +92,5 @@ target_link_options(${TARGET_NAME_LEAK_SANITIZED} PRIVATE -fsanitize=leak)
 set_target_properties(
   ${TARGET_NAME_LEAK_SANITIZED} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                            "${CMAKE_CURRENT_BINARY_DIR}/leak-sanitized")
+target_include_directories(${TARGET_NAME_LEAK_SANITIZED} PRIVATE ${DS_ALGO_TEST_INCLUDE_DIR})
 target_link_libraries(${TARGET_NAME_LEAK_SANITIZED} PRIVATE ${DS_ALGO_TEST_LINK_LIBRARIES})
