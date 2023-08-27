@@ -16,6 +16,7 @@ Checks: >
   performance-*,
   portability-*,
   readability-*,
+  -misc-no-recursion,
 
 # Turn all the warnings from the checks above into errors.
 WarningsAsErrors: "*"
@@ -28,7 +29,7 @@ CheckOptions:
       key: readability-identifier-naming.TemplateParameterCase,
       value: CamelCase,
     }
-  - { key: readability-identifier-naming.FunctionCase, value: CamelCase }
+  - { key: readability-identifier-naming.FunctionCase, value: camelBack }
   - { key: readability-identifier-naming.VariableCase, value: lower_case }
   - { key: readability-identifier-naming.PrivateMemberSuffix, value: _ }
   - { key: readability-identifier-naming.ProtectedMemberSuffix, value: _ }
