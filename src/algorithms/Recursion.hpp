@@ -44,5 +44,27 @@ public:
     return (pow % 2U ? num * power(num * num, pow / 2U)
                      : power(num * num, pow / 2U));
   }
+
+  /// @brief method that calculates e^x with resolution n-terms using Taylor's
+  ///        Seires
+  /// @param x the power to which the natural number e is raised
+  /// @param n the number of n-terms which also represents the resolution of
+  ///          calculation
+  /// @return e^x calculated at certain point with resolution n-terms using
+  ///         Taylor's Seires
+  /// @note from the expansion: e^x|N = 1 + x^1/2! + x^2/2! + ... + x^N/N!
+  ///                                 = e^x|N-1 + x^N/N!
+  ///
+  ///                      and: X^N = X * X^N-1, N! = N * (N-1)!
+  static constexpr auto exp(NaturalNumber auto x, NaturalNumber auto n)
+      -> double {
+    if (x == 0U || n == 0U) {
+      return 1.0;
+    }
+
+    return (static_cast<double>(power(x, n)) /
+            static_cast<double>(factorial(n))) +
+           exp(x, n - 1U);
+  }
 };
 }  // namespace algorithms
