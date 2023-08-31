@@ -50,19 +50,23 @@ TEST_F(FactorialTest, PositiveInputs) {
 /// @brief namespace for power tests
 namespace algorithms_test::power_test {
 
-/// @brief class for testing power method
-class PowerTest : public ::testing::TestWithParam<int> {};
+/// @brief class with parameters for testing power method
+class PowerTestWithParam : public ::testing::TestWithParam<int> {};
 
-TEST_P(PowerTest, PowerZero) {
+TEST_P(PowerTestWithParam, PowerZero) {
   EXPECT_EQ(::algorithms::Recursion::power(GetParam(), 0U), 1U);
 }
 
-TEST_P(PowerTest, PowerOne) {
+TEST_P(PowerTestWithParam, PowerOne) {
   const auto param{GetParam()};
   EXPECT_EQ(::algorithms::Recursion::power(param, 1U), param);
 }
 
-INSTANTIATE_TEST_SUITE_P(RangeTests, PowerTest, ::testing::Range<int>(-3, 3));
+INSTANTIATE_TEST_SUITE_P(RangeTests, PowerTestWithParam,
+                         ::testing::Range<int>(-3, 3));
+
+/// @brief class for testing power method
+class PowerTest : public ::testing::Test {};
 
 TEST_F(PowerTest, PositiveInputs) {
   EXPECT_EQ(::algorithms::Recursion::power(3, 2U), 9U);
