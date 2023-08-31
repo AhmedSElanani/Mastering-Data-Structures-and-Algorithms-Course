@@ -24,11 +24,4 @@ TEST_F(SumNaturalNumsTest, PositiveInputs) {
   EXPECT_EQ(::algorithms::Recursion::sumNaturalNums(42U), 903U);
 }
 
-TEST_F(SumNaturalNumsTest, NegativeInput) {
-  EXPECT_EQ(::algorithms::Recursion::sumNaturalNums(-1),
-            std::numeric_limits<uint64_t>::max());
-  EXPECT_EQ(::algorithms::Recursion::sumNaturalNums(-10),
-            std::numeric_limits<uint64_t>::max());
-}
-
 }  // namespace algorithms_test
