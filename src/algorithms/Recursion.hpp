@@ -1,7 +1,7 @@
 #pragma once
 
-#include <concepts>
-#include <cstdint>
+#include <cstddef>
+#include <type_traits>
 
 /// @brief namespace for algorithms implemented
 namespace algorithms {

@@ -1,7 +1,5 @@
 #include "algorithms/Recursion.hpp"
 
-#include <limits>
-
 #include "gtest/gtest.h"
 
 /// @brief namespace for sumNaturalNums tests
