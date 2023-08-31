@@ -1,10 +1,15 @@
 #pragma once
 
+#include <concepts>
 #include <cstdint>
 #include <limits>
 
 /// @brief namespace for algorithms implemented
 namespace algorithms {
+
+/// @brief concept for natural numbers
+template <typename T>
+concept NaturalNumber = std::is_unsigned_v<T>;
 
 /// @brief class holding recursive algorithms
 class Recursion {
