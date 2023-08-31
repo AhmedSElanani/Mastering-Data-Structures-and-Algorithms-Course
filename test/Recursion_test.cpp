@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-/// @brief
+/// @brief namespace for sumNaturalNums tests
 namespace algorithms_test::sumNaturalNums_test {
 
 /// @brief class for testing sumNaturalNums method
@@ -25,7 +25,7 @@ TEST_F(SumNaturalNumsTest, PositiveInputs) {
 }
 }  // namespace algorithms_test::sumNaturalNums_test
 
-/// @brief class for testing factorial method
+/// @brief namespace for factorial tests
 namespace algorithms_test::factorial_test {
 
 /// @brief class for testing factorial method
@@ -48,3 +48,38 @@ TEST_F(FactorialTest, PositiveInputs) {
 }
 
 }  // namespace algorithms_test::factorial_test
+
+/// @brief namespace for power tests
+namespace algorithms_test::power_test {
+
+/// @brief class for testing power method
+class PowerTest : public ::testing::TestWithParam<int> {};
+
+TEST_P(PowerTest, PowerZero) {
+  EXPECT_EQ(::algorithms::Recursion::power(GetParam(), 0U), 1U);
+}
+
+TEST_P(PowerTest, PowerOne) {
+  const auto param{GetParam()};
+  EXPECT_EQ(::algorithms::Recursion::power(param, 1U), param);
+}
+
+INSTANTIATE_TEST_SUITE_P(RangeTests, PowerTest, ::testing::Range<int>(-3, 3));
+
+TEST_F(PowerTest, PositiveInputs) {
+  EXPECT_EQ(::algorithms::Recursion::power(3, 2U), 9U);
+  EXPECT_EQ(::algorithms::Recursion::power(3, 3U), 27U);
+  EXPECT_EQ(::algorithms::Recursion::power(3, 4U), 81U);
+  EXPECT_EQ(::algorithms::Recursion::power(3, 5U), 243U);
+  EXPECT_EQ(::algorithms::Recursion::power(3, 6U), 729U);
+}
+
+TEST_F(PowerTest, NegativeInputs) {
+  EXPECT_EQ(::algorithms::Recursion::power(-4, 2U), 16);
+  EXPECT_EQ(::algorithms::Recursion::power(-4, 3U), -64);
+  EXPECT_EQ(::algorithms::Recursion::power(-4, 4U), 256);
+  EXPECT_EQ(::algorithms::Recursion::power(-4, 5U), -1024);
+  EXPECT_EQ(::algorithms::Recursion::power(-4, 6U), 4096);
+}
+
+}  // namespace algorithms_test::power_test
