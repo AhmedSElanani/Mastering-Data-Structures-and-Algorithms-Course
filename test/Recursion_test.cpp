@@ -5,9 +5,9 @@
 #include "gtest/gtest.h"
 
 /// @brief
-namespace algorithms_test {
+namespace algorithms_test::sumNaturalNums_test {
 
-/// @brief
+/// @brief class for testing sumNaturalNums method
 class SumNaturalNumsTest : public ::testing::Test {};
 
 TEST_F(SumNaturalNumsTest, SumUpToZero) {
@@ -23,5 +23,7 @@ TEST_F(SumNaturalNumsTest, PositiveInputs) {
   EXPECT_EQ(::algorithms::Recursion::sumNaturalNums(9U), 45U);
   EXPECT_EQ(::algorithms::Recursion::sumNaturalNums(42U), 903U);
 }
+}  // namespace algorithms_test::sumNaturalNums_test
+
 
 }  // namespace algorithms_test
