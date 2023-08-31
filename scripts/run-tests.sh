@@ -2,8 +2,16 @@
 
 # Function to run an executable
 run_executable() {
-    echo "Running: $1"
-    ./"$1"
+    local executable="$1"
+    local filter="$2"
+
+    echo "Running: $executable with filter: $filter"
+
+    if [ -z "$filter" ]; then
+        ./"$executable"
+    else
+        ./"$executable" --gtest_filter="$filter"
+    fi
 }
 
 # Directory to start the search
