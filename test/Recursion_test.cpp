@@ -1,5 +1,7 @@
 #include "algorithms/Recursion.hpp"
 
+#include <cstdint>
+
 #include "gtest/gtest.h"
 
 /// @brief namespace for sumNaturalNums tests
@@ -85,3 +87,39 @@ TEST_F(PowerTest, NegativeInputs) {
 }
 
 }  // namespace algorithms_test::power_test
+
+/// @brief namespace for exp tests
+namespace algorithms_test::exp_test {
+
+/// @brief class with parameters for testing exp method
+class ExpTestwithParam : public ::testing::TestWithParam<std::uint8_t> {};
+
+TEST_P(ExpTestwithParam, ExpZero) {
+  EXPECT_EQ(::algorithms::Recursion::exp(0U, GetParam()), 1U);
+}
+
+INSTANTIATE_TEST_SUITE_P(RangeTests, ExpTestwithParam,
+                         ::testing::Range<std::uint8_t>(1U, 10U));
+
+/// @brief class for testing exp method
+class ExpTest : public ::testing::Test {};
+
+TEST_F(ExpTest, ExpOne) {
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 0U), 1.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 1U), 2.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 2U), 2.5, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 3U), 2.666667, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 4U), 2.708334, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(1U, 5U), 2.716667, 0.000001);
+}
+
+TEST_F(ExpTest, ExpTwo) {
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 0U), 1.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 1U), 3.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 2U), 5, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 3U), 6.333333, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 4U), 7.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp(2U, 5U), 7.266667, 0.000001);
+}
+
+}  // namespace algorithms_test::exp_test
