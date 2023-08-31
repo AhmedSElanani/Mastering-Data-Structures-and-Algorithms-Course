@@ -41,7 +41,8 @@ public:
       return num;
     }
 
-    return num * power(num, pow - 1U);
+    return (pow % 2U ? num * power(num * num, pow / 2U)
+                     : power(num * num, pow / 2U));
   }
 };
 }  // namespace algorithms
