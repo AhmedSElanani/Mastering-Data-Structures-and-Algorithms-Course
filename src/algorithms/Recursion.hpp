@@ -19,6 +19,11 @@ public:
   static constexpr auto sumNaturalNums(NaturalNumber auto num) -> std::size_t {
     return (num == 0U || num == 1U) ? num : num + sumNaturalNums(num - 1U);
   }
+  /// @brief method returns the factorial of the natural number N
+  /// @param num input N value
+  /// @return the factorial of the natural number N
+  static constexpr auto factorial(NaturalNumber auto num) -> std::size_t {
+    return (num == 0U || num == 1U) ? 1U : num * factorial(num - 1U);
   }
 };
 }  // namespace algorithms
