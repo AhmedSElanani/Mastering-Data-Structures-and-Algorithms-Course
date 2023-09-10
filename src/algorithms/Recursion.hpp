@@ -57,15 +57,15 @@ public:
   ///                                 = e^x|N-1 + x^N/N!
   ///
   ///                      and: X^N = X * X^N-1, N! = N * (N-1)!
-  static constexpr auto exp(NaturalNumber auto x, NaturalNumber auto n)
+  static constexpr auto exp(NaturalNumber auto arg, NaturalNumber auto n)
       -> double {
-    if (x == 0U || n == 0U) {
+    if (arg == 0U || n == 0U) {
       return 1.0;
     }
 
-    return (static_cast<double>(power(x, n)) /
+    return (static_cast<double>(power(arg, n)) /
             static_cast<double>(factorial(n))) +
-           exp(x, n - 1U);
+           exp(arg, n - 1U);
   }
 
   /// @brief another method that calculates e^x with resolution n-terms using
@@ -76,23 +76,25 @@ public:
   ///          calculation
   /// @return e^x calculated at certain point with resolution n-terms using
   ///         Taylor's Series and Horner's Rule for optimization
-  static constexpr auto exp_HornersRule(NaturalNumber auto x,
-                                        NaturalNumber auto n) -> double {
-    if (x == 0U || n == 0U) {
+  static auto expHornersRule(NaturalNumber auto arg, NaturalNumber auto n)
+      -> double {
+    if (arg == 0U || n == 0U) {
       return 1.0;
     }
 
     const std::function<double(std::size_t)> calculateTerms{
-        [&calculateTerms, x = x, n = n](auto termNo) {
-          if (termNo > n) {
+        [&calculateTerms, arg = arg, nTerms = n](auto termNo) {
+          if (termNo > nTerms) {
             // it shouldn't calculate higher terms
             return 0.0;
           }
 
-          const auto nextTerm{termNo == n ? 1.0 : calculateTerms(termNo + 1)};
+          const auto nextTerm{termNo == nTerms ? 1.0
+                                               : calculateTerms(termNo + 1)};
 
-          return 1.0 + ((static_cast<double>(x) / static_cast<double>(termNo)) *
-                        nextTerm);
+          return 1.0 +
+                 ((static_cast<double>(arg) / static_cast<double>(termNo)) *
+                  nextTerm);
         }};
 
     return calculateTerms(1U);
