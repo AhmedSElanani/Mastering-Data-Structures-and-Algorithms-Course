@@ -123,3 +123,45 @@ TEST_F(ExpTest, ExpTwo) {
 }
 
 }  // namespace algorithms_test::exp_test
+
+/// @brief namespace for exp Horner's Rule tests
+namespace algorithms_test::exp_HornersRule_test {
+
+/// @brief class with parameters for testing exp_HornersRule method
+class ExpHornersRuleTestwithParam
+    : public ::testing::TestWithParam<std::uint8_t> {};
+
+TEST_P(ExpHornersRuleTestwithParam, ExpZero) {
+  EXPECT_EQ(::algorithms::Recursion::exp_HornersRule(0U, GetParam()), 1U);
+}
+
+INSTANTIATE_TEST_SUITE_P(RangeTests, ExpHornersRuleTestwithParam,
+                         ::testing::Range<std::uint8_t>(1U, 10U));
+
+/// @brief class for testing exp_HornersRule method
+class ExpHornersRuleTest : public ::testing::Test {};
+
+TEST_F(ExpHornersRuleTest, ExpOne) {
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 0U), 1.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 1U), 2.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 2U), 2.5, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 3U), 2.666667,
+              0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 4U), 2.708334,
+              0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(1U, 5U), 2.716667,
+              0.000001);
+}
+
+TEST_F(ExpHornersRuleTest, ExpTwo) {
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 0U), 1.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 1U), 3.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 2U), 5, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 3U), 6.333333,
+              0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 4U), 7.0, 0.000001);
+  EXPECT_NEAR(::algorithms::Recursion::exp_HornersRule(2U, 5U), 7.266667,
+              0.000001);
+}
+
+}  // namespace algorithms_test::exp_HornersRule_test
