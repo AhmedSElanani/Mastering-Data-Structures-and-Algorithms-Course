@@ -101,5 +101,16 @@ public:
 
     return calculateTerms(1U);
   }
+
+  /// @brief method that calculates Fibonacci series
+  /// @param num the input argument n
+  /// @return Fibonacci series based on the input n
+  static constexpr auto fibonacci(NaturalNumber auto num) -> std::size_t {
+    if (num <= 1U) {
+      return num;
+    }
+
+    return fibonacci(num - 1U) + fibonacci(num - 2U);
+  }
 };
 }  // namespace algorithms
