@@ -17,7 +17,7 @@ public:
   /// @brief method returns the sum of the first N natural numbers
   /// @param num input N value
   /// @return the sum of the first N natural numbers if input is 0 or more
-  static constexpr auto sumNaturalNums(NaturalNumber auto num) -> std::size_t {
+  static consteval auto sumNaturalNums(NaturalNumber auto num) -> std::size_t {
     return (num == 0U || num == 1U) ? num : num + sumNaturalNums(num - 1U);
   }
 
