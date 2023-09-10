@@ -76,6 +76,8 @@ public:
   ///          calculation
   /// @return e^x calculated at certain point with resolution n-terms using
   ///         Taylor's Series and Horner's Rule for optimization
+  ///
+  /// @note   Horner's Rule: e^x = 1 + x/1(1 + x/2(1 + x/3(...)))
   static auto expHornersRule(NaturalNumber auto arg, NaturalNumber auto n)
       -> double {
     if (arg == 0U || n == 0U) {
