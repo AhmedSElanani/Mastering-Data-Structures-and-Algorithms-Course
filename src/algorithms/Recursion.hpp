@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <functional>
 #include <type_traits>
+#include <vector>
 
 /// @brief namespace for algorithms implemented
 namespace algorithms {
@@ -106,11 +107,23 @@ public:
   /// @param num the input argument n
   /// @return Fibonacci series based on the input n
   static constexpr auto fibonacci(NaturalNumber auto num) -> std::size_t {
-    if (num <= 1U) {
-      return num;
+    // because zero-indexed
+    if (m_fibValues.size() <= num) {
+      const auto fib_1{fibonacci(num - 1U)};
+      const auto fib_2{fibonacci(num - 2U)};
+
+      m_fibValues.resize(num + 1U);
+      m_fibValues[num] = fib_1 + fib_2;
     }
 
-    return fibonacci(num - 1U) + fibonacci(num - 2U);
+    return m_fibValues[num];
   }
+
+private:
+  static std::vector<std::size_t> m_fibValues;
 };
+
+/// @brief initializing the base cases for Fibonacci series
+std::vector<std::size_t> Recursion::m_fibValues{0U, 1U};
+
 }  // namespace algorithms
