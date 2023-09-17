@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <functional>
+#include <limits>
 #include <type_traits>
 #include <vector>
 
@@ -118,6 +119,24 @@ public:
     }
 
     return m_fibValues[num];
+  }
+
+  /// @brief a method that calculates combination formula
+  /// @param nTotal the total number of elements available
+  /// @param rSelected the number of selected elements no matter the order
+  /// @return result of combination formula using Pascal's triangle
+  static constexpr auto nCr(NaturalNumber auto nTotal,
+                            NaturalNumber auto rSelected) -> std::size_t {
+    if (nTotal < rSelected) {
+      return std::numeric_limits<std::size_t>::max();
+    }
+
+    if (nTotal == rSelected || rSelected == 0U) {
+      return 1U;
+    }
+
+    // Pascal's triangle for calculating Combination formula
+    return nCr(nTotal - 1U, rSelected - 1U) + nCr(nTotal - 1U, rSelected);
   }
 
 private:

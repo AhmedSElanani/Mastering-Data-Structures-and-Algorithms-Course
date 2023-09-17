@@ -1,6 +1,7 @@
 #include "algorithms/Recursion.hpp"
 
 #include <cstdint>
+#include <limits>
 
 #include "gtest/gtest.h"
 
@@ -189,3 +190,57 @@ TEST_F(FibonacciTest, FibonacciPositiveShuffledInputs) {
 }
 
 }  // namespace algorithms_test::fibonacci_test
+
+/// @brief namespace for nCr tests
+namespace algorithms_test::nCr_test {
+
+/// @brief class for testing nCr method
+class NCRTest : public ::testing::Test {};
+
+TEST_F(NCRTest, RbiggerThanN) {
+  EXPECT_EQ(::algorithms::Recursion::nCr(1U, 2U),
+            std::numeric_limits<std::size_t>::max());
+
+  EXPECT_EQ(::algorithms::Recursion::nCr(3U, 4U),
+            std::numeric_limits<std::size_t>::max());
+
+  EXPECT_EQ(::algorithms::Recursion::nCr(5U, 6U),
+            std::numeric_limits<std::size_t>::max());
+}
+
+TEST_F(NCRTest, RequalsZero) {
+  EXPECT_EQ(::algorithms::Recursion::nCr(1U, 0U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(2U, 0U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(3U, 0U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(4U, 0U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(5U, 0U), 1U);
+}
+
+TEST_F(NCRTest, NequalsR) {
+  EXPECT_EQ(::algorithms::Recursion::nCr(1U, 1U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(2U, 2U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(3U, 3U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(4U, 4U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(5U, 5U), 1U);
+}
+
+TEST_F(NCRTest, nCrPositiveShuffledInputs) {
+  EXPECT_EQ(::algorithms::Recursion::nCr(3U, 1U), 3U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(5U, 2U), 10U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(7U, 3U), 35U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(4U, 4U), 1U);
+  EXPECT_EQ(::algorithms::Recursion::nCr(6U, 5U), 6U);
+}
+
+/// @brief class with parameters for testing nCr method
+class NCRTestwithParam : public ::testing::TestWithParam<std::uint8_t> {};
+
+TEST_P(NCRTestwithParam, RequalsOne) {
+  const auto n{GetParam()};
+  EXPECT_EQ(::algorithms::Recursion::nCr(n, 1U), n);
+}
+
+INSTANTIATE_TEST_SUITE_P(RangeTests, NCRTestwithParam,
+                         ::testing::Range<std::uint8_t>(1U, 10U));
+
+}  // namespace algorithms_test::nCr_test
