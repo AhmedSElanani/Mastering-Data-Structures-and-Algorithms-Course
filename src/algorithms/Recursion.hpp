@@ -103,7 +103,8 @@ public:
     return calculateTerms(1U);
   }
 
-  /// @brief method that calculates Fibonacci series
+  /// @brief method that calculates Fibonacci series using lookup table, which
+  ///        reduces its time complexity from O(2^N) to just O(N)
   /// @param num the input argument n
   /// @return Fibonacci series based on the input n
   static constexpr auto fibonacci(NaturalNumber auto num) -> std::size_t {
