@@ -180,12 +180,12 @@ TEST_F(FibonacciTest, FibonacciOne) {
   EXPECT_EQ(::algorithms::Recursion::fibonacci(1U), 1U);
 }
 
-TEST_F(FibonacciTest, FibonacciPositiveInputs) {
+TEST_F(FibonacciTest, FibonacciPositiveShuffledInputs) {
+  EXPECT_EQ(::algorithms::Recursion::fibonacci(4U), 3U);
+  EXPECT_EQ(::algorithms::Recursion::fibonacci(6U), 8U);
   EXPECT_EQ(::algorithms::Recursion::fibonacci(2U), 1U);
   EXPECT_EQ(::algorithms::Recursion::fibonacci(3U), 2U);
-  EXPECT_EQ(::algorithms::Recursion::fibonacci(4U), 3U);
   EXPECT_EQ(::algorithms::Recursion::fibonacci(5U), 5U);
-  EXPECT_EQ(::algorithms::Recursion::fibonacci(6U), 8U);
 }
 
 }  // namespace algorithms_test::fibonacci_test
