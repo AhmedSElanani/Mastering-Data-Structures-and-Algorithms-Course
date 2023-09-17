@@ -120,10 +120,7 @@ public:
   }
 
 private:
-  static std::vector<std::size_t> m_fibValues;
+  static inline std::vector<std::size_t> m_fibValues{0U, 1U};
 };
-
-/// @brief initializing the base cases for Fibonacci series
-std::vector<std::size_t> Recursion::m_fibValues{0U, 1U};
 
 }  // namespace algorithms
