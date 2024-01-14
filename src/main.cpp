@@ -10,7 +10,7 @@ constexpr auto kSuccess = 0;
 /// @param
 /// @return the execution status
 auto main(int /*unused*/, char* /*unused*/[]) -> int {
-  std::cout << "Hello Data Structures and Algorithms!!" << std::endl;
+  std::cout << "Hello Data Structures and Algorithms!!" << '\n';
 
   return kSuccess;
 }

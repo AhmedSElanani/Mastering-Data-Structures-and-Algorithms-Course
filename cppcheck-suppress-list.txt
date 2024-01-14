@@ -13,3 +13,7 @@ missingInclude
 // If Cppcheck does not find any errors to be suppressed,
 // it would raise a warning by default. This entry prevents that.
 unmatchedSuppression
+
+// The following entry prevent cppcheck from reporting a false syntax error.
+// (e.g GTest)
+syntaxError
