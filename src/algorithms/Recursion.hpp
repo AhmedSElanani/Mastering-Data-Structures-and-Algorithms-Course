@@ -1,8 +1,10 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <functional>
 #include <limits>
+#include <stack>
 #include <type_traits>
 #include <vector>
 
@@ -12,6 +14,11 @@ namespace algorithms {
 /// @brief concept for natural numbers
 template <typename T>
 concept NaturalNumber = std::is_unsigned_v<T>;
+
+/// @brief namespace for needed constants to be defined
+namespace {
+constexpr auto kNumberOfTowersOfHanoi{3U};
+}
 
 /// @brief class holding recursive algorithms
 class Recursion {
@@ -137,6 +144,44 @@ public:
 
     // Pascal's triangle for calculating Combination formula
     return nCr(nTotal - 1U, rSelected - 1U) + nCr(nTotal - 1U, rSelected);
+  }
+
+  /// @brief type definition for towers of Hanoi
+  using towersOfHanoi =
+      std::array<std::stack<std::size_t>, kNumberOfTowersOfHanoi>;
+
+  /// @brief method that solves the tower of Hanoi problem using recursion
+  /// @param towers the src, aux,and dest towers
+  static auto solveTowersOfHanoi(towersOfHanoi towers) -> towersOfHanoi {
+    // helper lambda to solve this recursively
+    const std::function<void(std::size_t, std::stack<std::size_t> &,
+                             std::stack<std::size_t> &,
+                             std::stack<std::size_t> &)>
+        toh{[&toh](std::size_t srcTowerHeight, auto &srcTower, auto &auxTower,
+                   auto &dstTower) {
+          if (srcTowerHeight == 0U) {
+            return;
+          }
+
+          constexpr auto kMoveTopDiscFromTo{[](auto &src, auto &dst) {
+            const auto topDisc{src.top()};
+            src.pop();
+            dst.push(topDisc);
+          }};
+
+          if (srcTowerHeight == 1U) {
+            return kMoveTopDiscFromTo(srcTower, dstTower);
+          }
+
+          // notice the swap between src, aux, and dst towers
+          toh(srcTowerHeight - 1U, srcTower, dstTower, auxTower);
+          kMoveTopDiscFromTo(srcTower, dstTower);
+          toh(srcTowerHeight - 1U, auxTower, srcTower, dstTower);
+        }};
+
+    // solution starts from here
+    toh(towers[0].size(), towers[0], towers[1], towers[2]);
+    return towers;
   }
 
 private:

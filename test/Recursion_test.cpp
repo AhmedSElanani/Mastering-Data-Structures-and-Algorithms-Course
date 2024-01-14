@@ -1,7 +1,8 @@
 #include "algorithms/Recursion.hpp"
 
 #include <cstdint>
-#include <limits>
+#include <deque>
+#include <numeric>
 
 #include "gtest/gtest.h"
 
@@ -244,3 +245,43 @@ INSTANTIATE_TEST_SUITE_P(RangeTests, NCRTestwithParam,
                          ::testing::Range<std::uint8_t>(1U, 10U));
 
 }  // namespace algorithms_test::nCr_test
+
+/// @brief namespace algorithms_test::towerOfHanoi_test
+namespace algorithms_test::towerOfHanoi_test {
+
+/// @brief class with parameters for testing solving the tower of Hanoi
+/// problem
+class TowerOfHanoiTestWithParam
+    : public ::testing::TestWithParam<std::uint8_t> {
+protected:
+  constexpr static auto initTowers{
+      [](auto towerHeight) -> ::algorithms::Recursion::towersOfHanoi {
+        std::deque<std::size_t> discs(towerHeight);
+        std::iota(discs.rbegin(), discs.rend(), 1U);
+
+        return {{std::remove_reference<
+            decltype(std::declval<
+                     ::algorithms::Recursion::towersOfHanoi>()[0])>::type{
+            discs}}};
+      }};
+
+  constexpr static auto swapFirstAndLastTowers{
+      [](auto inputTowers) -> ::algorithms::Recursion::towersOfHanoi {
+        std::iter_swap(inputTowers.begin(), inputTowers.end() - 1U);
+        return inputTowers;
+      }};
+};
+
+TEST_P(TowerOfHanoiTestWithParam, TowersOfDifferentSizes) {
+  const auto inputTowers{initTowers(GetParam())};
+
+  const auto algoSolution{
+      ::algorithms::Recursion::solveTowersOfHanoi(inputTowers)};
+  const auto expectedSolution{swapFirstAndLastTowers(inputTowers)};
+  EXPECT_EQ(algoSolution, expectedSolution);
+}
+
+INSTANTIATE_TEST_SUITE_P(RangeTests, TowerOfHanoiTestWithParam,
+                         ::testing::Range<std::uint8_t>(0U, 10U));
+
+}  // namespace algorithms_test::towerOfHanoi_test
