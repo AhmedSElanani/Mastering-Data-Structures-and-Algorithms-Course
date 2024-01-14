@@ -2,9 +2,9 @@
 
 ## Description
 
-This project includes my solution to all classes I've done so far in this DSA course: <https://www.udemy.com/course/datastructurescncpp/>
+This project includes my solution for all classes I've done so far in this DSA course: <https://www.udemy.com/course/datastructurescncpp/>
 
-Code is written in C++20, Iam using CMake for configuration, and GTest for testing my soluitons
+The code is written in C++20, I am using CMake for configuration, and GTest for testing my solutions
 
 In addition, I am experimenting with automation to make things easier and more robust
 
