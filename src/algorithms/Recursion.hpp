@@ -66,8 +66,8 @@ public:
   ///                                 = e^x|N-1 + x^N/N!
   ///
   ///                      and: X^N = X * X^N-1, N! = N * (N-1)!
-  static constexpr auto exp(NaturalNumber auto arg, NaturalNumber auto n)
-      -> double {
+  static constexpr auto exp(NaturalNumber auto arg,
+                            NaturalNumber auto n) -> double {
     if (arg == 0U || n == 0U) {
       return 1.0;
     }
@@ -87,8 +87,8 @@ public:
   ///         Taylor's Series and Horner's Rule for optimization
   ///
   /// @note   Horner's Rule: e^x = 1 + x/1(1 + x/2(1 + x/3(...)))
-  static auto expHornersRule(NaturalNumber auto arg, NaturalNumber auto n)
-      -> double {
+  static auto expHornersRule(NaturalNumber auto arg,
+                             NaturalNumber auto n) -> double {
     if (arg == 0U || n == 0U) {
       return 1.0;
     }
