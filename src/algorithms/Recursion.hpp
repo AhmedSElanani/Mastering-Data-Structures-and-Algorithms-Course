@@ -115,7 +115,9 @@ public:
   ///        reduces its time complexity from O(2^N) to just O(N)
   /// @param num the input argument n
   /// @return Fibonacci series based on the input n
-  static constexpr auto fibonacci(NaturalNumber auto num) -> std::size_t {
+  static auto fibonacci(NaturalNumber auto num) -> std::size_t {
+    static std::vector<std::size_t> m_fibValues{0U, 1U};
+
     // because zero-indexed
     if (m_fibValues.size() <= num) {
       const auto fib_2{fibonacci(num - 2U)};
@@ -183,9 +185,6 @@ public:
     toh(towers[0].size(), towers[0], towers[1], towers[2]);
     return towers;
   }
-
-private:
-  static inline std::vector<std::size_t> m_fibValues{0U, 1U};
 };
 
 }  // namespace algorithms
