@@ -2,7 +2,7 @@
 
 # Specify the directories to analyze
 DIRECTORIES=(
-    'src'
+    'include'
     'test'
 )
 

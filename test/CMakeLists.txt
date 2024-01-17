@@ -28,7 +28,7 @@ set(DS_ALGO_TEST_SRCS
 set(DS_ALGO_TEST_LINK_LIBRARIES gtest gmock)
 
 # set include directories
-set(DS_ALGO_TEST_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/src)
+set(DS_ALGO_TEST_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 # add tests executable for the project
 add_executable(${TARGET_NAME} ${DS_ALGO_TEST_SRCS})
