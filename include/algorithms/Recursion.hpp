@@ -15,10 +15,8 @@ namespace algorithms {
 template <typename T>
 concept NaturalNumber = std::is_unsigned_v<T>;
 
-/// @brief namespace for needed constants to be defined
-namespace {
+/// @brief constants definitions
 constexpr auto kNumberOfTowersOfHanoi{3U};
-}
 
 /// @brief class holding recursive algorithms
 class Recursion {

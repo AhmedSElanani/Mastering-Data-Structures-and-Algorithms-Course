@@ -1,9 +1,9 @@
 #pragma once
 
 /// @brief namespace for data structures implemented
-namespace dataStructures {
+namespace data_structures {
 
 /// @brief class representing Array abstract data type
 class ArrayAdt {};
 
-}  // namespace dataStructures
+}  // namespace data_structures
