@@ -42,9 +42,6 @@ add_link_options(-flto)
 # enable the generation of the compilation database for all targets
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# add subdirectory for the source files
-add_subdirectory(src)
-
 # option for building unit tests
 option(BUILD_TESTS "Option to turn On/OFF building tests" ON)
 if(BUILD_TESTS)
