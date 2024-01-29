@@ -1,15 +1,20 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdint>
 #include <format>
 #include <initializer_list>
 #include <iterator>
+#include <numeric>
 #include <span>
 #include <stdexcept>
 #include <string>
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
+
+/// @brief directions for shifting the elements
+enum class shiftDir : uint8_t { left, right };
 
 /// @brief class representing Array abstract data type
 template <typename T, std::size_t N>
@@ -29,34 +34,19 @@ public:
     }
 
     std::ranges::move(initList.begin(), initList.end(), std::begin(m_elements));
-    m_no_of_elements = initListSize;
+    m_numberOfElements = initListSize;
   }
 
-  /// @brief method to display currently stored elements
-  /// @return elements surrounded by square brackets
-  constexpr std::string display() const noexcept {
-    const auto stringify{[](auto elements[], auto length) {
-      std::string result;
-      for (std::size_t i{0U}; i < length; ++i) {
-        result += std::string{elements[i]} + (i == length - 1U ? "" : ",");
-      }
-      return result;
-    }};
-
-    return std::string{
-        // this expression gives: [return-from-stringify]
-        std::format(R"([{}])", stringify(m_elements, m_no_of_elements))};
-  }
   /// @brief method to insert element at the end
   /// @param elem element to be inserted
   /// @return true if element was inserted successfully, false otherwise
   constexpr bool append(const T& elem) noexcept {
-    if (m_no_of_elements == m_size) {
+    if (m_numberOfElements == m_size) {
       return false;
     }
 
-    m_elements[m_no_of_elements] = elem;
-    ++m_no_of_elements;
+    m_elements[m_numberOfElements] = elem;
+    ++m_numberOfElements;
     return true;
   }
 
@@ -69,7 +59,7 @@ public:
   ///       placed after the last currently stored element, to ensure its
   ///       contiguity
   constexpr bool insert(const T& elem, std::size_t index) {
-    if (m_no_of_elements == m_size) {
+    if (m_numberOfElements == m_size) {
       // array is full
       return false;
     }
@@ -79,10 +69,10 @@ public:
       return false;
     }
 
-    if (index < m_no_of_elements) {
+    if (index < m_numberOfElements) {
       const auto elementsToShift{std::ranges::subrange(
           m_elements + index,
-          m_elements + m_no_of_elements  // equivalent to end()
+          m_elements + m_numberOfElements  // equivalent to end()
           )};
       std::ranges::move(elementsToShift, elementsToShift.begin() + 1U);
 
@@ -90,10 +80,10 @@ public:
     } else {
       // force the element to be at the end of the array anyway to keep the
       // elements stored contiguously
-      m_elements[m_no_of_elements] = elem;
+      m_elements[m_numberOfElements] = elem;
     }
 
-    ++m_no_of_elements;
+    ++m_numberOfElements;
     return true;
   }
 
@@ -101,17 +91,17 @@ public:
   /// @param index the index at which the element shall be removed
   /// @return true if element was removed successfully, false otherwise
   constexpr bool remove(std::size_t index) {
-    if (index >= m_no_of_elements) {
+    if (index >= m_numberOfElements) {
       return false;
     }
 
     const auto elementsToShift{std::ranges::subrange(
         m_elements + index + 1U,
-        m_elements + m_no_of_elements + 1U  // equivalent to end()
+        m_elements + m_numberOfElements + 1U  // equivalent to end()
         )};
     std::ranges::move(elementsToShift, elementsToShift.begin() - 1U);
 
-    --m_no_of_elements;
+    --m_numberOfElements;
     return true;
   }
 
@@ -122,7 +112,7 @@ public:
   constexpr std::size_t search(T key) const {
     const auto arrayElements{std::ranges::subrange(
         m_elements,
-        m_elements + m_no_of_elements  // equivalent to end()
+        m_elements + m_numberOfElements  // equivalent to end()
         )};
 
     const auto index{std::ranges::find(arrayElements, key)};
@@ -130,6 +120,18 @@ public:
                ? static_cast<std::size_t>(
                      std::distance(arrayElements.begin(), index))
                : std::numeric_limits<std::size_t>::max();
+  }
+
+  /// @brief method to set an element at a given index
+  /// @param elem the element to be set at the given index
+  /// @param index the index at which the element shall be set
+  /// @note this method assumes element exists already, i.e size won't increase
+  constexpr void set(const T& elem, std::size_t index) {
+    if (index >= m_size) {
+      throw std::out_of_range("Index must be less than the array size defined");
+    }
+
+    m_elements[index] = elem;
   }
 
   /// @brief method to return an element at a given index
@@ -143,6 +145,113 @@ public:
     return m_elements[index];
   }
 
+  /// @brief returns the maximum element of the array
+  /// @return the maximum element of the array
+  constexpr T max() const {
+    return std::ranges::max(std::span{m_elements, m_numberOfElements});
+  }
+
+  /// @brief returns the minimum element of the array
+  /// @return the minimum element of the array
+  constexpr T min() const {
+    return std::ranges::min(std::span{m_elements, m_numberOfElements});
+  }
+
+  /// @brief calculates the total sum of all elements of the array
+  /// @return the sum of all elements of the array
+  constexpr T sum() const {
+    const std::span arr{
+        std::begin(m_elements),
+        std::begin(m_elements) + m_numberOfElements  // equivalent to end()
+    };
+
+    return std::accumulate(arr.begin(), arr.end(),
+                           0U  // accumulate elements to initial value of zero,
+                               // to have their sum only
+    );
+  }
+
+  /// @brief calculates the average of all elements of the array
+  /// @return the average of all elements of the array
+  constexpr double avg() const {
+    return static_cast<double>(sum()) / m_numberOfElements;
+  }
+
+  /// @brief method to reverse the array elements
+  /// @return a reference to the current object to support chained operations
+  constexpr ArrayAdt& reverse() {
+    std::ranges::reverse(std::span{m_elements, m_numberOfElements});
+    return *this;  // to enable chained operations if needed
+  }
+
+  /// @brief a method to shift the elements in both directions
+  /// @param numberOfShifts number of places to shift
+  /// @param dir direction of shifting left or right
+  /// @note currently, there are no gurantees on the objects's states on the
+  ///       shifted sides
+  /// @return a reference to the current object to support chained operations
+  constexpr ArrayAdt& shift(std::size_t numberOfShifts, shiftDir dir) {
+    switch (std::span arr{m_elements, m_numberOfElements}; dir) {
+      case (shiftDir::left): {
+        std::shift_left(
+            arr.begin(), arr.end(),
+            std::make_signed_t<decltype(numberOfShifts)>(numberOfShifts));
+      } break;
+
+      case (shiftDir::right): {
+        std::shift_right(
+            arr.begin(), arr.end(),
+            std::make_signed_t<decltype(numberOfShifts)>(numberOfShifts));
+      } break;
+
+      default: {
+      } break;
+    }
+
+    return *this;  // to enable chained operations if needed
+  }
+
+  /// @brief a method to rotate the elements in both directions
+  /// @param numberOfShifts number of places to shift
+  /// @param dir direction of rotation left or right
+  /// @return a reference to the current object to support chained operations
+  constexpr ArrayAdt& rotate(std::size_t numberOfShifts, shiftDir dir) {
+    switch (std::span arr{m_elements, m_numberOfElements}; dir) {
+      case (shiftDir::left): {
+        std::ranges::rotate(arr, arr.begin() + numberOfShifts);
+      } break;
+
+      case (shiftDir::right): {
+        std::ranges::rotate(arr, arr.end() - numberOfShifts);
+      } break;
+
+      default: {
+      } break;
+    }
+
+    return *this;  // to enable chained operations if needed
+  }
+
+  /// @brief method to display currently stored elements
+  /// @return elements surrounded by square brackets
+  constexpr std::string display() const noexcept {
+    const auto stringify{[](auto elements[], auto length) {
+      std::string result;
+      for (std::size_t i{0U}; i < length; ++i) {
+        result += std::to_string(elements[i]) + (i == length - 1U ? "" : ",");
+      }
+      return result;
+    }};
+
+    return std::string{
+        // this expression gives: [return-from-stringify]
+        std::format("[{}]", stringify(m_elements, m_numberOfElements))};
+  }
+
+  /// @brief method to find the current number of elements stored in the array
+  /// @return the current number of elements stored in the array
+  constexpr std::size_t length() const noexcept { return m_numberOfElements; }
+
 private:
   /// @brief the actual elements of the array
   T m_elements[N]{};
@@ -153,7 +262,7 @@ private:
   static constexpr auto m_size{N};
 
   /// @brief the number of elements currently stored in the array
-  std::size_t m_no_of_elements{0U};
+  std::size_t m_numberOfElements{0U};
 };
 
 }  // namespace data_structures
