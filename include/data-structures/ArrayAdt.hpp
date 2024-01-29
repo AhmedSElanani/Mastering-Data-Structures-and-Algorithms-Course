@@ -10,6 +10,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "common/Common.hpp"
+
 /// @brief namespace for data structures implemented
 namespace data_structures {
 
@@ -17,7 +19,7 @@ namespace data_structures {
 enum class shiftDir : uint8_t { left, right };
 
 /// @brief class representing Array abstract data type
-template <typename T, std::size_t N>
+template <typename T, common::NaturalNumber auto N>
 class ArrayAdt {
 public:
   /// @brief default constructor for ArrayAdt class
