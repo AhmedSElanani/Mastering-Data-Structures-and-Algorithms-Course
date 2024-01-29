@@ -6,23 +6,6 @@
 namespace data_structures_test::arrayAdt_test {
 using namespace ::data_structures;
 
-TEST(TestingAppend, LengthsOfArraysOfDifferentSizes) {
-  EXPECT_EQ((ArrayAdt<std::size_t, 1>{}).length(), 0U);
-
-  EXPECT_EQ((ArrayAdt<std::size_t, 2>{}).length(),
-            (ArrayAdt<std::size_t, 3>{}).length());
-
-  EXPECT_EQ((ArrayAdt<std::size_t, 4>{2, 3}).length(), 2U);
-
-  EXPECT_EQ((ArrayAdt<std::size_t, 5>{2, 3}).length(),
-            (ArrayAdt<std::size_t, 6>{4, 5}).length());
-
-  EXPECT_EQ((ArrayAdt<std::size_t, 7>{2, 3, 4, 5}).length(), 4U);
-
-  EXPECT_EQ((ArrayAdt<std::size_t, 8>{2, 3, 4, 5}).length(),
-            (ArrayAdt<std::size_t, 9>{6, 7, 8, 9}).length());
-}
-
 TEST(TestingAppend, AppendElementsToEmptyArray) {
   ArrayAdt<std::size_t, 5> arr1;
 
@@ -68,4 +51,21 @@ TEST(TestingAppend, AppendToFullArray) {
   EXPECT_STREQ((arr1).display().c_str(),
                (ArrayAdt<std::size_t, 3>{1, 2, 3}).display().c_str());
 }
+TEST(TestingLength, LengthsOfArraysOfDifferentSizes) {
+  EXPECT_EQ((ArrayAdt<std::size_t, 1>{}).length(), 0U);
+
+  EXPECT_EQ((ArrayAdt<std::size_t, 2>{}).length(),
+            (ArrayAdt<std::size_t, 3>{}).length());
+
+  EXPECT_EQ((ArrayAdt<std::size_t, 4>{2, 3}).length(), 2U);
+
+  EXPECT_EQ((ArrayAdt<std::size_t, 5>{2, 3}).length(),
+            (ArrayAdt<std::size_t, 6>{4, 5}).length());
+
+  EXPECT_EQ((ArrayAdt<std::size_t, 7>{2, 3, 4, 5}).length(), 4U);
+
+  EXPECT_EQ((ArrayAdt<std::size_t, 8>{2, 3, 4, 5}).length(),
+            (ArrayAdt<std::size_t, 9>{6, 7, 8, 9}).length());
+}
+
 }  // namespace data_structures_test::arrayAdt_test
