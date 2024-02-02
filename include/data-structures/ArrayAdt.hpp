@@ -176,7 +176,7 @@ public:
   /// @brief calculates the average of all elements of the array
   /// @return the average of all elements of the array
   constexpr double avg() const {
-    return static_cast<double>(sum()) / m_numberOfElements;
+    return static_cast<double>(sum()) / static_cast<double>(m_numberOfElements);
   }
 
   /// @brief method to reverse the array elements
@@ -218,13 +218,29 @@ public:
   /// @param dir direction of rotation left or right
   /// @return a reference to the current object to support chained operations
   constexpr ArrayAdt& rotate(std::size_t numberOfShifts, shiftDir dir) {
+    if (m_numberOfElements == 0U) {
+      // there are no elements to rotate
+      return *this;  // to enable chained operations if needed
+    }
+
+    // normalize shift positions
+    numberOfShifts = numberOfShifts % m_numberOfElements;
+    if (numberOfShifts == 0U) {
+      // shift is not needed
+      return *this;  // to enable chained operations if needed
+    }
+
     switch (std::span arr{m_elements, m_numberOfElements}; dir) {
       case (shiftDir::left): {
-        std::ranges::rotate(arr, arr.begin() + numberOfShifts);
+        std::ranges::rotate(
+            arr, arr.begin() + std::make_signed_t<decltype(numberOfShifts)>(
+                                   numberOfShifts));
       } break;
 
       case (shiftDir::right): {
-        std::ranges::rotate(arr, arr.end() - numberOfShifts);
+        std::ranges::rotate(
+            arr, arr.end() - std::make_signed_t<decltype(numberOfShifts)>(
+                                 numberOfShifts));
       } break;
 
       default: {
