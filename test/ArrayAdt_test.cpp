@@ -550,6 +550,23 @@ TEST(TestingRotate, RotateMultipleElementArray) {
                (ArrayAdt<int, 5U>{9, 10, 6, 7, 8}).display().c_str());
 }
 
+TEST(TestingDisplay, DisplayArraysOfDifferentSizes) {
+  EXPECT_STREQ((ArrayAdt<std::size_t, 1U>{}).display().c_str(), "[]");
+  EXPECT_STREQ((ArrayAdt<std::size_t, 2U>{}).display().c_str(), "[]");
+  EXPECT_STREQ((ArrayAdt<std::size_t, 3U>{}).display().c_str(), "[]");
+
+  EXPECT_STREQ((ArrayAdt<std::size_t, 1U>{}).display().c_str(),
+               (ArrayAdt<std::size_t, 3U>{}).display().c_str());
+
+  EXPECT_STREQ((ArrayAdt<std::size_t, 4U>{2, 3}).display().c_str(), "[2,3]");
+  EXPECT_STREQ((ArrayAdt<std::size_t, 4U>{4, 5}).display().c_str(), "[4,5]");
+
+  EXPECT_STREQ((ArrayAdt<std::size_t, 8U>{2, 3, 4, 5}).display().c_str(),
+               "[2,3,4,5]");
+  EXPECT_STREQ((ArrayAdt<std::size_t, 9U>{6, 7, 8, 9}).display().c_str(),
+               "[6,7,8,9]");
+}
+
 TEST(TestingLength, LengthsOfArraysOfDifferentSizes) {
   EXPECT_EQ((ArrayAdt<std::size_t, 1U>{}).length(), 0U);
 
