@@ -550,6 +550,179 @@ TEST(TestingRotate, RotateMultipleElementArray) {
                (ArrayAdt<int, 5U>{9, 10, 6, 7, 8}).display().c_str());
 }
 
+TEST(TestingMerge, MergingTwoEmptyArrays) {
+  ArrayAdt<int, 5U> empty1;
+  const auto copyOfEmpty1{empty1};
+
+  EXPECT_TRUE(empty1.mergeWith(ArrayAdt<int, 10U>{}));
+
+  // check state wasn't altered
+  EXPECT_EQ(empty1.length(), 0U);
+  EXPECT_EQ(empty1.size(), copyOfEmpty1.size());
+  EXPECT_STREQ(copyOfEmpty1.display().c_str(), copyOfEmpty1.display().c_str());
+}
+
+TEST(TestingMerge, MergingUnsortedToSorted) {
+  ArrayAdt<int, 10U> sorted{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> unsorted{6, 42, 7, 8, 9};
+  const auto copyOfSorted{sorted};
+
+  EXPECT_FALSE(sorted.mergeWith(unsorted));
+
+  // check state wasn't altered
+  EXPECT_EQ(sorted.length(), copyOfSorted.length());
+  EXPECT_EQ(sorted.size(), copyOfSorted.size());
+  EXPECT_STREQ(sorted.display().c_str(), copyOfSorted.display().c_str());
+}
+
+TEST(TestingMerge, MergingSortedToUnsorted) {
+  ArrayAdt<int, 10U> sorted{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> unsorted{6, 42, 7, 8, 9};
+  const auto copyOfUnsorted{unsorted};
+
+  EXPECT_FALSE(unsorted.mergeWith(sorted));
+
+  // check state wasn't altered
+  EXPECT_EQ(unsorted.length(), copyOfUnsorted.length());
+  EXPECT_EQ(unsorted.size(), copyOfUnsorted.size());
+  EXPECT_STREQ(unsorted.display().c_str(), copyOfUnsorted.display().c_str());
+}
+
+TEST(TestingMerge, MergingEmptyToNonEmpty) {
+  ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> empty;
+  const auto copyOfNonEmpty{nonEmpty};
+
+  EXPECT_TRUE(nonEmpty.mergeWith(empty));
+
+  // check state wasn't altered
+  EXPECT_EQ(nonEmpty.length(), copyOfNonEmpty.length());
+  EXPECT_EQ(nonEmpty.size(), copyOfNonEmpty.size());
+  EXPECT_STREQ(nonEmpty.display().c_str(), copyOfNonEmpty.display().c_str());
+}
+
+TEST(TestingMerge, MergingNonEmptyToEmpty) {
+  ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> empty;
+  const auto copyOfEmpty{empty};
+
+  EXPECT_TRUE(empty.mergeWith(nonEmpty));
+
+  // check state was altered
+  EXPECT_EQ(empty.length(), nonEmpty.length());
+  EXPECT_STREQ(empty.display().c_str(), nonEmpty.display().c_str());
+
+  // check size wasn't altered
+  EXPECT_EQ(empty.size(), copyOfEmpty.size());
+}
+
+TEST(TestingMerge, MergingTwoNonEmptyArraysOfSameSize) {
+  ArrayAdt<int, 10U> src{1, 3, 5, 7, 9};
+  ArrayAdt<int, 10U> dst{2, 4, 6, 8, 10};
+  const auto copyOfDst{dst};
+
+  EXPECT_TRUE(dst.mergeWith(src));
+
+  // check state was altered
+  EXPECT_EQ(dst.length(), src.length() + copyOfDst.length());
+  EXPECT_STREQ(
+      (dst).display().c_str(),
+      (ArrayAdt<int, 10U>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).display().c_str());
+
+  // check size wasn't altered
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingTwoNonEmptyArraysSrcIsLonger) {
+  ArrayAdt<int, 10U> src{1, 3, 5, 7, 8, 9, 10};
+  ArrayAdt<int, 10U> dst{2, 4, 6};
+  const auto copyOfDst{dst};
+
+  EXPECT_TRUE(dst.mergeWith(src));
+
+  // check state was altered
+  EXPECT_EQ(dst.length(), src.length() + copyOfDst.length());
+  EXPECT_STREQ(
+      (dst).display().c_str(),
+      (ArrayAdt<int, 10U>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).display().c_str());
+
+  // check size wasn't altered
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingTwoNonEmptyArraysDstIsLonger) {
+  ArrayAdt<int, 10U> src{1, 3, 5};
+  ArrayAdt<int, 10U> dst{2, 4, 6, 7, 8, 9, 10};
+  const auto copyOfDst{dst};
+
+  EXPECT_TRUE(dst.mergeWith(src));
+
+  // check state was altered
+  EXPECT_EQ(dst.length(), src.length() + copyOfDst.length());
+  EXPECT_STREQ(
+      (dst).display().c_str(),
+      (ArrayAdt<int, 10U>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}).display().c_str());
+
+  // check size wasn't altered
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingTwoNonEmptyArraysWithCommonElements) {
+  ArrayAdt<int, 10U> src{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> dst{1, 2, 3, 4, 5};
+  const auto copyOfDst{dst};
+
+  EXPECT_TRUE(dst.mergeWith(src));
+
+  // check state was altered
+  EXPECT_EQ(dst.length(), src.length() + copyOfDst.length());
+  EXPECT_STREQ(
+      (dst).display().c_str(),
+      (ArrayAdt<int, 10U>{1, 1, 2, 2, 3, 3, 4, 4, 5, 5}).display().c_str());
+
+  // check size wasn't altered
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingArraysNotFittingOfSameSize) {
+  ArrayAdt<int, 10U> src{1, 2, 3, 4, 5, 6};
+  ArrayAdt<int, 10U> dst{7, 8, 9, 10, 11, 12};
+  const auto copyOfDst{dst};
+
+  EXPECT_FALSE(dst.mergeWith(src));
+
+  // check state wasn't altered
+  EXPECT_EQ(dst.length(), copyOfDst.length());
+  EXPECT_STREQ((dst).display().c_str(), (copyOfDst).display().c_str());
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingArraysNotFittingSrcIsLonger) {
+  ArrayAdt<int, 10U> src{1, 2, 3, 4, 5, 6};
+  ArrayAdt<int, 10U> dst{7, 8, 9, 10, 11};
+  const auto copyOfDst{dst};
+
+  EXPECT_FALSE(dst.mergeWith(src));
+
+  // check state wasn't altered
+  EXPECT_EQ(dst.length(), copyOfDst.length());
+  EXPECT_STREQ((dst).display().c_str(), (copyOfDst).display().c_str());
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
+TEST(TestingMerge, MergingArraysNotFittingDestIsLonger) {
+  ArrayAdt<int, 10U> src{1, 2, 3, 4, 5};
+  ArrayAdt<int, 10U> dst{6, 7, 8, 9, 10, 11, 12};
+  const auto copyOfDst{dst};
+
+  EXPECT_FALSE(dst.mergeWith(src));
+
+  // check state wasn't altered
+  EXPECT_EQ(dst.length(), copyOfDst.length());
+  EXPECT_STREQ((dst).display().c_str(), (copyOfDst).display().c_str());
+  EXPECT_EQ(dst.size(), copyOfDst.size());
+}
+
 TEST(TestingDisplay, DisplayArraysOfDifferentSizes) {
   EXPECT_STREQ((ArrayAdt<std::size_t, 1U>{}).display().c_str(), "[]");
   EXPECT_STREQ((ArrayAdt<std::size_t, 2U>{}).display().c_str(), "[]");
