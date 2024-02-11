@@ -9,6 +9,7 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "common/Common.hpp"
 
@@ -250,6 +251,46 @@ public:
     return *this;  // to enable chained operations if needed
   }
 
+  /// @brief method to merge current array with a given input array
+  /// @param input given input array to be merged with current one
+  /// @return true in case of successful merge, false otherwise
+  /// @note preconditions: both arrays are sorted and fit in the current
+  ///       destination array.
+  template <common::NaturalNumber auto N2>
+  constexpr bool mergeWith(const ArrayAdt<T, N2>& input) {
+    const auto outputArraySize{m_numberOfElements + input.m_numberOfElements};
+    if (outputArraySize > m_size) {
+      return false;
+    }
+
+    auto mergetwoArrays{[](auto firstInputArr, auto secondInputArr,
+                           auto outArr) {
+      const auto mergingPrecondition{std::ranges::is_sorted(firstInputArr) &&
+                                     std::ranges::is_sorted(secondInputArr)};
+      if (mergingPrecondition == false) {
+        return false;
+      }
+
+      std::ranges::merge(firstInputArr, secondInputArr, outArr);
+      return true;
+    }};
+
+    auto mergeResult{std::vector<T>(outputArraySize)};
+    auto arraysMerged{
+        mergetwoArrays(std::span{m_elements, m_numberOfElements},
+                       std::span{input.m_elements, input.m_numberOfElements},
+                       mergeResult.begin())};
+
+    if (arraysMerged == false) {
+      return false;
+    }
+
+    std::ranges::move(mergeResult.begin(), mergeResult.end(),
+                      std::begin(m_elements));
+    m_numberOfElements = mergeResult.size();
+    return true;
+  }
+
   /// @brief method to display currently stored elements
   /// @return elements surrounded by square brackets
   constexpr std::string display() const noexcept {
@@ -281,6 +322,12 @@ private:
 
   /// @brief the number of elements currently stored in the array
   std::size_t m_numberOfElements{0U};
+
+  /// @brief friend with ArrayAdt instances of different sizes and types
+  /// @tparam U  type of the elements of the friend ArrayAdt instance
+  /// @tparam N2 size of the other  ArrayAdt instance
+  template <typename U, common::NaturalNumber auto N2>
+  friend class ArrayAdt;
 };
 
 }  // namespace data_structures
