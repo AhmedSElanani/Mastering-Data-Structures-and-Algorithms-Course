@@ -311,6 +311,12 @@ public:
   /// @return the current number of elements stored in the array
   constexpr std::size_t length() const noexcept { return m_numberOfElements; }
 
+  /// @brief method to get the largest possible number of elements that can be
+  ///        stored in the array
+  /// @return the largest possible number of elements that can be stored in the
+  ///         array
+  constexpr std::size_t size() const noexcept { return m_size; }
+
 private:
   /// @brief the actual elements of the array
   T m_elements[N]{};
