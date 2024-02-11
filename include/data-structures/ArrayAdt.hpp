@@ -256,8 +256,8 @@ public:
   /// @return true in case of successful merge, false otherwise
   /// @note preconditions: both arrays are sorted and fit in the current
   ///       destination array.
-  template <common::NaturalNumber auto N2>
-  constexpr bool mergeWith(const ArrayAdt<T, N2>& input) {
+  template <common::NaturalNumber auto Ne>
+  constexpr bool mergeWith(const ArrayAdt<T, Ne>& input) {
     const auto outputArraySize{m_numberOfElements + input.m_numberOfElements};
     if (outputArraySize > m_size) {
       return false;
@@ -331,8 +331,8 @@ private:
 
   /// @brief friend with ArrayAdt instances of different sizes and types
   /// @tparam U  type of the elements of the friend ArrayAdt instance
-  /// @tparam N2 size of the other  ArrayAdt instance
-  template <typename U, common::NaturalNumber auto N2>
+  /// @tparam Ne size of the other  ArrayAdt instance
+  template <typename U, common::NaturalNumber auto Ne>
   friend class ArrayAdt;
 };
 
