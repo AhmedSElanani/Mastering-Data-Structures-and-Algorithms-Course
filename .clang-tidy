@@ -17,6 +17,7 @@ Checks: >
   portability-*,
   readability-*,
   -misc-no-recursion,
+  -google-explicit-constructor,
 
 # Turn all the warnings from the checks above into errors.
 WarningsAsErrors: "*"
