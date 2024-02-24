@@ -6,7 +6,7 @@ set(PROJECT_NAME "Mastering-Data-Structures-and-Algorithms-Course" VERSION 1.0.0
 project(${PROJECT_NAME})
 
 # set target compilation options
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS FALSE)
 
@@ -41,9 +41,6 @@ add_link_options(-flto)
 
 # enable the generation of the compilation database for all targets
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# add subdirectory for the source files
-add_subdirectory(src)
 
 # option for building unit tests
 option(BUILD_TESTS "Option to turn On/OFF building tests" ON)

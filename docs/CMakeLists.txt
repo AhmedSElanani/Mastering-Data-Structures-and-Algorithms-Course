@@ -36,7 +36,7 @@ set(DOXYGEN_STRIP_CODE_COMMENTS NO)
 
 doxygen_add_docs(
   doc
-  "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/src"
+  "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/include"
   "${Mastering-Data-Structures-and-Algorithms-Course_SOURCE_DIR}/tests"
   ALL
   COMMENT "Generate HTML documentation")

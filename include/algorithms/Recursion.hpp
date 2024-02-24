@@ -5,20 +5,15 @@
 #include <functional>
 #include <limits>
 #include <stack>
-#include <type_traits>
 #include <vector>
+
+#include "common/Common.hpp"
 
 /// @brief namespace for algorithms implemented
 namespace algorithms {
 
-/// @brief concept for natural numbers
-template <typename T>
-concept NaturalNumber = std::is_unsigned_v<T>;
-
-/// @brief namespace for needed constants to be defined
-namespace {
+/// @brief constants definitions
 constexpr auto kNumberOfTowersOfHanoi{3U};
-}
 
 /// @brief class holding recursive algorithms
 class Recursion {
@@ -26,14 +21,16 @@ public:
   /// @brief method returns the sum of the first N natural numbers
   /// @param num input N value
   /// @return the sum of the first N natural numbers if input is 0 or more
-  static consteval auto sumNaturalNums(NaturalNumber auto num) -> std::size_t {
+  static consteval auto sumNaturalNums(common::NaturalNumber auto num)
+      -> std::size_t {
     return (num == 0U || num == 1U) ? num : num + sumNaturalNums(num - 1U);
   }
 
   /// @brief method returns the factorial of the natural number N
   /// @param num input N value
   /// @return the factorial of the natural number N
-  static constexpr auto factorial(NaturalNumber auto num) -> std::size_t {
+  static constexpr auto factorial(common::NaturalNumber auto num)
+      -> std::size_t {
     return (num == 0U || num == 1U) ? 1U : num * factorial(num - 1U);
   }
 
@@ -42,7 +39,7 @@ public:
   /// @param pow a natural number to be raised to
   /// @return the number raised to the power
   template <typename T>
-  static constexpr auto power(T num, NaturalNumber auto pow) -> T {
+  static constexpr auto power(T num, common::NaturalNumber auto pow) -> T {
     if (pow == 0U) {
       return 1;
     }
@@ -66,8 +63,8 @@ public:
   ///                                 = e^x|N-1 + x^N/N!
   ///
   ///                      and: X^N = X * X^N-1, N! = N * (N-1)!
-  static constexpr auto exp(NaturalNumber auto arg,
-                            NaturalNumber auto n) -> double {
+  static constexpr auto exp(common::NaturalNumber auto arg,
+                            common::NaturalNumber auto n) -> double {
     if (arg == 0U || n == 0U) {
       return 1.0;
     }
@@ -87,8 +84,8 @@ public:
   ///         Taylor's Series and Horner's Rule for optimization
   ///
   /// @note   Horner's Rule: e^x = 1 + x/1(1 + x/2(1 + x/3(...)))
-  static auto expHornersRule(NaturalNumber auto arg,
-                             NaturalNumber auto n) -> double {
+  static auto expHornersRule(common::NaturalNumber auto arg,
+                             common::NaturalNumber auto n) -> double {
     if (arg == 0U || n == 0U) {
       return 1.0;
     }
@@ -115,7 +112,7 @@ public:
   ///        reduces its time complexity from O(2^N) to just O(N)
   /// @param num the input argument n
   /// @return Fibonacci series based on the input n
-  static auto fibonacci(NaturalNumber auto num) -> std::size_t {
+  static auto fibonacci(common::NaturalNumber auto num) -> std::size_t {
     static std::vector<std::size_t> m_fibValues{0U, 1U};
 
     // because zero-indexed
@@ -134,8 +131,9 @@ public:
   /// @param nTotal the total number of elements available
   /// @param rSelected the number of selected elements no matter the order
   /// @return result of combination formula using Pascal's triangle
-  static constexpr auto nCr(NaturalNumber auto nTotal,
-                            NaturalNumber auto rSelected) -> std::size_t {
+  static constexpr auto nCr(common::NaturalNumber auto nTotal,
+                            common::NaturalNumber auto rSelected)
+      -> std::size_t {
     if (nTotal < rSelected) {
       return std::numeric_limits<std::size_t>::max();
     }
