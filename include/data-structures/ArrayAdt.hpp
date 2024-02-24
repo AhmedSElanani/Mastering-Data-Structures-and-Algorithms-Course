@@ -320,13 +320,15 @@ public:
     const auto ret{std::ranges::set_union(firstInputArr, secondInputArr,
                                           unionResult.begin())};
 
-    // some house keeping to remove rest of unneeded elements
-    unionResult.erase(ret.out, unionResult.end());
-
+    // take only the elements resulting from the set operation
     ArrayAdt<T, resultSize> unifiedArrays;
-    std::ranges::move(unionResult.begin(), unionResult.end(),
+
+    unifiedArrays.m_numberOfElements =
+        static_cast<std::size_t>(std::distance(unionResult.begin(), ret.out));
+
+    std::ranges::move(unionResult.begin(), ret.out,
                       std::begin(unifiedArrays.m_elements));
-    unifiedArrays.m_numberOfElements = unionResult.size();
+
     return unifiedArrays;
   }
 
@@ -360,13 +362,15 @@ public:
     const auto ret{std::ranges::set_difference(firstInputArr, secondInputArr,
                                                differenceResult.begin())};
 
-    // some house keeping to remove rest of unneeded elements
-    differenceResult.erase(ret.out, differenceResult.end());
-
+    // take only the elements resulting from the set operation
     ArrayAdt<T, resultSize> differenceArray;
-    std::ranges::move(differenceResult.begin(), differenceResult.end(),
+
+    differenceArray.m_numberOfElements = static_cast<std::size_t>(
+        std::distance(differenceResult.begin(), ret.out));
+
+    std::ranges::move(differenceResult.begin(), ret.out,
                       std::begin(differenceArray.m_elements));
-    differenceArray.m_numberOfElements = differenceResult.size();
+
     return differenceArray;
   }
 
@@ -399,13 +403,16 @@ public:
     auto intersectionResult{std::vector<T>(maxOfBothArrSize)};
     const auto ret{std::ranges::set_intersection(firstInputArr, secondInputArr,
                                                  intersectionResult.begin())};
-    // some house keeping to remove rest of unneeded elements
-    intersectionResult.erase(ret.out, intersectionResult.end());
 
+    // take only the elements resulting from the set operation
     ArrayAdt<T, resultSize> intersectionArray;
-    std::ranges::move(intersectionResult.begin(), intersectionResult.end(),
+
+    intersectionArray.m_numberOfElements = static_cast<std::size_t>(
+        std::distance(intersectionResult.begin(), ret.out));
+
+    std::ranges::move(intersectionResult.begin(), ret.out,
                       std::begin(intersectionArray.m_elements));
-    intersectionArray.m_numberOfElements = intersectionResult.size();
+
     return intersectionArray;
   }
 
