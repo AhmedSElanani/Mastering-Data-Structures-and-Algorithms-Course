@@ -769,7 +769,18 @@ TEST(TestingUnion, UnionTwoNonEmptyIntersectingArrays) {
   const ArrayAdt<int, 10U> nonEmpty2{3, 4, 5, 6, 7, 8};
 
   const auto result{ArrayAdt<int, 20U>::unionSet(nonEmpty1, nonEmpty2)};
-  const auto expectedUnionResult{ArrayAdt<int, 10U>{1, 2, 3, 4, 5, 6, 7, 8}};
+  const auto expectedUnionResult{ArrayAdt<int, 20U>{1, 2, 3, 4, 5, 6, 7, 8}};
+
+  EXPECT_EQ(result.length(), expectedUnionResult.length());
+  EXPECT_STREQ(result.display().c_str(), expectedUnionResult.display().c_str());
+}
+
+TEST(TestingUnion, UnionTwoNonEmptyUnsortedArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 3, 5, 4, 2};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::unionSet(nonEmpty1, nonEmpty2)};
+  const auto expectedUnionResult{ArrayAdt<int, 20U>{}};
 
   EXPECT_EQ(result.length(), expectedUnionResult.length());
   EXPECT_STREQ(result.display().c_str(), expectedUnionResult.display().c_str());
