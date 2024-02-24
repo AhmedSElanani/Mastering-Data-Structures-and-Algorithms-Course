@@ -291,6 +291,45 @@ public:
     return true;
   }
 
+  /// @brief a function to return the union of two ArrayAdts passed
+  /// @param arr1 first ArrayAdt passed
+  /// @param arr2 second ArrayAdt passed
+  /// @return the union of both arrays in object of capacity that must be
+  ///         equal to or more than the sum of both passed arrays
+  /// @note preconditions: both arrays are sorted and fit in the set
+  ///       destination array.
+  template <common::NaturalNumber auto N1, common::NaturalNumber auto N2>
+  static constexpr ArrayAdt unionSet(const ArrayAdt<T, N1>& arr1,
+                                     const ArrayAdt<T, N2>& arr2) {
+    constexpr auto resultSize{m_size};
+    const auto combinedSizes{arr1.length() + arr2.length()};
+    if (resultSize < combinedSizes) {
+      return {};
+    }
+
+    const std::span firstInputArr{arr1.m_elements, arr1.m_numberOfElements};
+    const std::span secondInputArr{arr2.m_elements, arr2.m_numberOfElements};
+
+    const auto bothInputsSorted{std::ranges::is_sorted(firstInputArr) &&
+                                std::ranges::is_sorted(secondInputArr)};
+    if (bothInputsSorted == false) {
+      return {};
+    }
+
+    auto unionResult{std::vector<T>(combinedSizes)};
+    const auto ret{std::ranges::set_union(firstInputArr, secondInputArr,
+                                          unionResult.begin())};
+
+    // some house keeping to remove rest of unneeded elements
+    unionResult.erase(ret.out, unionResult.end());
+
+    ArrayAdt<T, resultSize> unifiedArrays;
+    std::ranges::move(unionResult.begin(), unionResult.end(),
+                      std::begin(unifiedArrays.m_elements));
+    unifiedArrays.m_numberOfElements = unionResult.size();
+    return unifiedArrays;
+  }
+
   /// @brief method to display currently stored elements
   /// @return elements surrounded by square brackets
   constexpr std::string display() const noexcept {
@@ -315,7 +354,7 @@ public:
   ///        stored in the array
   /// @return the largest possible number of elements that can be stored in the
   ///         array
-  constexpr std::size_t size() const noexcept { return m_size; }
+  static constexpr std::size_t size() noexcept { return m_size; }
 
 private:
   /// @brief the actual elements of the array
