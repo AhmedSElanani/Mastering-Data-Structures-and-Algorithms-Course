@@ -879,6 +879,67 @@ TEST(TestingDifference, DiffOutOfBounds) {
                (ArrayAdt<int, 3U>{}).display().c_str());
 }
 
+TEST(TestingIntersection, IntersectTwoEmptyArrays) {
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(ArrayAdt<int, 10U>{},
+                                                        ArrayAdt<int, 10U>{})};
+  EXPECT_EQ(result.length(), 0U);
+  EXPECT_STREQ(result.display().c_str(),
+               (ArrayAdt<int, 20U>{}).display().c_str());
+}
+
+TEST(TestingIntersection, IntersectEmptyToNonEmptyArray) {
+  const ArrayAdt<int, 10U> empty{};
+  const ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(empty, nonEmpty)};
+  EXPECT_EQ(result.length(), 0U);
+  EXPECT_STREQ(result.display().c_str(),
+               (ArrayAdt<int, 20U>{}).display().c_str());
+}
+
+TEST(TestingIntersection, IntersectTwoNonEmptyIdenticalArrays) {
+  const ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(nonEmpty, nonEmpty)};
+  EXPECT_EQ(result.length(), nonEmpty.length());
+  EXPECT_STREQ(result.display().c_str(), nonEmpty.display().c_str());
+}
+
+TEST(TestingIntersection, IntersectTwoNonEmptyIntersectingArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 2, 3, 4, 5};
+  const ArrayAdt<int, 10U> nonEmpty2{3, 4, 5, 6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(nonEmpty1, nonEmpty2)};
+  const ArrayAdt<int, 20U> expectedIntersectionResult{3, 4, 5};
+
+  EXPECT_EQ(result.length(), expectedIntersectionResult.length());
+  EXPECT_STREQ(result.display().c_str(),
+               expectedIntersectionResult.display().c_str());
+}
+
+TEST(TestingIntersection, IntersectTwoNonEmptyDisjointArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 2, 3, 4, 5};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(nonEmpty1, nonEmpty2)};
+  const ArrayAdt<int, 20U> expectedIntersectionResult{};
+
+  EXPECT_EQ(result.length(), expectedIntersectionResult.length());
+  EXPECT_STREQ(result.display().c_str(),
+               expectedIntersectionResult.display().c_str());
+}
+
+TEST(TestingIntersection, IntersectTwoUnsortedArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 3, 5, 4, 2};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::intersectionSet(nonEmpty1, nonEmpty2)};
+  const ArrayAdt<int, 20U> expectedIntersectionResult{};
+
+  EXPECT_EQ(result.length(), expectedIntersectionResult.length());
+  EXPECT_STREQ(result.display().c_str(),
+               expectedIntersectionResult.display().c_str());
+}
 
 TEST(TestingDisplay, DisplayArraysOfDifferentSizes) {
   EXPECT_STREQ((ArrayAdt<std::size_t, 1U>{}).display().c_str(), "[]");
