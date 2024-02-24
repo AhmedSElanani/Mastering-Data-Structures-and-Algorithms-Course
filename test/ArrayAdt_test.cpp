@@ -797,6 +797,88 @@ TEST(TestingUnion, UnionOutOfBounds) {
                (ArrayAdt<int, 5U>{}).display().c_str());
 }
 
+TEST(TestingDifference, DiffTwoEmptyArrays) {
+  const auto result{ArrayAdt<int, 20U>::differenceSet(ArrayAdt<int, 10U>{},
+                                                      ArrayAdt<int, 10U>{})};
+  EXPECT_EQ(result.length(), 0U);
+  EXPECT_STREQ(result.display().c_str(),
+               (ArrayAdt<int, 20U>{}).display().c_str());
+}
+
+TEST(TestingDifference, DiffEmptyToNonEmptyArray) {
+  const ArrayAdt<int, 10U> empty{};
+  const ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(empty, nonEmpty)};
+
+  EXPECT_EQ(result.length(), empty.length());
+  EXPECT_STREQ(result.display().c_str(), empty.display().c_str());
+}
+
+TEST(TestingDifference, DiffNonEmptyToEmptyArray) {
+  const ArrayAdt<int, 10U> empty{};
+  const ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(nonEmpty, empty)};
+
+  EXPECT_EQ(result.length(), nonEmpty.length());
+  EXPECT_STREQ(result.display().c_str(), nonEmpty.display().c_str());
+}
+
+TEST(TestingDifference, DiffTwoNonEmptyIdentical) {
+  const ArrayAdt<int, 10U> nonEmpty{1, 2, 3, 4, 5};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(nonEmpty, nonEmpty)};
+
+  EXPECT_EQ(result.length(), 0U);
+  EXPECT_STREQ(result.display().c_str(),
+               (ArrayAdt<int, 20U>{}).display().c_str());
+}
+
+TEST(TestingDifference, DiffTwoNonEmptyIntersectingArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 2, 3, 4, 5};
+  const ArrayAdt<int, 10U> nonEmpty2{4, 5, 6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(nonEmpty1, nonEmpty2)};
+  const auto expectedDiffResult{ArrayAdt<int, 20U>{1, 2, 3}};
+
+  EXPECT_EQ(result.length(), expectedDiffResult.length());
+  EXPECT_STREQ(result.display().c_str(),
+               (expectedDiffResult).display().c_str());
+}
+
+TEST(TestingDifference, DiffTwoNonEmptyDisjointArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 2, 3, 4, 5};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(nonEmpty1, nonEmpty2)};
+
+  EXPECT_EQ(result.length(), nonEmpty1.length());
+  EXPECT_STREQ(result.display().c_str(), (nonEmpty1).display().c_str());
+}
+
+TEST(TestingUnion, DiffTwoNonEmptyUnsortedArrays) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 3, 5, 4, 2};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 20U>::differenceSet(nonEmpty1, nonEmpty2)};
+  const auto expectedDiffResult{ArrayAdt<int, 20U>{}};
+
+  EXPECT_EQ(result.length(), expectedDiffResult.length());
+  EXPECT_STREQ(result.display().c_str(), expectedDiffResult.display().c_str());
+}
+
+TEST(TestingDifference, DiffOutOfBounds) {
+  const ArrayAdt<int, 10U> nonEmpty1{1, 2, 3, 4, 5};
+  const ArrayAdt<int, 10U> nonEmpty2{6, 7, 8, 9, 10};
+
+  const auto result{ArrayAdt<int, 3U>::differenceSet(nonEmpty1, nonEmpty2)};
+
+  EXPECT_EQ(result.length(), 0U);
+  EXPECT_STREQ(result.display().c_str(),
+               (ArrayAdt<int, 3U>{}).display().c_str());
+}
+
 
 TEST(TestingDisplay, DisplayArraysOfDifferentSizes) {
   EXPECT_STREQ((ArrayAdt<std::size_t, 1U>{}).display().c_str(), "[]");

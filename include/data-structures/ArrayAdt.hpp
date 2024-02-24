@@ -330,6 +330,46 @@ public:
     return unifiedArrays;
   }
 
+  /// @brief a function that returns an array containing elements which
+  ///        exclusively found in first passed array only
+  /// @param arr1 first ArrayAdt passed
+  /// @param arr2 second ArrayAdt passed
+  /// @return an array containing elements which exclusively found in first
+  ///         passed array only
+  /// @note preconditions: both arrays are sorted and fit in the set
+  ///       destination array.
+  template <common::NaturalNumber auto N1, common::NaturalNumber auto N2>
+  static constexpr ArrayAdt differenceSet(const ArrayAdt<T, N1>& arr1,
+                                          const ArrayAdt<T, N2>& arr2) {
+    constexpr auto resultSize{m_size};
+    const auto maxPossibleSize{arr1.length()};
+    if (resultSize < maxPossibleSize) {
+      return {};
+    }
+
+    const std::span firstInputArr{arr1.m_elements, arr1.m_numberOfElements};
+    const std::span secondInputArr{arr2.m_elements, arr2.m_numberOfElements};
+
+    const auto bothInputsSorted{std::ranges::is_sorted(firstInputArr) &&
+                                std::ranges::is_sorted(secondInputArr)};
+    if (bothInputsSorted == false) {
+      return {};
+    }
+
+    auto differenceResult{std::vector<T>(maxPossibleSize)};
+    const auto ret{std::ranges::set_difference(firstInputArr, secondInputArr,
+                                               differenceResult.begin())};
+
+    // some house keeping to remove rest of unneeded elements
+    differenceResult.erase(ret.out, differenceResult.end());
+
+    ArrayAdt<T, resultSize> differenceArray;
+    std::ranges::move(differenceResult.begin(), differenceResult.end(),
+                      std::begin(differenceArray.m_elements));
+    differenceArray.m_numberOfElements = differenceResult.size();
+    return differenceArray;
+  }
+
   /// @brief method to display currently stored elements
   /// @return elements surrounded by square brackets
   constexpr std::string display() const noexcept {
