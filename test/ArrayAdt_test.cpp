@@ -338,69 +338,69 @@ TEST(TestingReverse, ReverseEmptyArray) {
 
 TEST(TestingShift, ShiftEmptyArray) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(1U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(1U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(2U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(2U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(3U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(3U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(1U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(1U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(2U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(2U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.shift(3U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.shift(3U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
 }
 
 TEST(TestingShift, ShiftOneElementArray) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(1U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(1U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(2U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(2U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(3U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(3U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(1U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(1U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(2U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(2U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.shift(3U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.shift(3U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
 }
 
 TEST(TestingShift, ShiftZeroPositions) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 1U>{1}.shift(0U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 1U>{1}.shift(0U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 1U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 2U>{1, 2}.shift(0U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 2U>{1, 2}.shift(0U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 2U>{1, 2}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 1U>{1}.shift(0U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 1U>{1}.shift(0U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 1U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 2U>{1, 2}.shift(0U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 2U>{1, 2}.shift(0U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 2U>{1, 2}).display().c_str());
 }
 
 TEST(TestingShift, ShiftMultipleElementArray) {
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(1U, shiftDir::left)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(1U, shiftDir::kLeft)};
 
     // remove last element(s) to eleminate undefined behavior
     arr.remove(arr.length() - 1U);
@@ -410,7 +410,7 @@ TEST(TestingShift, ShiftMultipleElementArray) {
   }
 
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(2U, shiftDir::left)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(2U, shiftDir::kLeft)};
 
     // remove last element(s) to eleminate undefined behavior
     arr.remove(arr.length() - 1U);
@@ -421,7 +421,7 @@ TEST(TestingShift, ShiftMultipleElementArray) {
   }
 
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(3U, shiftDir::left)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(3U, shiftDir::kLeft)};
 
     // remove last element(s) to eleminate undefined behavior
     arr.remove(arr.length() - 1U);
@@ -433,7 +433,7 @@ TEST(TestingShift, ShiftMultipleElementArray) {
   }
 
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(1U, shiftDir::right)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(1U, shiftDir::kRight)};
 
     // remove first element(s) to eleminate undefined behavior
     arr.remove(0U);
@@ -443,7 +443,7 @@ TEST(TestingShift, ShiftMultipleElementArray) {
   }
 
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(2U, shiftDir::right)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(2U, shiftDir::kRight)};
 
     // remove first element(s) to eleminate undefined behavior
     arr.remove(0U);
@@ -454,7 +454,7 @@ TEST(TestingShift, ShiftMultipleElementArray) {
   }
 
   {
-    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(3U, shiftDir::right)};
+    auto arr{ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.shift(3U, shiftDir::kRight)};
 
     // remove first element(s) to eleminate undefined behavior
     arr.remove(0U);
@@ -468,83 +468,83 @@ TEST(TestingShift, ShiftMultipleElementArray) {
 
 TEST(TestingRotate, RotateEmptyArray) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(1U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(1U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(2U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(2U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(3U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(3U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(1U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(1U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(2U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(2U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{}.rotate(3U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{}.rotate(3U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{}).display().c_str());
 }
 
 TEST(TestingRotate, RotateOneElementArray) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(1U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(1U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(2U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(2U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(3U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(3U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(1U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(1U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(2U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(2U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
   EXPECT_STREQ(
-      (ArrayAdt<int, 5U>{1}.rotate(3U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 5U>{1}.rotate(3U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 5U>{1}).display().c_str());
 }
 
 TEST(TestingRotate, RotateZeroPositions) {
   EXPECT_STREQ(
-      (ArrayAdt<int, 1U>{1}.rotate(0U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 1U>{1}.rotate(0U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 1U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 2U>{1, 2}.rotate(0U, shiftDir::left)).display().c_str(),
+      (ArrayAdt<int, 2U>{1, 2}.rotate(0U, shiftDir::kLeft)).display().c_str(),
       (ArrayAdt<int, 2U>{1, 2}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 1U>{1}.rotate(0U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 1U>{1}.rotate(0U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 1U>{1}).display().c_str());
 
   EXPECT_STREQ(
-      (ArrayAdt<int, 2U>{1, 2}.rotate(0U, shiftDir::right)).display().c_str(),
+      (ArrayAdt<int, 2U>{1, 2}.rotate(0U, shiftDir::kRight)).display().c_str(),
       (ArrayAdt<int, 2U>{1, 2}).display().c_str());
 }
 
 TEST(TestingRotate, RotateMultipleElementArray) {
-  EXPECT_STREQ((ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.rotate(1U, shiftDir::left))
+  EXPECT_STREQ((ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.rotate(1U, shiftDir::kLeft))
                    .display()
                    .c_str(),
                (ArrayAdt<int, 5U>{2, 3, 4, 5, 1}).display().c_str());
 
-  EXPECT_STREQ((ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.rotate(2U, shiftDir::left))
+  EXPECT_STREQ((ArrayAdt<int, 5U>{1, 2, 3, 4, 5}.rotate(2U, shiftDir::kLeft))
                    .display()
                    .c_str(),
                (ArrayAdt<int, 5U>{3, 4, 5, 1, 2}).display().c_str());
 
-  EXPECT_STREQ((ArrayAdt<int, 5U>{6, 7, 8, 9, 10}.rotate(1U, shiftDir::right))
+  EXPECT_STREQ((ArrayAdt<int, 5U>{6, 7, 8, 9, 10}.rotate(1U, shiftDir::kRight))
                    .display()
                    .c_str(),
                (ArrayAdt<int, 5U>{10, 6, 7, 8, 9}).display().c_str());
 
-  EXPECT_STREQ((ArrayAdt<int, 5U>{6, 7, 8, 9, 10}.rotate(2U, shiftDir::right))
+  EXPECT_STREQ((ArrayAdt<int, 5U>{6, 7, 8, 9, 10}.rotate(2U, shiftDir::kRight))
                    .display()
                    .c_str(),
                (ArrayAdt<int, 5U>{9, 10, 6, 7, 8}).display().c_str());

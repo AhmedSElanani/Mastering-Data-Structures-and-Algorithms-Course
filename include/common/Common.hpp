@@ -1,5 +1,6 @@
 #pragma once
 
+// NOLINTNEXTLINE(misc-include-cleaner)
 #include <concepts>
 
 /// @brief namespace for common
