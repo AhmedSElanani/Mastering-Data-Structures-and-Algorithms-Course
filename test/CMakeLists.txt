@@ -21,8 +21,10 @@ FetchContent_MakeAvailable(GTest)
 
 # set executable source files
 set(DS_ALGO_TEST_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/Recursion_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ArrayAdt_test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Recursion_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ArrayAdt_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/NormalMatrix_test.cpp)
 
 # set link libraries
 set(DS_ALGO_TEST_LINK_LIBRARIES gtest gmock)
