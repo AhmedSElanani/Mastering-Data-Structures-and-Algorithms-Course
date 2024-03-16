@@ -58,7 +58,7 @@ public:
 
 private:
   /// @brief elements of the matrix
-  std::array<std::array<T, M>, N> m_elements;
+  const std::array<std::array<T, M>, N> m_elements;
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
