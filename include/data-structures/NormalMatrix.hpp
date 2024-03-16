@@ -1,0 +1,95 @@
+#pragma once
+
+#include <algorithm>
+#include <array>
+#include <cstddef>
+#include <format>
+#include <initializer_list>
+#include <iterator>
+
+#include "common/Common.hpp"
+#include "data-structures/matrix-concept/MatrixAdt.hpp"
+
+/// @brief namespace for data structures implemented
+namespace data_structures {
+
+/// @brief definition of class representing non-special case Matrix
+/// @tparam N number of rows of matrix
+/// @tparam M number of columns of matrix
+/// @tparam T type of elements of matrix, default is std::size_t
+template <common::NaturalNumber auto N, common::NaturalNumber auto M,
+          typename T = std::size_t>
+class NormalMatrix {
+public:
+  /// @brief constructor that accepts multiple braced init lists
+  /// @tparam ...Row parameter pack for the braced init lists passed
+  /// @param ...rows parameter pack passes to fill the elements of the matrix
+  template <typename... Row>
+  constexpr explicit NormalMatrix(std::initializer_list<Row>&&... rows)
+      : m_elements{fillToMatrixRow(
+            std::forward<std::initializer_list<Row>>(rows))...} {}
+
+  /// @brief method to display elements of the matrix
+  /// @return elements surrounded by matrix symbol
+  constexpr auto display() const noexcept -> std::string {
+    const auto stringifyMatrix{[&matrixElements = m_elements]() {
+      const auto stringifyRow{[](auto&& row) {
+        constexpr auto rowLength{M};
+        std::string result;
+        for (std::size_t i{0U}; i < rowLength; ++i) {
+          result += std::to_string(row[i]) + (i == rowLength - 1U ? "" : " ");
+        }
+
+        return std::string{std::format("|{}|", result)};
+      }};
+
+      constexpr auto numberOfRows{N};
+      std::string result;
+      for (std::size_t i{0U}; i < numberOfRows; ++i) {
+        result += stringifyRow(matrixElements[i]) +
+                  (i == numberOfRows - 1U ? "" : "\n");
+      }
+
+      return result;
+    }};
+
+    return stringifyMatrix();
+  }
+
+private:
+  /// @brief elements of the matrix
+  std::array<std::array<T, M>, N> m_elements;
+
+  /// @brief helper method to take braced init list passed and return a matrix
+  ///        row filled with those passed elements
+  /// @tparam Row braced init list of elements to fill the matrix row
+  /// @param elems elements to fill the matrix row
+  /// @return filled matrix row
+  template <typename Row>
+  constexpr auto fillToMatrixRow(Row&& elems) const noexcept {
+    typename std::remove_const<
+        typename std::remove_reference<decltype(m_elements[0U])>::type>::type
+        matrixRow{};
+
+    const auto numberOfElementsPassed{
+        static_cast<std::size_t>(std::distance(elems.begin(), elems.end()))};
+    constexpr auto matrixRowLength{matrixRow.size()};
+
+    const auto numberOfElementsToMove{numberOfElementsPassed <= matrixRowLength
+                                          ? numberOfElementsPassed
+                                          : matrixRowLength};
+    std::move(elems.begin(), elems.begin() + numberOfElementsToMove,
+              matrixRow.begin());
+    return matrixRow;
+  }
+};
+
+/// @brief derive in a non-intrusive way of the MatrixAdt type
+/// @tparam N number of rows of matrix
+/// @tparam M number of columns of matrix
+/// @tparam T type of elements of matrix
+template <common::NaturalNumber auto N, common::NaturalNumber auto M,
+          typename T>
+class detail::IsMatrixAdt<NormalMatrix<M, N, T>> : public std::true_type {};
+
+}  // namespace data_structures
