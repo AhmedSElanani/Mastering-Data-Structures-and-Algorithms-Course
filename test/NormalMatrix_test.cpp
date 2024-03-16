@@ -106,7 +106,7 @@ TEST(TestingConstruction, ConstructingMatricesWithRowsLessThanExpected) {
   }
 }
 
-TEST(TestingDisplay, DisplayMatricesOfDifferentSizes) {
+TEST(TestingDisplay, DisplayNormalMatricesOfDifferentSizes) {
   EXPECT_STREQ((NormalMatrix<1U, 1U>{}).display().c_str(), "|0|");
   EXPECT_STREQ((NormalMatrix<1U, 1U>{{1U}}).display().c_str(), "|1|");
 
