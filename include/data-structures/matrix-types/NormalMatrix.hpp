@@ -27,6 +27,9 @@ public:
   /// @brief constructor that accepts multiple braced init lists
   /// @tparam ...Rows parameter pack for the braced init lists passed
   /// @param ...rows parameter pack passes to fill the elements of the matrix
+  /// @note the when passing a row shorter than expected, the remaining elements
+  ///       are set to zero, while when  passing a row longer, extra elements
+  ///       are ignored
   template <typename... Rows>
   constexpr explicit NormalMatrix(std::initializer_list<Rows>&&... rows)
       : m_elements{fillToMatrixRow(
