@@ -4,7 +4,7 @@
 #include <format>
 
 #include "common/Common.hpp"
-#include "data-structures/matrix-concept/MatrixAdt.hpp"
+#include "data-structures/matrix-types/MatrixConcept.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {

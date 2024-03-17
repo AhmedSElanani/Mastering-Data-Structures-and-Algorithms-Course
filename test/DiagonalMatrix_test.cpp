@@ -1,4 +1,4 @@
-#include "data-structures/DiagonalMatrix.hpp"
+#include "data-structures/matrix-types/DiagonalMatrix.hpp"
 
 #include "gtest/gtest.h"
 

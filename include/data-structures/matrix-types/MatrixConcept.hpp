@@ -25,7 +25,7 @@ constexpr bool IsMatrixAdt_v = IsMatrixAdt<T>::value;
 
 /// @brief concept for Matrix ADT interface
 template <typename T>
-concept MatrixAdt = IsMatrixAdt_v<T>;
+concept MatrixAdtConcept = IsMatrixAdt_v<T>;
 
 }  // namespace detail
 }  // namespace data_structures

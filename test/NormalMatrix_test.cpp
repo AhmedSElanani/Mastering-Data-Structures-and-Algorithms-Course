@@ -1,4 +1,4 @@
-#include "data-structures/NormalMatrix.hpp"
+#include "data-structures/matrix-types/NormalMatrix.hpp"
 
 #include "gtest/gtest.h"
 
