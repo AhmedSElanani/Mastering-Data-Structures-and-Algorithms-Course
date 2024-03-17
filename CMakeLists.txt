@@ -31,7 +31,9 @@ add_compile_options(
   -Wduplicated-cond
   -Wduplicated-branches
   -Wlogical-op
-  -Werror)
+  -Werror
+  # diagnostics flags
+  -fconcepts-diagnostics-depth=3)
 
 # set additional compile flags for the compiled targets
 set(ADDITIONAL_COMPILE_OPTIONS -Wsign-conversion -Wdouble-promotion -Wuseless-cast)
