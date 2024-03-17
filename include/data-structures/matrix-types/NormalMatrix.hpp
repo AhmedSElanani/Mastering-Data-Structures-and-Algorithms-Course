@@ -25,12 +25,12 @@ template <common::NaturalNumber auto N, common::NaturalNumber auto M,
 class NormalMatrix {
 public:
   /// @brief constructor that accepts multiple braced init lists
-  /// @tparam ...Row parameter pack for the braced init lists passed
+  /// @tparam ...Rows parameter pack for the braced init lists passed
   /// @param ...rows parameter pack passes to fill the elements of the matrix
-  template <typename... Row>
-  constexpr explicit NormalMatrix(std::initializer_list<Row>&&... rows)
+  template <typename... Rows>
+  constexpr explicit NormalMatrix(std::initializer_list<Rows>&&... rows)
       : m_elements{fillToMatrixRow(
-            std::forward<std::initializer_list<Row>>(rows))...} {}
+            std::forward<std::initializer_list<Rows>>(rows))...} {}
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
@@ -65,11 +65,11 @@ private:
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
-  /// @tparam Row braced init list of elements to fill the matrix row
+  /// @tparam Rows braced init list of elements to fill the matrix row
   /// @param elems elements to fill the matrix row
   /// @return filled matrix row
-  template <typename Row>
-  constexpr auto fillToMatrixRow(Row&& elems) const noexcept {
+  template <typename Rows>
+  constexpr auto fillToMatrixRow(Rows&& elems) const noexcept {
     typename std::remove_const<
         typename std::remove_reference<decltype(m_elements[0U])>::type>::type
         matrixRow{};
