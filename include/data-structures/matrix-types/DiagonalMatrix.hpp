@@ -9,6 +9,9 @@
 /// @brief namespace for data structures implemented
 namespace data_structures {
 
+/// @brief namespace for matrices types
+namespace matrix_types {
+
 /// @brief definition of class representing diagonal Matrix
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix, default is std::size_t
@@ -65,6 +68,7 @@ private:
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix
 template <common::NaturalNumber auto N, typename T>
-class detail::IsMatrixAdt<DiagonalMatrix<N, T>> : public std::true_type {};
+class IsMatrixAdt<DiagonalMatrix<N, T>> : public std::true_type {};
 
+}  // namespace matrix_types
 }  // namespace data_structures

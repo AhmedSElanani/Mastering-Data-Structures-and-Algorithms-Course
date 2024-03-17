@@ -5,8 +5,8 @@
 /// @brief namespace for data structures implemented
 namespace data_structures {
 
-/// @brief namespace for data structures implementation details
-namespace detail {
+/// @brief namespace for matrices types
+namespace matrix_types {
 /// @brief a tag to be used to strict matrices types only
 /// @note it can be used in an intrusive approach via inheritance (preferred
 ///       privately tho), or non-intrusively through specialization
@@ -27,5 +27,5 @@ constexpr bool IsMatrixAdt_v = IsMatrixAdt<T>::value;
 template <typename T>
 concept MatrixAdtConcept = IsMatrixAdt_v<T>;
 
-}  // namespace detail
+}  // namespace matrix_types
 }  // namespace data_structures

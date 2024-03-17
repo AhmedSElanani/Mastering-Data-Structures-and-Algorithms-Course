@@ -4,7 +4,7 @@
 
 /// @brief namespace for matrixAdt_test tests
 namespace data_structures_test::matrixAdt_test {
-using namespace ::data_structures;
+using namespace ::data_structures::matrix_types;
 
 TEST(TestingConstruction, ConstructingDiagonallMatrices) {
   // 1-D Matrices
