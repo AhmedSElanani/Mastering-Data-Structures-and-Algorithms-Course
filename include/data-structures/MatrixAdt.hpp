@@ -5,7 +5,10 @@
 #include <string>
 #include <utility>
 
+#include "data-structures/matrix-types/DiagonalMatrix.hpp"
+#include "data-structures/matrix-types/LowerTriangularMatrix.hpp"
 #include "data-structures/matrix-types/MatrixConcept.hpp"
+#include "data-structures/matrix-types/NormalMatrix.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -15,8 +18,8 @@ namespace data_structures {
 template <matrix_types::MatrixAdtConcept MatrixT>
 class MatrixAdt {
 public:
-  /// @brief resolve ambiguity when passing empty list
-  constexpr explicit MatrixAdt() = default;
+  /// @brief default constructor to resolve ambiguity when passing empty list
+  constexpr MatrixAdt() = default;
 
   /// @brief parametrized constructor accepting a single braced init list,
   ///        useful for matrices types accepting such parameters
