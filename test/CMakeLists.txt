@@ -26,6 +26,7 @@ set(DS_ALGO_TEST_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/ArrayAdt_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/NormalMatrix_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DiagonalMatrix_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/LowerTriangularMatrix_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MatrixAdt_test.cpp)
 
 # set link libraries
