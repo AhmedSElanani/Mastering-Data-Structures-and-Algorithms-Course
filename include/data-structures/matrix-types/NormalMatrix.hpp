@@ -6,6 +6,7 @@
 #include <format>
 #include <initializer_list>
 #include <iterator>
+#include <utility>
 
 #include "common/Common.hpp"
 #include "data-structures/matrix-types/MatrixConcept.hpp"
@@ -34,6 +35,10 @@ public:
   constexpr explicit NormalMatrix(std::initializer_list<Rows>&&... rows)
       : m_elements{fillToMatrixRow(
             std::forward<std::initializer_list<Rows>>(rows))...} {}
+
+  /// @brief a constexpr method to return the [n*m] dimensions of the matrix
+  /// @return a pair representing [n*m] dimensions of the matrix
+  static constexpr auto dimensions() noexcept { return std::make_pair(N, M); }
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol

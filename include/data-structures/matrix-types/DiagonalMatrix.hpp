@@ -28,6 +28,10 @@ public:
   constexpr explicit DiagonalMatrix(Elems&&... elems)
       : m_elements{std::forward<Elems>(elems)...} {}
 
+  /// @brief a constexpr method to return the [n*m] dimensions of the matrix
+  /// @return a pair representing [n*m] dimensions of the matrix
+  static constexpr auto dimensions() noexcept { return std::make_pair(N, N); }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {

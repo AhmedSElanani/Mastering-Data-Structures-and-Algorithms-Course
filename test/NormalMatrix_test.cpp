@@ -106,6 +106,59 @@ TEST(TestingConstruction, ConstructingMatricesWithRowsLessThanExpected) {
   }
 }
 
+TEST(TestingDisplay, DimensionsOfNormalMatricesWithDifferentSizes) {
+  // 1-D Matrices
+  {
+    const auto &[rows, columns]{(NormalMatrix<1U, 1U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 1U);
+    EXPECT_EQ(columns, 1U);
+  }
+
+  // 2-D Matrices
+  {
+    const auto &[rows, columns]{(NormalMatrix<1U, 2U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 1U);
+    EXPECT_EQ(columns, 2U);
+  }
+
+  {
+    const auto &[rows, columns]{(NormalMatrix<2U, 1U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 2U);
+    EXPECT_EQ(columns, 1U);
+  }
+
+  {
+    const auto &[rows, columns]{(NormalMatrix<2U, 2U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 2U);
+    EXPECT_EQ(columns, 2U);
+  }
+
+  {
+    const auto &[rows, columns]{(NormalMatrix<3U, 2U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 3U);
+    EXPECT_EQ(columns, 2U);
+  }
+
+  {
+    const auto &[rows, columns]{(NormalMatrix<2U, 3U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 2U);
+    EXPECT_EQ(columns, 3U);
+  }
+
+  {
+    const auto &[rows, columns]{(NormalMatrix<3U, 3U>{}).dimensions()};
+
+    EXPECT_EQ(rows, 3U);
+    EXPECT_EQ(columns, 3U);
+  }
+}
+
 TEST(TestingDisplay, DisplayNormalMatricesOfDifferentSizes) {
   EXPECT_STREQ((NormalMatrix<1U, 1U>{}).display().c_str(), "|0|");
   EXPECT_STREQ((NormalMatrix<1U, 1U>{{1U}}).display().c_str(), "|1|");
