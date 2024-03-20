@@ -20,8 +20,8 @@ namespace matrix_types {
 /// @tparam N number of rows of matrix
 /// @tparam M number of columns of matrix
 /// @tparam T type of elements of matrix, default is std::size_t
-template <common::NaturalNumber auto N, common::NaturalNumber auto M,
-          typename T = std::size_t>
+template <common::NaturalNumber decltype(auto) N,
+          common::NaturalNumber decltype(auto) M, typename T = std::size_t>
 class NormalMatrix {
 public:
   /// @brief constructor that accepts multiple braced init lists
@@ -94,8 +94,8 @@ private:
 /// @tparam N number of rows of matrix
 /// @tparam M number of columns of matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber auto N, common::NaturalNumber auto M,
-          typename T>
+template <common::NaturalNumber decltype(auto) N,
+          common::NaturalNumber decltype(auto) M, typename T>
 class IsMatrixAdt<NormalMatrix<M, N, T>> : public std::true_type {};
 }  // namespace matrix_types
 }  // namespace data_structures

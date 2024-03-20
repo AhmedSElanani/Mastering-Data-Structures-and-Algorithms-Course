@@ -25,7 +25,7 @@ namespace data_structures {
 enum class shiftDir : uint8_t { kLeft, kRight };
 
 /// @brief class representing Array abstract data type
-template <typename T, common::NaturalNumber auto N>
+template <typename T, common::NaturalNumber decltype(auto) N>
 class ArrayAdt {
 public:
   /// @brief default constructor for ArrayAdt class
@@ -265,7 +265,7 @@ public:
   /// @return true in case of successful merge, false otherwise
   /// @note preconditions: both arrays are sorted and fit in the current
   ///       destination array.
-  template <common::NaturalNumber auto Ne>
+  template <common::NaturalNumber decltype(auto) Ne>
   constexpr auto mergeWith(const ArrayAdt<T, Ne>& input) -> bool {
     const auto outputArraySize{m_numberOfElements + input.m_numberOfElements};
     if (outputArraySize > kMSize) {
@@ -307,7 +307,8 @@ public:
   ///         equal to or more than the sum of both passed arrays
   /// @note preconditions: both arrays are sorted and fit in the set
   ///       destination array.
-  template <common::NaturalNumber auto N1, common::NaturalNumber auto N2>
+  template <common::NaturalNumber decltype(auto) N1,
+            common::NaturalNumber decltype(auto) N2>
   static constexpr auto unionSet(const ArrayAdt<T, N1>& arr1,
                                  const ArrayAdt<T, N2>& arr2) -> ArrayAdt {
     constexpr auto kResultSize{kMSize};
@@ -349,7 +350,8 @@ public:
   ///         passed array only
   /// @note preconditions: both arrays are sorted and fit in the set
   ///       destination array.
-  template <common::NaturalNumber auto N1, common::NaturalNumber auto N2>
+  template <common::NaturalNumber decltype(auto) N1,
+            common::NaturalNumber decltype(auto) N2>
   static constexpr auto differenceSet(const ArrayAdt<T, N1>& arr1,
                                       const ArrayAdt<T, N2>& arr2) -> ArrayAdt {
     constexpr auto kResultSize{kMSize};
@@ -391,7 +393,8 @@ public:
   ///         arrays
   /// @note preconditions: both arrays are sorted and the larger of them fit in
   ///       the set destination array.
-  template <common::NaturalNumber auto N1, common::NaturalNumber auto N2>
+  template <common::NaturalNumber decltype(auto) N1,
+            common::NaturalNumber decltype(auto) N2>
   static constexpr auto intersectionSet(
       const ArrayAdt<T, N1>& arr1, const ArrayAdt<T, N2>& arr2) -> ArrayAdt {
     constexpr auto kResultSize{kMSize};
@@ -471,7 +474,7 @@ private:
   /// @brief friend with ArrayAdt instances of different sizes and types
   /// @tparam U  type of the elements of the friend ArrayAdt instance
   /// @tparam Ne size of the other  ArrayAdt instance
-  template <typename U, common::NaturalNumber auto Ne>
+  template <typename U, common::NaturalNumber decltype(auto) Ne>
   friend class ArrayAdt;
 };
 

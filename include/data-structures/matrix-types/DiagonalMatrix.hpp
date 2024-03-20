@@ -17,7 +17,7 @@ namespace matrix_types {
 /// @tparam T type of elements of matrix, default is std::size_t
 /// @note diagonal matrix is by definition is a square matrix, hence it needs
 ///       only one parameter to define its size
-template <common::NaturalNumber auto N, typename T = std::size_t>
+template <common::NaturalNumber decltype(auto) N, typename T = std::size_t>
 class DiagonalMatrix {
 public:
   /// @brief constructor accepting braced init list representing the diagonal
@@ -67,7 +67,7 @@ private:
 /// @brief derive in a non-intrusive way of the MatrixAdt type
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber auto N, typename T>
+template <common::NaturalNumber decltype(auto) N, typename T>
 class IsMatrixAdt<DiagonalMatrix<N, T>> : public std::true_type {};
 
 }  // namespace matrix_types
