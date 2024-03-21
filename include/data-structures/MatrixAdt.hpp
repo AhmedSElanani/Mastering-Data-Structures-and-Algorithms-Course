@@ -5,9 +5,11 @@
 #include <string>
 #include <utility>
 
+#include "data-structures/matrix-types/MatrixCommon.hpp"
+
+// Matrices Types supported
 #include "data-structures/matrix-types/DiagonalMatrix.hpp"
 #include "data-structures/matrix-types/LowerTriangularMatrix.hpp"
-#include "data-structures/matrix-types/MatrixConcept.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
 /// @brief namespace for data structures implemented

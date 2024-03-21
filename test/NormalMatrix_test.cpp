@@ -109,53 +109,53 @@ TEST(TestingConstruction, ConstructingMatricesWithRowsLessThanExpected) {
 TEST(TestingDimensions, DimensionsOfNormalMatricesWithDifferentSizes) {
   // 1-D Matrices
   {
-    const auto &[rows, columns]{(NormalMatrix<1U, 1U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<1U, 1U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 1U);
-    EXPECT_EQ(columns, 1U);
+    EXPECT_EQ(dimensions.rows, 1U);
+    EXPECT_EQ(dimensions.columns, 1U);
   }
 
   // 2-D Matrices
   {
-    const auto &[rows, columns]{(NormalMatrix<1U, 2U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<1U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 1U);
-    EXPECT_EQ(columns, 2U);
+    EXPECT_EQ(dimensions.rows, 1U);
+    EXPECT_EQ(dimensions.columns, 2U);
   }
 
   {
-    const auto &[rows, columns]{(NormalMatrix<2U, 1U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<2U, 1U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 2U);
-    EXPECT_EQ(columns, 1U);
+    EXPECT_EQ(dimensions.rows, 2U);
+    EXPECT_EQ(dimensions.columns, 1U);
   }
 
   {
-    const auto &[rows, columns]{(NormalMatrix<2U, 2U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<2U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 2U);
-    EXPECT_EQ(columns, 2U);
+    EXPECT_EQ(dimensions.rows, 2U);
+    EXPECT_EQ(dimensions.columns, 2U);
   }
 
   {
-    const auto &[rows, columns]{(NormalMatrix<3U, 2U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<3U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 3U);
-    EXPECT_EQ(columns, 2U);
+    EXPECT_EQ(dimensions.rows, 3U);
+    EXPECT_EQ(dimensions.columns, 2U);
   }
 
   {
-    const auto &[rows, columns]{(NormalMatrix<2U, 3U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<2U, 3U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 2U);
-    EXPECT_EQ(columns, 3U);
+    EXPECT_EQ(dimensions.rows, 2U);
+    EXPECT_EQ(dimensions.columns, 3U);
   }
 
   {
-    const auto &[rows, columns]{(NormalMatrix<3U, 3U>{}).dimensions()};
+    const auto &dimensions{(NormalMatrix<3U, 3U>{}).dimensions()};
 
-    EXPECT_EQ(rows, 3U);
-    EXPECT_EQ(columns, 3U);
+    EXPECT_EQ(dimensions.rows, 3U);
+    EXPECT_EQ(dimensions.columns, 3U);
   }
 }
 

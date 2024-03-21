@@ -8,8 +8,7 @@
 #include <iterator>
 #include <utility>
 
-#include "common/Common.hpp"
-#include "data-structures/matrix-types/MatrixConcept.hpp"
+#include "data-structures/matrix-types/MatrixCommon.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -37,8 +36,10 @@ public:
             std::forward<std::initializer_list<Rows>>(rows))...} {}
 
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
-  /// @return a pair representing [n*m] dimensions of the matrix
-  static constexpr auto dimensions() noexcept { return std::make_pair(N, M); }
+  /// @return a MatrixDimension object representing [n*m] dimensions
+  static constexpr auto dimensions() noexcept {
+    return matrix_common::MatrixDimensions<N, M>{};
+  }
 
   /// @brief method to return the column at the given index
   /// @param index order of the column in the matrix

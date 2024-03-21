@@ -2,11 +2,26 @@
 
 #include <concepts>
 
+#include "common/Common.hpp"
+
 /// @brief namespace for data structures implemented
 namespace data_structures {
 
 /// @brief namespace for matrices types
 namespace matrix_types {
+
+/// @brief namespace for common data between matrices types
+namespace matrix_common {
+
+/// @brief struct to represent the dimensions of the matrix
+template <common::NaturalNumber decltype(auto) N,
+          common::NaturalNumber decltype(auto) M>
+struct MatrixDimensions {
+  static constexpr auto rows{N};
+  static constexpr auto columns{M};
+};
+}  // namespace matrix_common
+
 /// @brief a tag to be used to strict matrices types only
 /// @note it can be used in an intrusive approach via inheritance (preferred
 ///       privately tho), or non-intrusively through specialization
@@ -27,7 +42,9 @@ constexpr bool IsMatrixAdt_v = IsMatrixAdt<T>::value;
 template <typename T>
 concept MatrixAdtConcept = requires(T t) {
   t.display();
-  t.dimensions();
+  t.dimensions().rows;
+  t.dimensions().columns;
+
 } && IsMatrixAdt_v<T>;
 
 }  // namespace matrix_types

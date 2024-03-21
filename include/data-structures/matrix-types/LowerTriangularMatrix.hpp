@@ -9,8 +9,7 @@
 #include <numeric>
 #include <ranges>
 
-#include "common/Common.hpp"
-#include "data-structures/matrix-types/MatrixConcept.hpp"
+#include "data-structures/matrix-types/MatrixCommon.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -40,8 +39,10 @@ public:
             std::forward<std::initializer_list<Rows>>(rows)...)} {}
 
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
-  /// @return a pair representing [n*m] dimensions of the matrix
-  static constexpr auto dimensions() noexcept { return std::make_pair(N, N); }
+  /// @return a MatrixDimension object representing [n*m] dimensions
+  static constexpr auto dimensions() noexcept {
+    return matrix_common::MatrixDimensions<N, N>{};
+  }
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
