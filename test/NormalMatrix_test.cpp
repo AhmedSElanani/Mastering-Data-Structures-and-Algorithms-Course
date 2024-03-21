@@ -106,7 +106,7 @@ TEST(TestingConstruction, ConstructingMatricesWithRowsLessThanExpected) {
   }
 }
 
-TEST(TestingDisplay, DimensionsOfNormalMatricesWithDifferentSizes) {
+TEST(TestingDimensions, DimensionsOfNormalMatricesWithDifferentSizes) {
   // 1-D Matrices
   {
     const auto &[rows, columns]{(NormalMatrix<1U, 1U>{}).dimensions()};
@@ -158,6 +158,110 @@ TEST(TestingDisplay, DimensionsOfNormalMatricesWithDifferentSizes) {
     EXPECT_EQ(columns, 3U);
   }
 }
+
+TEST(TestingColumn, ReadNormalMatricesColumnsWithinRange) {
+  // 1x1 Matrix
+  {
+    constexpr auto column{NormalMatrix<1U, 1U>{}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<1U, 1U>{{1U}}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){1U}));
+  }
+
+  // 2x1 Matrix
+  {
+    constexpr auto column{NormalMatrix<2U, 1U>{}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){0U, 0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<2U, 1U>{{1U}, {2U}}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){1U, 2U}));
+  }
+
+  // 1x2 Matrix
+  {
+    constexpr auto column{NormalMatrix<1U, 2U>{}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<1U, 2U>{}.column(1U)};
+    EXPECT_EQ(column, (decltype(column){0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<1U, 2U>{{1U, 2U}}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){1U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<1U, 2U>{{1U, 2U}}.column(1U)};
+    EXPECT_EQ(column, (decltype(column){2U}));
+  }
+
+  // 2x2 Matrix
+  {
+    constexpr auto column{NormalMatrix<2U, 2U>{}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){0U, 0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<2U, 2U>{}.column(1U)};
+    EXPECT_EQ(column, (decltype(column){0U, 0U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<2U, 2U>{{1U, 2U}, {3U, 4U}}.column(0U)};
+    EXPECT_EQ(column, (decltype(column){1U, 3U}));
+  }
+
+  {
+    constexpr auto column{NormalMatrix<2U, 2U>{{1U, 2U}, {3U, 4U}}.column(1U)};
+    EXPECT_EQ(column, (decltype(column){2U, 4U}));
+  }
+}
+
+TEST(TestingColumn, ReadNormalMatricesColumnsOutOfRange) {
+  // 1x1 Matrix
+  EXPECT_NO_THROW((NormalMatrix<1U, 1U>{}.column(0U)));
+  EXPECT_THROW((NormalMatrix<1U, 1U>{}.column(1U)), std::out_of_range);
+
+  // 2x1 Matrix
+  EXPECT_NO_THROW((NormalMatrix<2U, 1U>{}.column(0U)));
+  EXPECT_THROW((NormalMatrix<2U, 1U>{}.column(1U)), std::out_of_range);
+
+  // 1x2 Matrix
+  EXPECT_NO_THROW((NormalMatrix<1U, 2U>{}.column(0U)));
+  EXPECT_NO_THROW((NormalMatrix<1U, 2U>{}.column(1U)));
+  EXPECT_THROW((NormalMatrix<1U, 2U>{}.column(2U)), std::out_of_range);
+
+  // 2x2 Matrix
+  EXPECT_NO_THROW((NormalMatrix<2U, 2U>{}.column(0U)));
+  EXPECT_NO_THROW((NormalMatrix<2U, 2U>{}.column(1U)));
+  EXPECT_THROW((NormalMatrix<2U, 2U>{}.column(2U)), std::out_of_range);
+
+  // 3x2 Matrix
+  EXPECT_NO_THROW((NormalMatrix<3U, 2U>{}.column(0U)));
+  EXPECT_NO_THROW((NormalMatrix<3U, 2U>{}.column(1U)));
+  EXPECT_THROW((NormalMatrix<3U, 2U>{}.column(2U)), std::out_of_range);
+
+  // 2x3 Matrix
+  EXPECT_NO_THROW((NormalMatrix<2U, 3U>{}.column(0U)));
+  EXPECT_NO_THROW((NormalMatrix<2U, 3U>{}.column(1U)));
+  EXPECT_NO_THROW((NormalMatrix<2U, 3U>{}.column(2U)));
+  EXPECT_THROW((NormalMatrix<2U, 3U>{}.column(3U)), std::out_of_range);
+
+  // 3x3 Matrix
+  EXPECT_NO_THROW((NormalMatrix<3U, 3U>{}.column(0U)));
+  EXPECT_NO_THROW((NormalMatrix<3U, 3U>{}.column(1U)));
+  EXPECT_NO_THROW((NormalMatrix<3U, 3U>{}.column(2U)));
+  EXPECT_THROW((NormalMatrix<3U, 3U>{}.column(3U)), std::out_of_range);
+}
+
 
 TEST(TestingDisplay, DisplayNormalMatricesOfDifferentSizes) {
   EXPECT_STREQ((NormalMatrix<1U, 1U>{}).display().c_str(), "|0|");

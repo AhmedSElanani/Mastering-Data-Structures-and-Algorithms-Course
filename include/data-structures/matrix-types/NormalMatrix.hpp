@@ -40,6 +40,23 @@ public:
   /// @return a pair representing [n*m] dimensions of the matrix
   static constexpr auto dimensions() noexcept { return std::make_pair(N, M); }
 
+  /// @brief method to return the column at the given index
+  /// @param index order of the column in the matrix
+  /// @return the column at the given index
+  constexpr auto column(std::size_t index) const {
+    if (index > M - 1U) {
+      throw std::out_of_range(
+          std::format("Columns must be within the range: 0 - {}", M - 1));
+    }
+
+    std::array<T, N> column;
+    std::transform(
+        m_elements.cbegin(), m_elements.cend(), column.begin(),
+        [columnIndex = index](const auto& row) { return row[columnIndex]; });
+
+    return column;
+  }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {
