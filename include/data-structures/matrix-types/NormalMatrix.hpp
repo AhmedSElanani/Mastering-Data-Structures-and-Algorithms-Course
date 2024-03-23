@@ -17,11 +17,12 @@ namespace data_structures {
 namespace matrix_types {
 
 /// @brief definition of class representing non-special case Matrix
-/// @tparam N number of rows of matrix
-/// @tparam M number of columns of matrix
+/// @tparam ROWS number of rows of matrix
+/// @tparam COLUMNS number of columns of matrix
 /// @tparam T type of elements of matrix, default is std::size_t
-template <common::NaturalNumber decltype(auto) N,
-          common::NaturalNumber decltype(auto) M, typename T = std::size_t>
+template <common::NaturalNumber decltype(auto) ROWS,
+          common::NaturalNumber decltype(auto) COLUMNS,
+          typename T = std::size_t>
 class NormalMatrix {
 public:
   /// @brief constructor that accepts multiple braced init lists
@@ -38,6 +39,7 @@ public:
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
   /// @return a MatrixDimension object representing [n*m] dimensions
   static constexpr auto dimensions() noexcept {
+    return matrix_common::MatrixDimensions<ROWS, COLUMNS>{};
     return matrix_common::MatrixDimensions<N, M>{};
   }
 
@@ -45,12 +47,12 @@ public:
   /// @param index order of the column in the matrix
   /// @return the column at the given index
   constexpr auto column(std::size_t index) const {
-    if (index > M - 1U) {
+    if (index > COLUMNS - 1U) {
       throw std::out_of_range(
-          std::format("Columns must be within the range: 0 - {}", M - 1));
+          std::format("Columns must be within the range: 0 - {}", COLUMNS - 1));
     }
 
-    std::array<T, N> column;
+    std::array<T, ROWS> column;
     std::transform(
         m_elements.cbegin(), m_elements.cend(), column.begin(),
         [columnIndex = index](const auto& row) { return row[columnIndex]; });
@@ -63,7 +65,7 @@ public:
   constexpr auto display() const noexcept -> std::string {
     const auto stringifyMatrix{[&matrixElements = m_elements]() {
       const auto stringifyRow{[](auto&& row) {
-        constexpr auto rowLength{M};
+        constexpr auto rowLength{COLUMNS};
         std::string result;
         for (std::size_t i{0U}; i < rowLength; ++i) {
           result += std::to_string(row[i]) + (i == rowLength - 1U ? "" : " ");
@@ -72,7 +74,7 @@ public:
         return std::string{std::format("|{}|", result)};
       }};
 
-      constexpr auto numberOfRows{N};
+      constexpr auto numberOfRows{ROWS};
       std::string result;
       for (std::size_t i{0U}; i < numberOfRows; ++i) {
         result += stringifyRow(matrixElements[i]) +
@@ -87,7 +89,7 @@ public:
 
 private:
   /// @brief elements of the matrix
-  const std::array<std::array<T, M>, N> m_elements;
+  const std::array<std::array<T, COLUMNS>, ROWS> m_elements;
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
@@ -114,11 +116,11 @@ private:
 };
 
 /// @brief derive in a non-intrusive way of the MatrixAdt type
-/// @tparam N number of rows of matrix
-/// @tparam M number of columns of matrix
+/// @tparam ROWS number of rows of matrix
+/// @tparam COLUMNS number of columns of matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber decltype(auto) N,
-          common::NaturalNumber decltype(auto) M, typename T>
-class IsMatrixAdt<NormalMatrix<M, N, T>> : public std::true_type {};
+template <common::NaturalNumber decltype(auto) ROWS,
+          common::NaturalNumber decltype(auto) COLUMNS, typename T>
+class IsMatrixAdt<NormalMatrix<COLUMNS, ROWS, T>> : public std::true_type {};
 }  // namespace matrix_types
 }  // namespace data_structures

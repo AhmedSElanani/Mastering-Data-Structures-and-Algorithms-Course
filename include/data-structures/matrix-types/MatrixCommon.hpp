@@ -14,11 +14,11 @@ namespace matrix_types {
 namespace matrix_common {
 
 /// @brief struct to represent the dimensions of the matrix
-template <common::NaturalNumber decltype(auto) N,
-          common::NaturalNumber decltype(auto) M>
+template <common::NaturalNumber decltype(auto) ROWS,
+          common::NaturalNumber decltype(auto) COLUMNS>
 struct MatrixDimensions {
-  static constexpr auto rows{N};
-  static constexpr auto columns{M};
+  static constexpr auto rows{ROWS};
+  static constexpr auto columns{COLUMNS};
 };
 }  // namespace matrix_common
 
