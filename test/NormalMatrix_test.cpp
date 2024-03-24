@@ -270,6 +270,26 @@ TEST(TestingColumn, ReadNormalMatricesColumnsOutOfRange) {
   EXPECT_THROW((NormalMatrix<3U, 3U>{}.column(3U)), std::out_of_range);
 }
 
+TEST(TestingMultiplication, NormalMatricesMultiplication) {
+  // TODO: complete this test suite
+  {
+    const auto result{NormalMatrix<2U, 3U>{{1U, 2U, 3U}, {4U, 5U, 6U}} *
+                      NormalMatrix<3U, 4U>{{7U, 8U, 9U, 10U},
+                                           {11U, 12U, 13U, 14U},
+                                           {15U, 16U, 17U, 18U}}};
+
+    EXPECT_STREQ(result.display().c_str(), "|74 80 86 92|\n|173 188 203 218|");
+  }
+
+  {
+    const auto result{
+        NormalMatrix<3U, 2U>{{1U, 2U}, {3U, 4U}, {5U, 6U}} *
+        NormalMatrix<2U, 4U>{{7U, 8U, 9U, 10U}, {11U, 12U, 13U, 14U}}};
+
+    EXPECT_STREQ(result.display().c_str(),
+                 "|29 32 35 38|\n|65 72 79 86|\n|101 112 123 134|");
+  }
+}
 
 TEST(TestingDisplay, DisplayNormalMatricesOfDifferentSizes) {
   EXPECT_STREQ((NormalMatrix<1U, 1U>{}).display().c_str(), "|0|");

@@ -6,7 +6,9 @@
 #include <format>
 #include <initializer_list>
 #include <iterator>
+#include <numeric>
 #include <utility>
+#include <vector>
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
@@ -65,6 +67,54 @@ public:
     return column;
   }
 
+  /// @brief generic multiplication operator
+  /// @param otherMatrix the second operand of multiplication
+  /// @return NormalMatrix  containing the result of the multiplication
+  auto operator*(const auto& otherMatrix) const {
+    // assert both types are the same
+    using OtherMatrixType = std::remove_const<
+        typename std::remove_reference<decltype(otherMatrix)>::type>::type;
+
+    static_assert(
+        std::is_same_v<typename OtherMatrixType::value_type, value_type>,
+        "Element types are not the same");
+
+    // assert dimensons are compatible
+    static_assert(COLUMNS == otherMatrix.dimensions().rows);
+
+    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    std::array<std::array<value_type, noOfOtherMatrixColumns>, ROWS>
+        resultElements;  // or use OtherMatrixType::value_type, since assertion
+                         // should've passed above
+
+    std::for_each(resultElements.begin(), resultElements.end(),
+                  [resultBegin = resultElements.begin(), &elements = m_elements,
+                   &otherMatrix](auto& resultRow) {
+                    const auto rowIndex{std::distance(resultBegin, &resultRow)};
+                    const auto row{elements.begin() + rowIndex};
+
+                    // TODO: use iterators instead
+                    auto colIndex{0U};
+                    std::generate(
+                        resultRow.begin(), resultRow.end(),
+                        [&row, &otherMatrix, &colIndex] {
+                          auto column{otherMatrix.column(colIndex++)};
+
+                          std::vector<value_type> elemsProduct(
+                              row->size()  // or column.size()
+                          );
+                          std::transform(row->cbegin(), row->cend(),
+                                         column.cbegin(), elemsProduct.begin(),
+                                         std::multiplies<value_type>());
+
+                          return std::accumulate(elemsProduct.cbegin(),
+                                                 elemsProduct.cend(), 0U);
+                        });
+                  });
+
+    return NormalMatrix<ROWS, noOfOtherMatrixColumns>{resultElements};
+  }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {
@@ -91,6 +141,9 @@ public:
 
     return stringifyMatrix();
   }
+
+  /// @brief type alias for T, used for assertions
+  using value_type = T;
 
 private:
   /// @brief elements of the matrix
