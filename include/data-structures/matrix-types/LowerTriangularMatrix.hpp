@@ -84,7 +84,7 @@ private:
       -> std::size_t {
     // this returns the sum of {0, 1, .. , n}
     std::ranges::iota_view elemsInEachRow{0U, n + 1U};
-    return std::accumulate(elemsInEachRow.begin(), elemsInEachRow.end(), 0U);
+    return std::accumulate(elemsInEachRow.cbegin(), elemsInEachRow.cend(), 0U);
   }
 
   /// @brief elements of the lower triangle in the matrix

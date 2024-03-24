@@ -126,7 +126,7 @@ public:
     const auto index{std::ranges::find(arrayElements, key)};
     return index != arrayElements.end()
                ? static_cast<std::size_t>(
-                     std::distance(arrayElements.begin(), index))
+                     std::distance(arrayElements.cbegin(), index))
                : std::numeric_limits<std::size_t>::max();
   }
 
@@ -173,7 +173,7 @@ public:
         std::begin(m_elements) + m_numberOfElements  // equivalent to end()
     };
 
-    return std::accumulate(arr.begin(), arr.end(),
+    return std::accumulate(arr.cbegin(), arr.cend(),
                            0U  // accumulate elements to initial value of zero,
                                // to have their sum only
     );
