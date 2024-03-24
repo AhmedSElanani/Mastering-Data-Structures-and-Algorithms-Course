@@ -36,11 +36,16 @@ public:
       : m_elements{fillToMatrixRow(
             std::forward<std::initializer_list<Rows>>(rows))...} {}
 
+  /// @brief overload to the constuctor that accepts 2D array to set the
+  ///        elements  directly
+  /// @param elements elements of the 2D array
+  /// @note this constructor is especially useful for multiplication operator
+  constexpr explicit NormalMatrix(auto&& elements) : m_elements{elements} {}
+
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
   /// @return a MatrixDimension object representing [n*m] dimensions
   static constexpr auto dimensions() noexcept {
     return matrix_common::MatrixDimensions<ROWS, COLUMNS>{};
-    return matrix_common::MatrixDimensions<N, M>{};
   }
 
   /// @brief method to return the column at the given index

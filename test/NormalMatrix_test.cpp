@@ -106,6 +106,14 @@ TEST(TestingConstruction, ConstructingMatricesWithRowsLessThanExpected) {
   }
 }
 
+TEST(TestingConstruction, ConstructingMatricesWith2DArrays) {
+  // TODO: complete this test suite
+  EXPECT_NO_THROW({
+    (NormalMatrix<3U, 2U>{std::array<std::array<std::size_t, 2U>, 3U>{
+        {{{1U, 2U}}, {{3U, 4U}}, {{5U, 6U}}}}});
+  });
+}
+
 TEST(TestingDimensions, DimensionsOfNormalMatricesWithDifferentSizes) {
   // 1-D Matrices
   {
