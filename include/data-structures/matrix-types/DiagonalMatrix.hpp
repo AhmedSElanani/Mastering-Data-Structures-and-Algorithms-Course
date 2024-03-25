@@ -28,6 +28,12 @@ public:
   constexpr explicit DiagonalMatrix(Elems&&... elems)
       : m_elements{std::forward<Elems>(elems)...} {}
 
+  /// @brief a constexpr method to return the [n*m] dimensions of the matrix
+  /// @return a MatrixDimension object representing [n*m] dimensions
+  static constexpr auto dimensions() noexcept {
+    return matrix_common::MatrixDimensions<N, N>{};
+  }
+
   /// @brief method to return row at given index
   /// @param index at which row is requested
   /// @return the row at given index
@@ -41,12 +47,6 @@ public:
     row[index] = m_elements[index];
 
     return row;
-  }
-
-  /// @brief a constexpr method to return the [n*m] dimensions of the matrix
-  /// @return a MatrixDimension object representing [n*m] dimensions
-  static constexpr auto dimensions() noexcept {
-    return matrix_common::MatrixDimensions<N, N>{};
   }
 
   /// @brief multiplication operator that multiplies diagonal Matrix with

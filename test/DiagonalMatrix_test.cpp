@@ -20,10 +20,10 @@ TEST(TestingConstruction, ConstructingDiagonallMatrices) {
 }
 
 // TODO:
-// test row() method
+// test dimensions same as normal matrix
 
 // TODO:
-// test dimensions same as normal matrix
+// test row() method
 
 TEST(TestingMultiplication, DiagonalMatricesMultiplication) {
   // TODO: complete this test suite
