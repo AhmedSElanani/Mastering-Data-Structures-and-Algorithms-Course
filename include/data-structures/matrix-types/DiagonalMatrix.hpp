@@ -95,29 +95,21 @@ public:
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {
-    const auto stringifyRow{
-        [&diagonalElements = m_elements](std::size_t rowIndex) {
-          constexpr auto rowLength{N};
-          const auto diagonalElem{diagonalElements[rowIndex]};
+    const auto stringifyRow{[&diagonalElements = m_elements](const auto& row) {
+      constexpr auto rowLength{N};
 
-          std::string result;
-          for (std::size_t i{0U}; i < rowLength; ++i) {
-            result +=
-                // concat. the diagonal element when reach it,
-                // otherwise concat. zero
-                (i == rowIndex ? std::to_string(diagonalElem)
-                               : std::to_string(0U)) +
-                // concat. space after each element except the last one
-                (i == rowLength - 1U ? "" : " ");
-          }
+      std::string result;
+      for (std::size_t i{0U}; i < rowLength; ++i) {
+        result += std::to_string(row[i]) + (i == rowLength - 1U ? "" : " ");
+      }
 
-          return std::string{std::format("|{}|", result)};
-        }};
+      return std::string{std::format("|{}|", result)};
+    }};
 
     constexpr auto numberOfRows{N};
     std::string result;
     for (std::size_t i{0U}; i < numberOfRows; ++i) {
-      result += stringifyRow(i) + (i == numberOfRows - 1U ? "" : "\n");
+      result += stringifyRow(row(i)) + (i == numberOfRows - 1U ? "" : "\n");
     }
 
     return result;
