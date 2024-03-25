@@ -4,6 +4,7 @@
 #include <format>
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
+#include "data-structures/matrix-types/NormalMatrix.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -27,10 +28,68 @@ public:
   constexpr explicit DiagonalMatrix(Elems&&... elems)
       : m_elements{std::forward<Elems>(elems)...} {}
 
+  /// @brief method to return row at given index
+  /// @param index at which row is requested
+  /// @return the row at given index
+  constexpr auto row(std::size_t index) const {
+    if (index > N - 1U) {
+      throw std::out_of_range(
+          std::format("Rows must be within the range: 0 - {}", N - 1));
+    }
+
+    std::array<T, N> row{};
+    row[index] = m_elements[index];
+
+    return row;
+  }
+
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
   /// @return a MatrixDimension object representing [n*m] dimensions
   static constexpr auto dimensions() noexcept {
     return matrix_common::MatrixDimensions<N, N>{};
+  }
+
+  /// @brief multiplication operator that multiplies diagonal Matrix with
+  ///        another and returns a result in NormalMatrix type
+  /// @param otherMatrix
+  /// @return the product of both matrices represented by NormalMatrix
+  auto operator*(const auto& otherMatrix) const {
+    // assert both types are the same
+    using OtherMatrixType = std::remove_const<
+        typename std::remove_reference<decltype(otherMatrix)>::type>::type;
+
+    static_assert(
+        std::is_same_v<typename OtherMatrixType::value_type, value_type>,
+        "Element types are not the same");
+
+    // assert dimensons are compatible
+    static_assert(N == otherMatrix.dimensions().rows);
+
+    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    std::array<std::array<value_type, noOfOtherMatrixColumns>, N>
+        resultElements;  // or use OtherMatrixType::value_type, since
+                         // assertion should've passed above
+
+    std::for_each(
+        resultElements.begin(), resultElements.end(),
+        [resultBegin = resultElements.begin(), &elements = m_elements,
+         &otherMatrix](auto& resultRow) {
+          const auto rowIndex{
+              static_cast<std::size_t>(std::distance(resultBegin, &resultRow))};
+          auto otherMatrixRow{otherMatrix.row(rowIndex)};
+
+          auto elemIndex{0U};
+          std::generate(  // an optimized way of diagonal matrix multiplication
+              otherMatrixRow.begin(), otherMatrixRow.end(),
+              [&otherMatrixRow, &rowIndex,
+               &diagonalElement = elements[rowIndex], &elemIndex]() {
+                return otherMatrixRow[elemIndex++] * diagonalElement;
+              });
+
+          resultRow = otherMatrixRow;  // after multiplying by diagonal element
+        });
+
+    return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
   }
 
   /// @brief method to display elements of the matrix
@@ -63,6 +122,9 @@ public:
 
     return result;
   }
+
+  /// @brief type alias for T, used for assertions
+  using value_type = T;
 
 private:
   /// @brief diagonal elements of the matrix

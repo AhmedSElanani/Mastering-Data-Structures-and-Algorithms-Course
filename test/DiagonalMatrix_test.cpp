@@ -19,6 +19,31 @@ TEST(TestingConstruction, ConstructingDiagonallMatrices) {
   EXPECT_NO_THROW({ (DiagonalMatrix<3U>{1U, 2U, 3U}); });
 }
 
+// TODO:
+// test row() method
+
+// TODO:
+// test dimensions same as normal matrix
+
+TEST(TestingMultiplication, DiagonalMatricesMultiplication) {
+  // TODO: complete this test suite
+  {
+    const auto result{DiagonalMatrix<3U>{1U, 2U, 3U} *
+                      DiagonalMatrix<3U>{4U, 5U, 6U}};
+
+    EXPECT_STREQ(result.display().c_str(), "|4 0 0|\n|0 10 0|\n|0 0 18|");
+  }
+
+  {
+    const auto result{DiagonalMatrix<5U>{1U, 2U, 3U, 4U, 5U} *
+                      DiagonalMatrix<5U>{6U, 7U, 8U, 9U, 10U}};
+
+    EXPECT_STREQ(
+        result.display().c_str(),
+        "|6 0 0 0 0|\n|0 14 0 0 0|\n|0 0 24 0 0|\n|0 0 0 36 0|\n|0 0 0 0 50|");
+  }
+}
+
 TEST(TestingDisplay, DisplayDiagonalMatricesOfDifferentSizes) {
   EXPECT_NO_THROW({ (DiagonalMatrix<3U>{}); });
   EXPECT_NO_THROW({ (DiagonalMatrix<3U>{1U, 2U, 3U}); });
