@@ -120,6 +120,9 @@ public:
     return result;
   }
 
+  /// @brief type alias for T, used for assertions
+  using value_type = T;
+
 private:
   /// @brief helper constexpr method to return the total number of elements in
   ///        a lower triangle matrix of a given number of rows n
@@ -128,7 +131,7 @@ private:
   static constexpr auto numberOfTriangleElements(auto n) noexcept
       -> std::size_t {
     // this returns the sum of {0, 1, .. , n}
-    std::ranges::iota_view elemsInEachRow{0U, n + 1U};
+    std::ranges::iota_view elemsInEachRow{static_cast<decltype(n)>(0U), n + 1U};
     return std::accumulate(elemsInEachRow.cbegin(), elemsInEachRow.cend(), 0U);
   }
 
