@@ -10,6 +10,7 @@
 #include <ranges>
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
+#include "data-structures/matrix-types/NormalMatrix.hpp"
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -42,6 +43,57 @@ public:
   /// @return a MatrixDimension object representing [n*m] dimensions
   static constexpr auto dimensions() noexcept {
     return matrix_common::MatrixDimensions<N, N>{};
+  }
+
+  /// @brief method to return the row in matrix at a given index
+  /// @param index at which row should be returned
+  /// @return the row at the given index
+  constexpr auto row(auto index) const {
+    const auto rowStartPosition{numberOfTriangleElements(index)};
+    std::array<T, N> result{};
+    for (auto i{0U}; i <= index; ++i) {
+      result[i] = m_elements[rowStartPosition + i];
+    }
+
+    return result;
+  }
+
+  /// @brief method to return the column at the given index
+  /// @param index at which column should be returned
+  /// @return the column at the given index
+  constexpr auto column(std::size_t index) const {
+    auto elemIndex{numberOfTriangleElements(index)};
+    std::array<T, N> result{};
+    for (auto i{index}; i < N; ++i, elemIndex += i) {
+      result[i] = m_elements[index + elemIndex];
+    }
+
+    return result;
+  }
+
+  /// @brief generic multiplication operator
+  /// @param otherMatrix the second operand of multiplication
+  /// @return NormalMatrix containing the result of the multiplication
+  auto operator*(const auto& otherMatrix) const {
+    // assert both types are the same
+    using OtherMatrixType = std::remove_const<
+        typename std::remove_reference<decltype(otherMatrix)>::type>::type;
+
+    static_assert(
+        std::is_same_v<typename OtherMatrixType::value_type, value_type>,
+        "Element types are not the same");
+
+    // assert dimensons are compatible
+    static_assert(N == otherMatrix.dimensions().rows);
+
+    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    std::array<std::array<value_type, noOfOtherMatrixColumns>, N>
+        resultElements;  // or use OtherMatrixType::value_type, since
+                         // assertion should've passed above
+
+    matrix_common::multiplyRowsByColumns(*this, otherMatrix, resultElements);
+
+    return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
   }
 
   /// @brief method to display elements of the matrix
