@@ -6,9 +6,7 @@
 #include <format>
 #include <initializer_list>
 #include <iterator>
-#include <numeric>
 #include <utility>
-#include <vector>
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
@@ -50,6 +48,11 @@ public:
     return matrix_common::MatrixDimensions<ROWS, COLUMNS>{};
   }
 
+  /// @brief method to return the row in matrix at a given index
+  /// @param index at which row should be returned
+  /// @return the row at the given index
+  constexpr auto row(std::size_t index) const { return m_elements[index]; }
+
   /// @brief method to return the column at the given index
   /// @param index order of the column in the matrix
   /// @return the column at the given index
@@ -87,30 +90,7 @@ public:
         resultElements;  // or use OtherMatrixType::value_type, since assertion
                          // should've passed above
 
-    std::for_each(resultElements.begin(), resultElements.end(),
-                  [resultBegin = resultElements.begin(), &elements = m_elements,
-                   &otherMatrix](auto& resultRow) {
-                    const auto rowIndex{std::distance(resultBegin, &resultRow)};
-                    const auto row{elements.begin() + rowIndex};
-
-                    // TODO: use iterators instead
-                    auto colIndex{0U};
-                    std::generate(
-                        resultRow.begin(), resultRow.end(),
-                        [&row, &otherMatrix, &colIndex] {
-                          auto column{otherMatrix.column(colIndex++)};
-
-                          std::vector<value_type> elemsProduct(
-                              row->size()  // or column.size()
-                          );
-                          std::transform(row->cbegin(), row->cend(),
-                                         column.cbegin(), elemsProduct.begin(),
-                                         std::multiplies<value_type>());
-
-                          return std::accumulate(elemsProduct.cbegin(),
-                                                 elemsProduct.cend(), 0U);
-                        });
-                  });
+    matrix_common::multiplyRowsByColumns(*this, otherMatrix, resultElements);
 
     return NormalMatrix<ROWS, noOfOtherMatrixColumns>{resultElements};
   }

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <concepts>
+#include <numeric>
+#include <vector>
 
 #include "common/Common.hpp"
 
@@ -20,6 +23,49 @@ struct MatrixDimensions {
   static constexpr auto rows{ROWS};
   static constexpr auto columns{COLUMNS};
 };
+
+/// @brief helper function to multiply rows of first matrix by columns of second
+///        matrix, i.e the definition of matrices multiplication
+/// @param firstMatrix first operand of matrices multiplication
+/// @param secondMatrix second operand of matrices multiplication
+/// @param productResult an array of arrays the hold the result elements
+// TODO: make it accept matrix adt concept for first two parameters
+static void multiplyRowsByColumns(const auto& firstMatrix,
+                                  const auto& secondMatrix,
+                                  auto& productResult) {
+  std::for_each(
+      productResult.begin(), productResult.end(),
+      [resultBegin = productResult.begin(), &firstMatrix,
+       &secondMatrix](auto& resultRow) {
+        const auto rowIndex{
+            static_cast<std::size_t>(std::distance(resultBegin, &resultRow))};
+        const auto currentRow{firstMatrix.row(rowIndex)};
+
+        // TODO: use iterators instead
+        auto colIndex{0U};
+        std::generate(
+            resultRow.begin(), resultRow.end(),
+            [&currentRow, &secondMatrix, &colIndex] {
+              auto column{secondMatrix.column(colIndex++)};
+
+              // type alias for element type in in either of both matrices
+              using value_type = std::remove_const<
+                  typename std::remove_reference<decltype(firstMatrix)>::type>::
+                  type::value_type;  // or secondMatrix
+
+              std::vector<value_type> elemsProduct(
+                  currentRow.size()  // or column.size()
+              );
+              std::transform(currentRow.cbegin(), currentRow.cend(),
+                             column.cbegin(), elemsProduct.begin(),
+                             std::multiplies<value_type>());
+
+              return std::accumulate(elemsProduct.cbegin(), elemsProduct.cend(),
+                                     0U);
+            });
+      });
+}
+
 }  // namespace matrix_common
 
 /// @brief a tag to be used to strict matrices types only
