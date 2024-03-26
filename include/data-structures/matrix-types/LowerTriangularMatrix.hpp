@@ -99,29 +99,22 @@ public:
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {
-    const auto stringifyRow{
-        [&triangleElements = m_elements](const auto rowIndex) {
-          constexpr auto rowLength{N};
-          const auto rowStartPosition{numberOfTriangleElements(rowIndex)};
-          std::string result;
-          for (std::size_t i{0U}; i < rowLength; ++i) {
-            result +=
-                // concat. the next triangle element until the diagonal,
-                // after that concat. zero
-                (i <= rowIndex
-                     ? std::to_string(triangleElements[rowStartPosition + i])
-                     : std::to_string(0U)) +
-                // concat. space after each element except the last one
-                (i == rowLength - 1U ? "" : " ");
-          }
+    const auto stringifyRow{[&triangleElements = m_elements](const auto& row) {
+      constexpr auto rowLength{N};
+      std::string result;
+      for (std::size_t i{0U}; i < rowLength; ++i) {
+        result += std::to_string(row[i]) +
+                  // concat. space after each element except the last one
+                  (i == rowLength - 1U ? "" : " ");
+      }
 
-          return std::string{std::format("|{}|", result)};
-        }};
+      return std::string{std::format("|{}|", result)};
+    }};
 
     constexpr auto numberOfRows{N};
     std::string result;
     for (auto i{0U}; i < numberOfRows; ++i) {
-      result += stringifyRow(i) + (i == numberOfRows - 1U ? "" : "\n");
+      result += stringifyRow(row(i)) + (i == numberOfRows - 1U ? "" : "\n");
     }
 
     return result;
