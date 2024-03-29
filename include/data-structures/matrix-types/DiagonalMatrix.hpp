@@ -49,6 +49,14 @@ public:
     return row;
   }
 
+  /// @brief method to return the column at the given index
+  /// @param index at which column should be returned
+  /// @return the column at the given index
+  constexpr auto column(std::size_t index) const {
+    // by defintion of diagonal matrix, rows and columns are the same
+    return row(index);
+  }
+
   /// @brief multiplication operator that multiplies diagonal Matrix with
   ///        another and returns a result in NormalMatrix type
   /// @param otherMatrix
