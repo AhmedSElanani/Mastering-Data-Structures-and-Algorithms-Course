@@ -24,6 +24,10 @@ template <common::NaturalNumber decltype(auto) ROWS,
           common::NaturalNumber decltype(auto) COLUMNS,
           typename T = std::size_t>
 class NormalMatrix {
+  /// @brief type alias for m_elements type as it is currently used
+  ///        in several places
+  using ElementsType = std::array<std::array<T, COLUMNS>, ROWS>;
+
 public:
   /// @brief constructor that accepts multiple braced init lists
   /// @tparam ...Rows parameter pack for the braced init lists passed
@@ -40,7 +44,8 @@ public:
   ///        elements  directly
   /// @param elements elements of the 2D array
   /// @note this constructor is especially useful for multiplication operator
-  constexpr explicit NormalMatrix(auto&& elements) : m_elements{elements} {}
+  constexpr explicit NormalMatrix(ElementsType elements)
+      : m_elements{std::move(elements)} {}
 
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
   /// @return a MatrixDimension object representing [n*m] dimensions
@@ -127,7 +132,7 @@ public:
 
 private:
   /// @brief elements of the matrix
-  const std::array<std::array<T, COLUMNS>, ROWS> m_elements;
+  const ElementsType m_elements;
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
@@ -136,9 +141,8 @@ private:
   /// @return filled matrix row
   template <typename Rows>
   constexpr auto fillToMatrixRow(Rows&& elems) const noexcept {
-    typename std::remove_const<
-        typename std::remove_reference<decltype(m_elements[0U])>::type>::type
-        matrixRow{};
+    typename std::remove_const<typename std::remove_reference<
+        decltype(ElementsType{}[0U])>::type>::type matrixRow{};
 
     const auto numberOfElementsPassed{
         static_cast<std::size_t>(std::distance(elems.begin(), elems.end()))};
