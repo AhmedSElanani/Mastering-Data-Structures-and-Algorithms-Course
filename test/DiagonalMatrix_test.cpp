@@ -25,6 +25,8 @@ TEST(TestingConstruction, ConstructingDiagonallMatrices) {
 // TODO:
 // test row() method
 
+// test column() method
+
 TEST(TestingMultiplication, DiagonalMatricesMultiplication) {
   // TODO: complete this test suite
   {
