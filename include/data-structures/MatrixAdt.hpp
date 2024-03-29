@@ -40,6 +40,15 @@ public:
       : m_matrixImpl{std::make_unique<MatrixT>(
             std::forward<std::initializer_list<Args>>(args)...)} {}
 
+  /// @brief multiplication operator that multiplies MatrixAdt type
+  ///        by another and returns the result in a new object
+  /// @param otherMatrix the other operand
+  /// @return the product of both matrices stored in a new obj
+  auto operator*(const auto& otherMatrix) const {
+    auto result{(*m_matrixImpl) * (*(otherMatrix.m_matrixImpl))};
+    return MatrixAdt<decltype(result)>{std::move(result)};
+  }
+
   /// @brief method to display elements of the instantiated matrix
   /// @return stringified format of the instantiated matrix elements
   constexpr auto display() const noexcept -> std::string {
@@ -49,6 +58,20 @@ public:
 private:
   /// @brief unique pointer to the matrix type instantiated
   std::unique_ptr<MatrixT> m_matrixImpl{std::make_unique<MatrixT>()};
+
+  /// @brief parameterized constructor that takes a matrix object directly to
+  ///        wrap it
+  /// @param matrix the matrix object of any accepted MatrixT type to be wrapped
+  /// @note currently only needed in multiplication operator
+  constexpr explicit MatrixAdt(MatrixT&& matrix)
+      : m_matrixImpl{std::make_unique<MatrixT>(std::forward<MatrixT>(matrix))} {
+  }
+
+  /// @brief friending with other matrices types to access m_matrixImpl
+  /// @tparam OtherMatrixT the other matrix that is constrainted
+  ///         to MatrixAdtConcept
+  template <matrix_types::MatrixAdtConcept OtherMatrixT>
+  friend class MatrixAdt;
 };
 
 }  // namespace data_structures

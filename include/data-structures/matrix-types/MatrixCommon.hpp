@@ -88,9 +88,14 @@ constexpr bool IsMatrixAdt_v = IsMatrixAdt<T>::value;
 template <typename T>
 concept MatrixAdtConcept = requires(T t) {
   t.display();
+
   t.dimensions().rows;
   t.dimensions().columns;
 
+  typename T::value_type;
+} && requires(T t, std::size_t index) {
+  t.row(index);
+  t.column(index);
 } && IsMatrixAdt_v<T>;
 
 }  // namespace matrix_types
