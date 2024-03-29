@@ -48,7 +48,7 @@ public:
   /// @brief method to return the row in matrix at a given index
   /// @param index at which row should be returned
   /// @return the row at the given index
-  constexpr auto row(auto index) const {
+  constexpr auto row(std::size_t index) const {
     const auto rowStartPosition{numberOfTriangleElements(index)};
     std::array<T, N> result{};
     for (auto i{0U}; i <= index; ++i) {
