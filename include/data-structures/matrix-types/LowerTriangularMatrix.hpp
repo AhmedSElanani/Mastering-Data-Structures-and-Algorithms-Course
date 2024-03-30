@@ -37,7 +37,9 @@ public:
   constexpr explicit LowerTriangularMatrix(
       std::initializer_list<Rows>&&... rows)
       : m_elements{fillTriangleElements(
-            std::forward<std::initializer_list<Rows>>(rows)...)} {}
+            std::forward<std::initializer_list<Rows>>(rows)...)} {
+    static_assert(sizeof...(rows) <= N);
+  }
 
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
   /// @return a MatrixDimension object representing [n*m] dimensions

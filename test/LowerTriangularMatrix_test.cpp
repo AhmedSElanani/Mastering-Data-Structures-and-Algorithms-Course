@@ -40,10 +40,10 @@ TEST(TestingConstruction,
       (LowerTriangularMatrix<3U>{{1U, 2U}, {3U, 4U, 5U}, {6U, 7U, 8U, 9U}});
     });
     EXPECT_STREQ(
-        (LowerTriangularMatrix<2U>{{1U}, {3U, 4U}, {6U, 7U, 8U}})
+        (LowerTriangularMatrix<3U>{{1U}, {3U, 4U}, {6U, 7U, 8U}})
             .display()
             .c_str(),
-        (LowerTriangularMatrix<2U>{{1U, 2U}, {3U, 4U, 5U}, {6U, 7U, 8U, 9U}})
+        (LowerTriangularMatrix<3U>{{1U, 2U}, {3U, 4U, 5U}, {6U, 7U, 8U, 9U}})
             .display()
             .c_str());
   }
@@ -66,8 +66,8 @@ TEST(TestingConstruction,
   {
     EXPECT_NO_THROW({ (LowerTriangularMatrix<3U>{{1U}, {2U}, {3U}}); });
     EXPECT_STREQ(
-        (LowerTriangularMatrix<2U>{{1U}, {2U}, {3U}}).display().c_str(),
-        (LowerTriangularMatrix<2U>{{1U}, {2U, 0U}, {3U, 0U, 0U}})
+        (LowerTriangularMatrix<3U>{{1U}, {2U}, {3U}}).display().c_str(),
+        (LowerTriangularMatrix<3U>{{1U}, {2U, 0U}, {3U, 0U, 0U}})
             .display()
             .c_str());
   }
