@@ -198,6 +198,15 @@ public:
     return column;
   }
 
+  /// @brief method that returns rows_iterator to traverse through each row
+  /// @return rows_iterator object pointing to first row
+  constexpr auto rows() const noexcept { return rows_iterator(*this); }
+
+  /// @brief method that returns columns_iterator to traverse through
+  ///        each column
+  /// @return column_iterator object pointing to first column
+  constexpr auto columns() const noexcept { return columns_iterator(*this); }
+
   /// @brief generic multiplication operator
   /// @param otherMatrix the second operand of multiplication
   /// @return NormalMatrix  containing the result of the multiplication
