@@ -291,6 +291,41 @@ TEST(TestingMultiplication, NormalMatricesMultiplication) {
   }
 }
 
+TEST(TestingIsSymmetric, CheckSymmetricityOfNormalMatricesOfDifferentSizes) {
+  // testing non-square matrices
+  EXPECT_FALSE((NormalMatrix<2U, 3U>{}).isSymmetric());
+  EXPECT_FALSE(
+      (NormalMatrix<2U, 3U>{{1U, 2U, 3U}, {4U, 5U, 6U}}).isSymmetric());
+
+  EXPECT_FALSE((NormalMatrix<3U, 4U>{}).isSymmetric());
+  EXPECT_FALSE(
+      (NormalMatrix<3U, 4U>{
+           {7U, 8U, 9U, 10U}, {11U, 12U, 13U, 14U}, {15U, 16U, 17U, 18U}})
+          .isSymmetric());
+
+  EXPECT_FALSE((NormalMatrix<3U, 2U>{}).isSymmetric());
+  EXPECT_FALSE(
+      (NormalMatrix<3U, 2U>{{1U, 2U}, {3U, 4U}, {5U, 6U}}).isSymmetric());
+
+  EXPECT_FALSE((NormalMatrix<2U, 4U>{}).isSymmetric());
+  EXPECT_FALSE((NormalMatrix<2U, 4U>{{7U, 8U, 9U, 10U}, {11U, 12U, 13U, 14U}})
+                   .isSymmetric());
+
+  // testing asymmetric square matrices
+  EXPECT_FALSE((NormalMatrix<2U, 2U>{{1U}, {1U}}).isSymmetric());
+
+  EXPECT_FALSE((NormalMatrix<3U, 3U>{{1U}, {1U}, {1U}}).isSymmetric());
+
+  // testing symmetric square matrices
+  EXPECT_TRUE((NormalMatrix<1U, 1U>{}).isSymmetric());
+  EXPECT_TRUE((NormalMatrix<1U, 1U>{{1U}}).isSymmetric());
+
+  EXPECT_TRUE((NormalMatrix<2U, 2U>{{1U, 2U}, {2U, 3U}}).isSymmetric());
+
+  EXPECT_TRUE((NormalMatrix<3U, 3U>{{1U, 2U, 3U}, {2U, 4U, 5U}, {3U, 5U, 6U}})
+                  .isSymmetric());
+}
+
 TEST(TestingDisplay, DisplayNormalMatricesOfDifferentSizes) {
   EXPECT_STREQ((NormalMatrix<1U, 1U>{}).display().c_str(), "|0|");
   EXPECT_STREQ((NormalMatrix<1U, 1U>{{1U}}).display().c_str(), "|1|");

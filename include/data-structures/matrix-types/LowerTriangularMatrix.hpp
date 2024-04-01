@@ -98,6 +98,11 @@ public:
     return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
   }
 
+  /// @brief method to check whether matrix type is symmetric or not
+  /// @return false
+  /// @note for lower triangular matrix, this is always false
+  constexpr auto isSymmetric() const noexcept { return false; }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {

@@ -106,6 +106,18 @@ TEST(TestingMultiplication, LowerTriangularMatricesMultiplication) {
   }
 }
 
+TEST(TestingIsSymmetric,
+     CheckSymmetricityOfLowerTringularMatricesOfDifferentSizes) {
+  EXPECT_FALSE((LowerTriangularMatrix<1U>{}).isSymmetric());
+  EXPECT_FALSE((LowerTriangularMatrix<1U>{{1U}}).isSymmetric());
+
+  EXPECT_FALSE((LowerTriangularMatrix<2U>{}).isSymmetric());
+  EXPECT_FALSE((LowerTriangularMatrix<2U>{{1U}, {2U}}).isSymmetric());
+
+  EXPECT_FALSE((LowerTriangularMatrix<3U>{}).isSymmetric());
+  EXPECT_FALSE((LowerTriangularMatrix<3U>{{1U}, {2U}, {3U}}).isSymmetric());
+}
+
 TEST(TestingDisplay, DisplayLowerTriangleMatricesOfDifferentSizes) {
   EXPECT_STREQ((LowerTriangularMatrix<1U>{}).display().c_str(), "|0|");
   EXPECT_STREQ((LowerTriangularMatrix<1U>{{1U}}).display().c_str(), "|1|");

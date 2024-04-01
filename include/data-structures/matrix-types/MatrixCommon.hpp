@@ -92,6 +92,8 @@ concept MatrixAdtConcept = requires(T t) {
   t.dimensions().rows;
   t.dimensions().columns;
 
+  t.isSymmetric();
+
   typename T::value_type;
 } && requires(T t, std::size_t index) {
   t.row(index);

@@ -100,6 +100,24 @@ public:
     return NormalMatrix<ROWS, noOfOtherMatrixColumns>{resultElements};
   }
 
+  /// @brief method to check whether matrix type is symmetric or not
+  /// @return true if matrix is symmetric, false otherwise
+  constexpr auto isSymmetric() const noexcept {
+    if constexpr (ROWS != COLUMNS) {
+      return false;
+    } else {  // it gives compilation errors on different sizes
+              // without this else
+      for (auto i{0U}; i < ROWS;
+           ++i) {  // or i < COLUMNS, since it is a square matrix
+        if (row(i) != column(i)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {

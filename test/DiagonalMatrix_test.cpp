@@ -46,6 +46,17 @@ TEST(TestingMultiplication, DiagonalMatricesMultiplication) {
   }
 }
 
+TEST(TestingIsSymmetric, CheckSymmetricityOfDiagonalMatricesOfDifferentSizes) {
+  EXPECT_TRUE((DiagonalMatrix<1U>{}).isSymmetric());
+  EXPECT_TRUE((DiagonalMatrix<1U>{1U}).isSymmetric());
+
+  EXPECT_TRUE((DiagonalMatrix<2U>{}).isSymmetric());
+  EXPECT_TRUE((DiagonalMatrix<2U>{1U, 2U}).isSymmetric());
+
+  EXPECT_TRUE((DiagonalMatrix<3U>{}).isSymmetric());
+  EXPECT_TRUE((DiagonalMatrix<3U>{1U, 2U, 3U}).isSymmetric());
+}
+
 TEST(TestingDisplay, DisplayDiagonalMatricesOfDifferentSizes) {
   EXPECT_NO_THROW({ (DiagonalMatrix<3U>{}); });
   EXPECT_NO_THROW({ (DiagonalMatrix<3U>{1U, 2U, 3U}); });

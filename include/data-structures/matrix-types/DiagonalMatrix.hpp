@@ -100,6 +100,11 @@ public:
     return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
   }
 
+  /// @brief method to check whether matrix type is symmetric or not
+  /// @return true
+  /// @note for diagonal matrix, this is always true
+  constexpr auto isSymmetric() const noexcept { return true; }
+
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
   constexpr auto display() const noexcept -> std::string {
