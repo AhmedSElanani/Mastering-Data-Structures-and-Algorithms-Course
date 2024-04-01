@@ -132,9 +132,8 @@ private:
   /// @return the total number of lower triangle elements in the matrix
   static constexpr auto numberOfTriangleElements(auto n) noexcept
       -> std::size_t {
-    // this returns the sum of {0, 1, .. , n}
-    std::ranges::iota_view elemsInEachRow{static_cast<decltype(n)>(0U), n + 1U};
-    return std::accumulate(elemsInEachRow.cbegin(), elemsInEachRow.cend(), 0U);
+    // this returns the sum of {1, 2, ... , n}
+    return (n * (n + 1U)) / 2U;
   }
 
   /// @brief elements of the lower triangle in the matrix
