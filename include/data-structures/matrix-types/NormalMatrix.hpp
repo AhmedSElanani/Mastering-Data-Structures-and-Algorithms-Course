@@ -43,6 +43,113 @@ class NormalMatrix {
             common::NaturalNumber decltype(auto) Cs = COLUMNS>
   using ElementsType = std::array<std::array<T, Cs>, Rs>;
 
+  /// @brief iterator for matrix rows
+  struct rows_iterator {
+    /// @brief C++ expects some properties from an iterator
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = RowType<>;
+    using pointer = value_type*;
+    using reference = value_type&;
+
+    /// @brief type alias for const ref to matrix
+    using cmatrix_ref = const NormalMatrix<ROWS, COLUMNS>&;
+
+    /// @brief constructor for the iterator
+    /// @param matrix the matrix  which we are iterating over
+    /// @param index the start index of iteration which defaults
+    ///               to the beginning
+    explicit constexpr rows_iterator(cmatrix_ref matrix, std::size_t index = 0U)
+        : m_matrix{matrix}, m_index{index} {}
+
+    /// @brief method that returns iterator to first row
+    /// @return iterator pointing to the first row
+    constexpr auto begin() const noexcept { return rows_iterator{m_matrix}; }
+
+    /// @brief method that returns iterator past the last row
+    /// @return iterator pointing to past the last row
+    constexpr auto end() const noexcept {
+      return rows_iterator{m_matrix, ROWS};
+    }
+
+    /// @brief prefix increment operator
+    /// @return incremented iterator
+    constexpr auto& operator++() noexcept {
+      ++m_index;
+      return *this;
+    }
+
+    /// @brief dereference operator
+    constexpr auto operator*() const { return m_matrix.row(m_index); }
+
+    /// @brief unequality operator
+    /// @param other the other iterator to compare against
+    /// @return whether both iterators are not pointing to the same row or not
+    constexpr bool operator!=(const auto& other) noexcept {
+      return m_index != other.m_index;
+    };
+
+    /// @brief const reference to the matrix to be iteraterated over
+    cmatrix_ref m_matrix;
+
+    /// @brief index to keep track of the current position of the oterator
+    std::size_t m_index;
+  };
+
+  /// @brief iterator for matrix columns
+  struct columns_iterator {
+    /// @brief C++ expects some properties from an iterator
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = ColumnType<>;
+    using pointer = value_type*;
+    using reference = value_type&;
+
+    /// @brief type alias for const ref to matrix
+    using cmatrix_ref = const NormalMatrix<ROWS, COLUMNS>&;
+
+    /// @brief constructor for the iterator
+    /// @param matrix the matrix  which we are iterating over
+    /// @param index the start index of iteration which defaults
+    ///               to the beginning
+    explicit constexpr columns_iterator(cmatrix_ref matrix,
+                                        std::size_t index = 0U)
+        : m_matrix{matrix}, m_index{index} {}
+
+    /// @brief method that returns iterator to first column
+    /// @return iterator pointing to the first column
+    constexpr auto begin() const noexcept { return columns_iterator{m_matrix}; }
+
+    /// @brief method that returns iterator past the last column
+    /// @return iterator pointing to past the last column
+    constexpr auto end() const noexcept {
+      return columns_iterator{m_matrix, COLUMNS};
+    }
+
+    /// @brief prefix increment operator
+    /// @return incremented iterator
+    constexpr auto& operator++() noexcept {
+      ++m_index;
+      return *this;
+    }
+
+    /// @brief dereference operator
+    constexpr auto operator*() const { return m_matrix.column(m_index); }
+
+    /// @brief unequality operator
+    /// @param other the other iterator to compare against
+    /// @return whether both iterators are not pointing to the same column
+    ///         or not
+    constexpr bool operator!=(const auto& other) noexcept {
+      return m_index != other.m_index;
+    };
+
+    /// @brief const reference to the matrix to be iteraterated over
+    cmatrix_ref m_matrix;
+
+    /// @brief index to keep track of the current position of the oterator
+    std::size_t m_index{0U};
+  };
 
 public:
   /// @brief constructor that accepts multiple braced init lists

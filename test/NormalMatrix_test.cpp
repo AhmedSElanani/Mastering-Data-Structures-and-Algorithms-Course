@@ -233,6 +233,14 @@ TEST(TestingColumn, ReadNormalMatricesColumnsWithinRange) {
   }
 }
 
+TEST(TestingIterators, ReadNormalMatricesRowsUsingIterator) {
+  // TODO
+}
+
+TEST(TestingIterators, ReadNormalMatricesColumnsUsingIterator) {
+  // TODO
+}
+
 TEST(TestingColumn, ReadNormalMatricesColumnsOutOfRange) {
   // 1x1 Matrix
   EXPECT_NO_THROW((NormalMatrix<1U, 1U>{}.column(0U)));
