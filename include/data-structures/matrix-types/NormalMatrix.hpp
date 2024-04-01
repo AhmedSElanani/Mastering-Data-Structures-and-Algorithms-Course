@@ -236,9 +236,10 @@ public:
       return false;
     } else {  // it gives compilation errors on different sizes
               // without this else
-      for (auto i{0U}; i < ROWS;
-           ++i) {  // or i < COLUMNS, since it is a square matrix
-        if (row(i) != column(i)) {
+      auto rIt{rows().begin()};
+      auto cIt{columns().begin()};
+      for (; rIt != rows().end() && cIt != columns().end(); ++rIt, ++cIt) {
+        if (*rIt != *cIt) {
           return false;
         }
       }
