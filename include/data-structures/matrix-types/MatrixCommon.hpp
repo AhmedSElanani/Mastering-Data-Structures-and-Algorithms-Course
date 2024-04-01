@@ -96,6 +96,11 @@ concept MatrixAdtConcept = requires(T t) {
 
   typename T::value_type;
 } && requires(T t, std::size_t index) {
+  // TODO:
+  // 1- implement rows() and columns() in the remaining matrices types
+  // 2- added them to the concept here
+  // 3- remove row(index) and column(index) from the concept and from the public
+  //    section as well
   t.row(index);
   t.column(index);
 } && IsMatrixAdt_v<T>;
