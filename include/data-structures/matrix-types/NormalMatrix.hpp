@@ -24,9 +24,25 @@ template <common::NaturalNumber decltype(auto) ROWS,
           common::NaturalNumber decltype(auto) COLUMNS,
           typename T = std::size_t>
 class NormalMatrix {
-  /// @brief type alias for m_elements type as it is currently used
+  /// @brief type alias for row type as it is currently used in several places
+  /// @tparam Cs number of columns
+  template <common::NaturalNumber decltype(auto) Cs = COLUMNS>
+  using RowType = std::array<T, Cs>;
+
+  /// @brief type alias for column type as it is currently used
+  ///         in several places
+  /// @tparam Rs number of rows
+  template <common::NaturalNumber decltype(auto) Rs = ROWS>
+  using ColumnType = std::array<T, Rs>;
+
+  /// @brief type alias for matrix elements type as it is currently used
   ///        in several places
-  using ElementsType = std::array<std::array<T, COLUMNS>, ROWS>;
+  /// @tparam Rs number of rows
+  /// @tparam Cs number of columns
+  template <common::NaturalNumber decltype(auto) Rs = ROWS,
+            common::NaturalNumber decltype(auto) Cs = COLUMNS>
+  using ElementsType = std::array<std::array<T, Cs>, Rs>;
+
 
 public:
   /// @brief constructor that accepts multiple braced init lists
@@ -44,7 +60,7 @@ public:
   ///        elements  directly
   /// @param elements elements of the 2D array
   /// @note this constructor is especially useful for multiplication operator
-  constexpr explicit NormalMatrix(ElementsType elements)
+  constexpr explicit NormalMatrix(ElementsType<> elements)
       : m_elements{std::move(elements)} {}
 
   /// @brief a constexpr method to return the [n*m] dimensions of the matrix
@@ -67,7 +83,7 @@ public:
           std::format("Columns must be within the range: 0 - {}", COLUMNS - 1));
     }
 
-    std::array<T, ROWS> column;
+    ColumnType<> column;
     std::transform(
         m_elements.cbegin(), m_elements.cend(), column.begin(),
         [columnIndex = index](const auto& row) { return row[columnIndex]; });
@@ -91,10 +107,7 @@ public:
     static_assert(COLUMNS == otherMatrix.dimensions().rows);
 
     constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
-    std::array<std::array<value_type, noOfOtherMatrixColumns>, ROWS>
-        resultElements;  // or use OtherMatrixType::value_type, since assertion
-                         // should've passed above
-
+    ElementsType<ROWS, noOfOtherMatrixColumns> resultElements;
     matrix_common::multiplyRowsByColumns(*this, otherMatrix, resultElements);
 
     return NormalMatrix<ROWS, noOfOtherMatrixColumns>{resultElements};
@@ -150,7 +163,7 @@ public:
 
 private:
   /// @brief elements of the matrix
-  const ElementsType m_elements;
+  const ElementsType<> m_elements;
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
@@ -159,8 +172,7 @@ private:
   /// @return filled matrix row
   template <typename Rows>
   constexpr auto fillToMatrixRow(Rows&& elems) const noexcept {
-    typename std::remove_const<typename std::remove_reference<
-        decltype(ElementsType{}[0U])>::type>::type matrixRow{};
+    RowType<> matrixRow{};
 
     const auto numberOfElementsPassed{
         static_cast<std::size_t>(std::distance(elems.begin(), elems.end()))};
