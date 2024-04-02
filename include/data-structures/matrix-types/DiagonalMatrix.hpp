@@ -136,6 +136,7 @@ public:
 
 private:
   /// @brief diagonal elements of the matrix
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
   const std::array<T, N> m_elements{};
 };
 

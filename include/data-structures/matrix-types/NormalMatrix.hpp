@@ -90,6 +90,7 @@ class NormalMatrix {
 
   private:
     /// @brief const reference to the matrix to be iteraterated over
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     cmatrix_ref m_matrix;
 
     /// @brief index to keep track of the current position of the oterator
@@ -146,6 +147,7 @@ class NormalMatrix {
 
   private:
     /// @brief const reference to the matrix to be iteraterated over
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     cmatrix_ref m_matrix;
 
     /// @brief index to keep track of the current position of the oterator
@@ -281,6 +283,7 @@ public:
 
 private:
   /// @brief elements of the matrix
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
   const ElementsType<> m_elements{};
 
   /// @brief helper method to take braced init list passed and return a matrix
@@ -289,7 +292,7 @@ private:
   /// @param elems elements to fill the matrix row
   /// @return filled matrix row
   template <typename Rows>
-  constexpr auto fillToMatrixRow(Rows&& elems) const noexcept {
+  constexpr auto fillToMatrixRow(Rows elems) const noexcept {
     RowType<> matrixRow{};
 
     const auto numberOfElementsPassed{

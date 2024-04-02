@@ -140,6 +140,7 @@ private:
   }
 
   /// @brief elements of the lower triangle in the matrix
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
   const std::array<T, numberOfTriangleElements(N)> m_elements{};
 
   /// @brief helper method to set the triangle elements of the matrix

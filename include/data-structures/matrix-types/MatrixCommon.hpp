@@ -4,8 +4,10 @@
 #include <cstddef>
 #include <numeric>
 #include <type_traits>
+// NOLINTNEXTLINE(misc-include-cleaner)
 #include <vector>
 
+// NOLINTNEXTLINE(clang-diagnostic-error)
 #include "common/Common.hpp"
 
 /// @brief namespace for matrices types
@@ -82,23 +84,23 @@ constexpr bool kIsMatrixAdtV = IsMatrixAdt<T>::value;
 
 /// @brief concept for Matrix ADT interface
 template <typename T>
-concept MatrixAdtConcept = requires(T t) {
-  t.display();
+concept MatrixAdtConcept = requires(T matrix) {
+  matrix.display();
 
-  t.dimensions().kRows;
-  t.dimensions().kColumns;
+  matrix.dimensions().kRows;
+  matrix.dimensions().kColumns;
 
-  t.isSymmetric();
+  matrix.isSymmetric();
 
   typename T::value_type;
-} && requires(T t, std::size_t index) {
+} && requires(T matrix, std::size_t index) {
   // TODO(salah):
   // 1- implement rows() and columns() in the remaining matrices types
   // 2- added them to the concept here
   // 3- remove row(index) and column(index) from the concept and from the public
   //    section as well
-  t.row(index);
-  t.column(index);
+  matrix.row(index);
+  matrix.column(index);
 } && kIsMatrixAdtV<T>;
 
 }  // namespace data_structures::matrix_types
