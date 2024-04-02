@@ -75,8 +75,8 @@ public:
   /// @return NormalMatrix containing the result of the multiplication
   auto operator*(const auto& otherMatrix) const {
     // assert both types are the same
-    using OtherMatrixType = std::remove_const<
-        typename std::remove_reference<decltype(otherMatrix)>::type>::type;
+    using OtherMatrixType =
+        std::remove_const_t<std::remove_reference_t<decltype(otherMatrix)>>;
 
     static_assert(
         std::is_same_v<typename OtherMatrixType::value_type, value_type>,

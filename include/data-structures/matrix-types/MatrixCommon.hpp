@@ -46,9 +46,8 @@ static void multiplyRowsByColumns(const auto& firstMatrix,
               auto column{secondMatrix.column(colIndex++)};
 
               // type alias for element type in in either of both matrices
-              using value_type = std::remove_const<
-                  typename std::remove_reference<decltype(firstMatrix)>::type>::
-                  type::value_type;  // or secondMatrix
+              using value_type = std::remove_const<std::remove_reference_t<
+                  decltype(firstMatrix)>>::type::value_type;  // or secondMatrix
 
               std::vector<value_type> elemsProduct(
                   currentRow.size()  // or column.size()
@@ -79,7 +78,7 @@ class IsMatrixAdt : public std::is_base_of<MatrixAdtTag, T> {};
 ///       definition
 /// @tparam T the type of question
 template <typename T>
-constexpr bool IsMatrixAdt_v = IsMatrixAdt<T>::value;
+constexpr bool kIsMatrixAdtV = IsMatrixAdt<T>::value;
 
 /// @brief concept for Matrix ADT interface
 template <typename T>
@@ -100,6 +99,6 @@ concept MatrixAdtConcept = requires(T t) {
   //    section as well
   t.row(index);
   t.column(index);
-} && IsMatrixAdt_v<T>;
+} && kIsMatrixAdtV<T>;
 
 }  // namespace data_structures::matrix_types

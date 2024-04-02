@@ -69,7 +69,7 @@ class NormalMatrix {
 
     /// @brief prefix increment operator
     /// @return incremented iterator
-    constexpr auto& operator++() noexcept {
+    constexpr auto operator++() noexcept -> auto& {
       ++m_index;
       return *this;
     }
