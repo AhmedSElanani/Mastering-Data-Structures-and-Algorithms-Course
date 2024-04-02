@@ -84,11 +84,13 @@ class NormalMatrix {
 
     /// @brief unequality operator
     /// @param other the other iterator to compare against
-    /// @return whether both iterators are not pointing to the same row or not
+    /// @return whether both iterators are not pointing to the same row
+    ///         in the same matrix or not
     constexpr bool operator!=(const auto& other) noexcept {
-      return m_index != other.m_index;
+      return (&m_matrix != &other.m_matrix) || (m_index != other.m_index);
     };
 
+  private:
     /// @brief const reference to the matrix to be iteraterated over
     cmatrix_ref m_matrix;
 
@@ -139,11 +141,12 @@ class NormalMatrix {
     /// @brief unequality operator
     /// @param other the other iterator to compare against
     /// @return whether both iterators are not pointing to the same column
-    ///         or not
+    ///         in the same matrix or not
     constexpr bool operator!=(const auto& other) noexcept {
-      return m_index != other.m_index;
+      return (&m_matrix != &other.m_matrix) || (m_index != other.m_index);
     };
 
+  private:
     /// @brief const reference to the matrix to be iteraterated over
     cmatrix_ref m_matrix;
 
