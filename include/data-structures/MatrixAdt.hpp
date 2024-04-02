@@ -65,6 +65,7 @@ private:
   ///        wrap it
   /// @param matrix the matrix object of any accepted MatrixT type to be wrapped
   /// @note currently only needed in multiplication operator
+  // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
   constexpr explicit MatrixAdt(MatrixT&& matrix)
       : m_matrixImpl{std::make_unique<MatrixT>(std::forward<MatrixT>(matrix))} {
   }

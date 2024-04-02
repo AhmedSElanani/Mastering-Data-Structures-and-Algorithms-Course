@@ -7,7 +7,6 @@
 // NOLINTNEXTLINE(misc-include-cleaner)
 #include <vector>
 
-// NOLINTNEXTLINE(clang-diagnostic-error)
 #include "common/Common.hpp"
 
 /// @brief namespace for matrices types

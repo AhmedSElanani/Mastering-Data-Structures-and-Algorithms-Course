@@ -153,9 +153,8 @@ private:
         triangleElements{};
 
     const auto setTriangleSideElements{
-        [&elems = triangleElements](auto&& triangleSide,
-                                    std::size_t startPosition,
-                                    std::size_t sideLength) {
+        [&elems = triangleElements](auto&& triangleSide, auto startPosition,
+                                    auto sideLength) {
           const auto numberOfElementsPassed{static_cast<std::size_t>(
               std::distance(triangleSide.begin(), triangleSide.end()))};
 
