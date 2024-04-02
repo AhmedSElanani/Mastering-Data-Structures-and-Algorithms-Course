@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <concepts>
+#include <cstddef>
 #include <numeric>
+#include <type_traits>
 #include <vector>
 
 #include "common/Common.hpp"
@@ -14,8 +16,7 @@ namespace data_structures::matrix_types {
 namespace matrix_common {
 
 /// @brief struct to represent the dimensions of the matrix
-template <common::NaturalNumber decltype(auto) ROWS,
-          common::NaturalNumber decltype(auto) COLUMNS>
+template <common::NaturalNumber auto ROWS, common::NaturalNumber auto COLUMNS>
 struct MatrixDimensions {
   static constexpr auto rows{ROWS};
   static constexpr auto columns{COLUMNS};

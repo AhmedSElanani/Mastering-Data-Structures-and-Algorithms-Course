@@ -1,16 +1,19 @@
 #pragma once
 
 #include <concepts>
+#include <initializer_list>
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
+// NOLINTBEGIN
 // Matrices Types supported
 #include "data-structures/matrix-types/DiagonalMatrix.hpp"
 #include "data-structures/matrix-types/LowerTriangularMatrix.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
+// NOLINTEND
 
 /// @brief namespace for data structures implemented
 namespace data_structures {

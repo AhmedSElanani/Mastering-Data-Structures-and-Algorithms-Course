@@ -3,12 +3,16 @@
 #include <algorithm>
 #include <array>
 #include <concepts>
+#include <cstddef>
 #include <format>
 #include <initializer_list>
 #include <iterator>
 #include <numeric>
 #include <ranges>
+#include <string>
+#include <type_traits>
 
+#include "common/Common.hpp"
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
@@ -18,7 +22,7 @@ namespace data_structures::matrix_types {
 /// @brief definition of class representing lower triangular Matrix
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix, default is std::size_t
-template <common::NaturalNumber decltype(auto) N, typename T = std::size_t>
+template <common::NaturalNumber auto N, typename T = std::size_t>
 class LowerTriangularMatrix {
 public:
   /// @brief to handle when passing empty list
@@ -181,6 +185,6 @@ private:
 /// @brief derive in a non-intrusive way of the MatrixAdt type
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber decltype(auto) N, typename T>
+template <common::NaturalNumber auto N, typename T>
 class IsMatrixAdt<LowerTriangularMatrix<N, T>> : public std::true_type {};
 }  // namespace data_structures::matrix_types

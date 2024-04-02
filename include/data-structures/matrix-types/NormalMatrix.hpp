@@ -6,8 +6,12 @@
 #include <format>
 #include <initializer_list>
 #include <iterator>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
 #include <utility>
 
+#include "common/Common.hpp"
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
 /// @brief namespace for matrices types
@@ -17,27 +21,26 @@ namespace data_structures::matrix_types {
 /// @tparam ROWS number of rows of matrix
 /// @tparam COLUMNS number of columns of matrix
 /// @tparam T type of elements of matrix, default is std::size_t
-template <common::NaturalNumber decltype(auto) ROWS,
-          common::NaturalNumber decltype(auto) COLUMNS,
+template <common::NaturalNumber auto ROWS, common::NaturalNumber auto COLUMNS,
           typename T = std::size_t>
 class NormalMatrix {
   /// @brief type alias for row type as it is currently used in several places
   /// @tparam Cs number of columns
-  template <common::NaturalNumber decltype(auto) Cs = COLUMNS>
+  template <common::NaturalNumber auto Cs = COLUMNS>
   using RowType = std::array<T, Cs>;
 
   /// @brief type alias for column type as it is currently used
   ///         in several places
   /// @tparam Rs number of rows
-  template <common::NaturalNumber decltype(auto) Rs = ROWS>
+  template <common::NaturalNumber auto Rs = ROWS>
   using ColumnType = std::array<T, Rs>;
 
   /// @brief type alias for matrix elements type as it is currently used
   ///        in several places
   /// @tparam Rs number of rows
   /// @tparam Cs number of columns
-  template <common::NaturalNumber decltype(auto) Rs = ROWS,
-            common::NaturalNumber decltype(auto) Cs = COLUMNS>
+  template <common::NaturalNumber auto Rs = ROWS,
+            common::NaturalNumber auto Cs = COLUMNS>
   using ElementsType = std::array<std::array<T, Cs>, Rs>;
 
   /// @brief iterator for matrix rows
@@ -306,7 +309,7 @@ private:
 /// @tparam ROWS number of rows of matrix
 /// @tparam COLUMNS number of columns of matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber decltype(auto) ROWS,
-          common::NaturalNumber decltype(auto) COLUMNS, typename T>
+template <common::NaturalNumber auto ROWS, common::NaturalNumber auto COLUMNS,
+          typename T>
 class IsMatrixAdt<NormalMatrix<COLUMNS, ROWS, T>> : public std::true_type {};
 }  // namespace data_structures::matrix_types

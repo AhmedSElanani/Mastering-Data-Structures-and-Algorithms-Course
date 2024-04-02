@@ -1,8 +1,14 @@
 #pragma once
 
 #include <array>
+#include <cstddef>
+#include <concepts>
 #include <format>
+#include <stdexcept>
+#include <type_traits>
+#include <string>
 
+#include "common/Common.hpp"
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
@@ -14,7 +20,7 @@ namespace data_structures::matrix_types {
 /// @tparam T type of elements of matrix, default is std::size_t
 /// @note diagonal matrix is by definition is a square matrix, hence it needs
 ///       only one parameter to define its size
-template <common::NaturalNumber decltype(auto) N, typename T = std::size_t>
+template <common::NaturalNumber auto N, typename T = std::size_t>
 class DiagonalMatrix {
 public:
   /// @brief constructor accepting braced init list representing the diagonal
@@ -136,7 +142,7 @@ private:
 /// @brief derive in a non-intrusive way of the MatrixAdt type
 /// @tparam N number of rows and columns of the matrix
 /// @tparam T type of elements of matrix
-template <common::NaturalNumber decltype(auto) N, typename T>
+template <common::NaturalNumber auto N, typename T>
 class IsMatrixAdt<DiagonalMatrix<N, T>> : public std::true_type {};
 
 }  // namespace data_structures::matrix_types
