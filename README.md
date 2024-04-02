@@ -20,6 +20,16 @@ In addition, I am experimenting with automation to make things easier and more r
 
   ``` $ scripts/run-tests.sh ```
 
+* ### If you faced a problem when running thread sanitized issue
+
+  For me, it had to do with ASLR and having a higher entropy. For more information check this link:
+
+  <https://stackoverflow.com/questions/77850769/fatal-threadsanitizer-unexpected-memory-mapping-when-running-on-linux-kernels>
+
+  And the limit that fixed it on my machine, was this:
+
+  ``` $ sudo sysctl vm.mmap_rnd_bits=28 ```
+
 ## Linting and Formatting
 
 * ### Clang Tidy
