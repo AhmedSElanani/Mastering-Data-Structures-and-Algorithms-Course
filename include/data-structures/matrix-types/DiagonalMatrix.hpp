@@ -1,12 +1,12 @@
 #pragma once
 
 #include <array>
-#include <cstddef>
 #include <concepts>
+#include <cstddef>
 #include <format>
 #include <stdexcept>
-#include <type_traits>
 #include <string>
+#include <type_traits>
 
 #include "common/Common.hpp"
 #include "data-structures/matrix-types/MatrixCommon.hpp"
@@ -74,9 +74,9 @@ public:
         "Element types are not the same");
 
     // assert dimensons are compatible
-    static_assert(N == otherMatrix.dimensions().rows);
+    static_assert(N == otherMatrix.dimensions().kRows);
 
-    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().kColumns};
     std::array<std::array<value_type, kNoOfOtherMatrixColumns>, N>
         resultElements;  // or use OtherMatrixType::value_type, since
                          // assertion should've passed above

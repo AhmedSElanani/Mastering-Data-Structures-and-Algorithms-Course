@@ -2,13 +2,10 @@
 
 #include <algorithm>
 #include <array>
-#include <concepts>
 #include <cstddef>
 #include <format>
 #include <initializer_list>
 #include <iterator>
-#include <numeric>
-#include <ranges>
 #include <string>
 #include <type_traits>
 
@@ -87,9 +84,9 @@ public:
         "Element types are not the same");
 
     // assert dimensons are compatible
-    static_assert(N == otherMatrix.dimensions().rows);
+    static_assert(N == otherMatrix.dimensions().kRows);
 
-    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().kColumns};
     std::array<std::array<value_type, kNoOfOtherMatrixColumns>, N>
         resultElements;  // or use OtherMatrixType::value_type, since
                          // assertion should've passed above
@@ -151,8 +148,7 @@ private:
   /// @return deserialized elements of the triangle
   template <typename... Rows>
   constexpr auto fillTriangleElements(auto&&... triangleSides) const noexcept {
-    typename std::remove_const<
-        typename std::remove_reference<decltype(m_elements)>::type>::type
+    std::remove_const_t<std::remove_reference_t<decltype(m_elements)>>
         triangleElements{};
 
     const auto setTriangleSideElements{

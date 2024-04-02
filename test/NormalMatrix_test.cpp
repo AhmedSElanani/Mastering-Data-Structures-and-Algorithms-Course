@@ -119,51 +119,51 @@ TEST(TestingDimensions, DimensionsOfNormalMatricesWithDifferentSizes) {
   {
     const auto &dimensions{(NormalMatrix<1U, 1U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 1U);
-    EXPECT_EQ(dimensions.columns, 1U);
+    EXPECT_EQ(dimensions.kRows, 1U);
+    EXPECT_EQ(dimensions.kColumns, 1U);
   }
 
   // 2-D Matrices
   {
     const auto &dimensions{(NormalMatrix<1U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 1U);
-    EXPECT_EQ(dimensions.columns, 2U);
+    EXPECT_EQ(dimensions.kRows, 1U);
+    EXPECT_EQ(dimensions.kColumns, 2U);
   }
 
   {
     const auto &dimensions{(NormalMatrix<2U, 1U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 2U);
-    EXPECT_EQ(dimensions.columns, 1U);
+    EXPECT_EQ(dimensions.kRows, 2U);
+    EXPECT_EQ(dimensions.kColumns, 1U);
   }
 
   {
     const auto &dimensions{(NormalMatrix<2U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 2U);
-    EXPECT_EQ(dimensions.columns, 2U);
+    EXPECT_EQ(dimensions.kRows, 2U);
+    EXPECT_EQ(dimensions.kColumns, 2U);
   }
 
   {
     const auto &dimensions{(NormalMatrix<3U, 2U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 3U);
-    EXPECT_EQ(dimensions.columns, 2U);
+    EXPECT_EQ(dimensions.kRows, 3U);
+    EXPECT_EQ(dimensions.kColumns, 2U);
   }
 
   {
     const auto &dimensions{(NormalMatrix<2U, 3U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 2U);
-    EXPECT_EQ(dimensions.columns, 3U);
+    EXPECT_EQ(dimensions.kRows, 2U);
+    EXPECT_EQ(dimensions.kColumns, 3U);
   }
 
   {
     const auto &dimensions{(NormalMatrix<3U, 3U>{}).dimensions()};
 
-    EXPECT_EQ(dimensions.rows, 3U);
-    EXPECT_EQ(dimensions.columns, 3U);
+    EXPECT_EQ(dimensions.kRows, 3U);
+    EXPECT_EQ(dimensions.kColumns, 3U);
   }
 }
 

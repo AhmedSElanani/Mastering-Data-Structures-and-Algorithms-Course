@@ -213,21 +213,21 @@ public:
   /// @return NormalMatrix  containing the result of the multiplication
   auto operator*(const auto& otherMatrix) const {
     // assert both types are the same
-    using OtherMatrixType = std::remove_const<
-        typename std::remove_reference<decltype(otherMatrix)>::type>::type;
+    using OtherMatrixType =
+        std::remove_const_t<std::remove_reference_t<decltype(otherMatrix)>>;
 
     static_assert(
         std::is_same_v<typename OtherMatrixType::value_type, value_type>,
         "Element types are not the same");
 
     // assert dimensons are compatible
-    static_assert(COLUMNS == otherMatrix.dimensions().rows);
+    static_assert(COLUMNS == otherMatrix.dimensions().kRows);
 
-    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
-    ElementsType<ROWS, noOfOtherMatrixColumns> resultElements;
+    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().kColumns};
+    ElementsType<ROWS, kNoOfOtherMatrixColumns> resultElements;
     matrix_common::multiplyRowsByColumns(*this, otherMatrix, resultElements);
 
-    return NormalMatrix<ROWS, noOfOtherMatrixColumns>{resultElements};
+    return NormalMatrix<ROWS, kNoOfOtherMatrixColumns>{resultElements};
   }
 
   /// @brief method to check whether matrix type is symmetric or not
@@ -251,23 +251,23 @@ public:
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
-  constexpr auto display() const noexcept -> std::string {
+  [[nodiscard]] constexpr auto display() const noexcept -> std::string {
     const auto stringifyMatrix{[&matrixElements = m_elements]() {
       const auto stringifyRow{[](auto&& row) {
-        constexpr auto rowLength{COLUMNS};
+        constexpr auto kRowLength{COLUMNS};
         std::string result;
-        for (std::size_t i{0U}; i < rowLength; ++i) {
-          result += std::to_string(row[i]) + (i == rowLength - 1U ? "" : " ");
+        for (std::size_t i{0U}; i < kRowLength; ++i) {
+          result += std::to_string(row[i]) + (i == kRowLength - 1U ? "" : " ");
         }
 
         return std::string{std::format("|{}|", result)};
       }};
 
-      constexpr auto numberOfRows{ROWS};
+      constexpr auto kNumberOfRows{ROWS};
       std::string result;
-      for (std::size_t i{0U}; i < numberOfRows; ++i) {
+      for (std::size_t i{0U}; i < kNumberOfRows; ++i) {
         result += stringifyRow(matrixElements[i]) +
-                  (i == numberOfRows - 1U ? "" : "\n");
+                  (i == kNumberOfRows - 1U ? "" : "\n");
       }
 
       return result;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <concepts>
 #include <cstddef>
 #include <numeric>
 #include <type_traits>
@@ -18,8 +17,8 @@ namespace matrix_common {
 /// @brief struct to represent the dimensions of the matrix
 template <common::NaturalNumber auto ROWS, common::NaturalNumber auto COLUMNS>
 struct MatrixDimensions {
-  static constexpr auto rows{ROWS};
-  static constexpr auto columns{COLUMNS};
+  static constexpr auto kRows{ROWS};
+  static constexpr auto kColumns{COLUMNS};
 };
 
 /// @brief helper function to multiply rows of first matrix by columns of second
@@ -86,8 +85,8 @@ template <typename T>
 concept MatrixAdtConcept = requires(T t) {
   t.display();
 
-  t.dimensions().rows;
-  t.dimensions().columns;
+  t.dimensions().kRows;
+  t.dimensions().kColumns;
 
   t.isSymmetric();
 
