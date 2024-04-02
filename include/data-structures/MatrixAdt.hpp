@@ -51,7 +51,7 @@ public:
 
   /// @brief method to display elements of the instantiated matrix
   /// @return stringified format of the instantiated matrix elements
-  constexpr auto display() const noexcept -> std::string {
+  [[nodiscard]] constexpr auto display() const noexcept -> std::string {
     return m_matrixImpl->display();
   }
 

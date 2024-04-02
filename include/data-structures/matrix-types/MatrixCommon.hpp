@@ -7,11 +7,8 @@
 
 #include "common/Common.hpp"
 
-/// @brief namespace for data structures implemented
-namespace data_structures {
-
 /// @brief namespace for matrices types
-namespace matrix_types {
+namespace data_structures::matrix_types {
 
 /// @brief namespace for common data between matrices types
 namespace matrix_common {
@@ -29,7 +26,7 @@ struct MatrixDimensions {
 /// @param firstMatrix first operand of matrices multiplication
 /// @param secondMatrix second operand of matrices multiplication
 /// @param productResult an array of arrays the hold the result elements
-// TODO: make it accept matrix adt concept for first two parameters
+// TODO(salah): make it accept matrix adt concept for first two parameters
 static void multiplyRowsByColumns(const auto& firstMatrix,
                                   const auto& secondMatrix,
                                   auto& productResult) {
@@ -41,7 +38,7 @@ static void multiplyRowsByColumns(const auto& firstMatrix,
             static_cast<std::size_t>(std::distance(resultBegin, &resultRow))};
         const auto currentRow{firstMatrix.row(rowIndex)};
 
-        // TODO: use iterators instead
+        // TODO(salah): use iterators instead
         auto colIndex{0U};
         std::generate(
             resultRow.begin(), resultRow.end(),
@@ -96,7 +93,7 @@ concept MatrixAdtConcept = requires(T t) {
 
   typename T::value_type;
 } && requires(T t, std::size_t index) {
-  // TODO:
+  // TODO(salah):
   // 1- implement rows() and columns() in the remaining matrices types
   // 2- added them to the concept here
   // 3- remove row(index) and column(index) from the concept and from the public
@@ -105,5 +102,4 @@ concept MatrixAdtConcept = requires(T t) {
   t.column(index);
 } && IsMatrixAdt_v<T>;
 
-}  // namespace matrix_types
-}  // namespace data_structures
+}  // namespace data_structures::matrix_types

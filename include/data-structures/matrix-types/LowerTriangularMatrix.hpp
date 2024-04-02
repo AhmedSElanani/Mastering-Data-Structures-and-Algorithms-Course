@@ -12,11 +12,8 @@
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
-/// @brief namespace for data structures implemented
-namespace data_structures {
-
 /// @brief namespace for matrices types
-namespace matrix_types {
+namespace data_structures::matrix_types {
 
 /// @brief definition of class representing lower triangular Matrix
 /// @tparam N number of rows and columns of the matrix
@@ -88,14 +85,14 @@ public:
     // assert dimensons are compatible
     static_assert(N == otherMatrix.dimensions().rows);
 
-    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
-    std::array<std::array<value_type, noOfOtherMatrixColumns>, N>
+    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    std::array<std::array<value_type, kNoOfOtherMatrixColumns>, N>
         resultElements;  // or use OtherMatrixType::value_type, since
                          // assertion should've passed above
 
     matrix_common::multiplyRowsByColumns(*this, otherMatrix, resultElements);
 
-    return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
+    return NormalMatrix<N, kNoOfOtherMatrixColumns>{resultElements};
   }
 
   /// @brief method to check whether matrix type is symmetric or not
@@ -105,23 +102,23 @@ public:
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
-  constexpr auto display() const noexcept -> std::string {
+  [[nodiscard]] constexpr auto display() const noexcept -> std::string {
     const auto stringifyRow{[&triangleElements = m_elements](const auto& row) {
-      constexpr auto rowLength{N};
+      constexpr auto kRowLength{N};
       std::string result;
-      for (std::size_t i{0U}; i < rowLength; ++i) {
+      for (std::size_t i{0U}; i < kRowLength; ++i) {
         result += std::to_string(row[i]) +
                   // concat. space after each element except the last one
-                  (i == rowLength - 1U ? "" : " ");
+                  (i == kRowLength - 1U ? "" : " ");
       }
 
       return std::string{std::format("|{}|", result)};
     }};
 
-    constexpr auto numberOfRows{N};
+    constexpr auto kNumberOfRows{N};
     std::string result;
-    for (auto i{0U}; i < numberOfRows; ++i) {
-      result += stringifyRow(row(i)) + (i == numberOfRows - 1U ? "" : "\n");
+    for (auto i{0U}; i < kNumberOfRows; ++i) {
+      result += stringifyRow(row(i)) + (i == kNumberOfRows - 1U ? "" : "\n");
     }
 
     return result;
@@ -186,5 +183,4 @@ private:
 /// @tparam T type of elements of matrix
 template <common::NaturalNumber decltype(auto) N, typename T>
 class IsMatrixAdt<LowerTriangularMatrix<N, T>> : public std::true_type {};
-}  // namespace matrix_types
-}  // namespace data_structures
+}  // namespace data_structures::matrix_types

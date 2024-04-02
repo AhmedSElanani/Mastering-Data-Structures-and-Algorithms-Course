@@ -10,11 +10,8 @@
 
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
-/// @brief namespace for data structures implemented
-namespace data_structures {
-
 /// @brief namespace for matrices types
-namespace matrix_types {
+namespace data_structures::matrix_types {
 
 /// @brief definition of class representing non-special case Matrix
 /// @tparam ROWS number of rows of matrix
@@ -44,7 +41,7 @@ class NormalMatrix {
   using ElementsType = std::array<std::array<T, Cs>, Rs>;
 
   /// @brief iterator for matrix rows
-  struct rows_iterator {
+  struct RowsIterator {
     /// @brief C++ expects some properties from an iterator
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -59,18 +56,16 @@ class NormalMatrix {
     /// @param matrix the matrix  which we are iterating over
     /// @param index the start index of iteration which defaults
     ///               to the beginning
-    explicit constexpr rows_iterator(cmatrix_ref matrix, std::size_t index = 0U)
+    explicit constexpr RowsIterator(cmatrix_ref matrix, std::size_t index = 0U)
         : m_matrix{matrix}, m_index{index} {}
 
     /// @brief method that returns iterator to first row
     /// @return iterator pointing to the first row
-    constexpr auto begin() const noexcept { return rows_iterator{m_matrix}; }
+    constexpr auto begin() const noexcept { return RowsIterator{m_matrix}; }
 
     /// @brief method that returns iterator past the last row
     /// @return iterator pointing to past the last row
-    constexpr auto end() const noexcept {
-      return rows_iterator{m_matrix, ROWS};
-    }
+    constexpr auto end() const noexcept { return RowsIterator{m_matrix, ROWS}; }
 
     /// @brief prefix increment operator
     /// @return incremented iterator
@@ -86,7 +81,7 @@ class NormalMatrix {
     /// @param other the other iterator to compare against
     /// @return whether both iterators are not pointing to the same row
     ///         in the same matrix or not
-    constexpr bool operator!=(const auto& other) noexcept {
+    constexpr auto operator!=(const auto& other) noexcept -> bool {
       return (&m_matrix != &other.m_matrix) || (m_index != other.m_index);
     };
 
@@ -99,7 +94,7 @@ class NormalMatrix {
   };
 
   /// @brief iterator for matrix columns
-  struct columns_iterator {
+  struct ColumnsIterator {
     /// @brief C++ expects some properties from an iterator
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -114,23 +109,23 @@ class NormalMatrix {
     /// @param matrix the matrix  which we are iterating over
     /// @param index the start index of iteration which defaults
     ///               to the beginning
-    explicit constexpr columns_iterator(cmatrix_ref matrix,
-                                        std::size_t index = 0U)
+    explicit constexpr ColumnsIterator(cmatrix_ref matrix,
+                                       std::size_t index = 0U)
         : m_matrix{matrix}, m_index{index} {}
 
     /// @brief method that returns iterator to first column
     /// @return iterator pointing to the first column
-    constexpr auto begin() const noexcept { return columns_iterator{m_matrix}; }
+    constexpr auto begin() const noexcept { return ColumnsIterator{m_matrix}; }
 
     /// @brief method that returns iterator past the last column
     /// @return iterator pointing to past the last column
     constexpr auto end() const noexcept {
-      return columns_iterator{m_matrix, COLUMNS};
+      return ColumnsIterator{m_matrix, COLUMNS};
     }
 
     /// @brief prefix increment operator
     /// @return incremented iterator
-    constexpr auto& operator++() noexcept {
+    constexpr auto operator++() noexcept -> auto& {
       ++m_index;
       return *this;
     }
@@ -142,7 +137,7 @@ class NormalMatrix {
     /// @param other the other iterator to compare against
     /// @return whether both iterators are not pointing to the same column
     ///         in the same matrix or not
-    constexpr bool operator!=(const auto& other) noexcept {
+    constexpr auto operator!=(const auto& other) noexcept -> bool {
       return (&m_matrix != &other.m_matrix) || (m_index != other.m_index);
     };
 
@@ -201,14 +196,14 @@ public:
     return column;
   }
 
-  /// @brief method that returns rows_iterator to traverse through each row
-  /// @return rows_iterator object pointing to first row
-  constexpr auto rows() const noexcept { return rows_iterator(*this); }
+  /// @brief method that returns RowsIterator to traverse through each row
+  /// @return RowsIterator object pointing to first row
+  constexpr auto rows() const noexcept { return RowsIterator(*this); }
 
-  /// @brief method that returns columns_iterator to traverse through
+  /// @brief method that returns ColumnsIterator to traverse through
   ///        each column
-  /// @return column_iterator object pointing to first column
-  constexpr auto columns() const noexcept { return columns_iterator(*this); }
+  /// @return ColumnsIterator object pointing to first column
+  constexpr auto columns() const noexcept { return ColumnsIterator(*this); }
 
   /// @brief generic multiplication operator
   /// @param otherMatrix the second operand of multiplication
@@ -283,7 +278,7 @@ public:
 
 private:
   /// @brief elements of the matrix
-  const ElementsType<> m_elements;
+  const ElementsType<> m_elements{};
 
   /// @brief helper method to take braced init list passed and return a matrix
   ///        row filled with those passed elements
@@ -296,11 +291,11 @@ private:
 
     const auto numberOfElementsPassed{
         static_cast<std::size_t>(std::distance(elems.begin(), elems.end()))};
-    constexpr auto matrixRowLength{matrixRow.size()};
+    constexpr auto kMatrixRowLength{matrixRow.size()};
 
-    const auto numberOfElementsToMove{numberOfElementsPassed <= matrixRowLength
+    const auto numberOfElementsToMove{numberOfElementsPassed <= kMatrixRowLength
                                           ? numberOfElementsPassed
-                                          : matrixRowLength};
+                                          : kMatrixRowLength};
     std::move(elems.begin(), elems.begin() + numberOfElementsToMove,
               matrixRow.begin());
     return matrixRow;
@@ -314,5 +309,4 @@ private:
 template <common::NaturalNumber decltype(auto) ROWS,
           common::NaturalNumber decltype(auto) COLUMNS, typename T>
 class IsMatrixAdt<NormalMatrix<COLUMNS, ROWS, T>> : public std::true_type {};
-}  // namespace matrix_types
-}  // namespace data_structures
+}  // namespace data_structures::matrix_types

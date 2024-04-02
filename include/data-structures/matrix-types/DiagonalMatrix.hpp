@@ -6,11 +6,8 @@
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
-/// @brief namespace for data structures implemented
-namespace data_structures {
-
 /// @brief namespace for matrices types
-namespace matrix_types {
+namespace data_structures::matrix_types {
 
 /// @brief definition of class representing diagonal Matrix
 /// @tparam N number of rows and columns of the matrix
@@ -73,8 +70,8 @@ public:
     // assert dimensons are compatible
     static_assert(N == otherMatrix.dimensions().rows);
 
-    constexpr auto noOfOtherMatrixColumns{otherMatrix.dimensions().columns};
-    std::array<std::array<value_type, noOfOtherMatrixColumns>, N>
+    constexpr auto kNoOfOtherMatrixColumns{otherMatrix.dimensions().columns};
+    std::array<std::array<value_type, kNoOfOtherMatrixColumns>, N>
         resultElements;  // or use OtherMatrixType::value_type, since
                          // assertion should've passed above
 
@@ -97,7 +94,7 @@ public:
           resultRow = otherMatrixRow;  // after multiplying by diagonal element
         });
 
-    return NormalMatrix<N, noOfOtherMatrixColumns>{resultElements};
+    return NormalMatrix<N, kNoOfOtherMatrixColumns>{resultElements};
   }
 
   /// @brief method to check whether matrix type is symmetric or not
@@ -107,22 +104,22 @@ public:
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
-  constexpr auto display() const noexcept -> std::string {
+  [[nodiscard]] constexpr auto display() const noexcept -> std::string {
     const auto stringifyRow{[&diagonalElements = m_elements](const auto& row) {
-      constexpr auto rowLength{N};
+      constexpr auto kRowLength{N};
 
       std::string result;
-      for (std::size_t i{0U}; i < rowLength; ++i) {
-        result += std::to_string(row[i]) + (i == rowLength - 1U ? "" : " ");
+      for (std::size_t i{0U}; i < kRowLength; ++i) {
+        result += std::to_string(row[i]) + (i == kRowLength - 1U ? "" : " ");
       }
 
       return std::string{std::format("|{}|", result)};
     }};
 
-    constexpr auto numberOfRows{N};
+    constexpr auto kNumberOfRows{N};
     std::string result;
-    for (std::size_t i{0U}; i < numberOfRows; ++i) {
-      result += stringifyRow(row(i)) + (i == numberOfRows - 1U ? "" : "\n");
+    for (std::size_t i{0U}; i < kNumberOfRows; ++i) {
+      result += stringifyRow(row(i)) + (i == kNumberOfRows - 1U ? "" : "\n");
     }
 
     return result;
@@ -133,7 +130,7 @@ public:
 
 private:
   /// @brief diagonal elements of the matrix
-  const std::array<T, N> m_elements;
+  const std::array<T, N> m_elements{};
 };
 
 /// @brief derive in a non-intrusive way of the MatrixAdt type
@@ -142,5 +139,4 @@ private:
 template <common::NaturalNumber decltype(auto) N, typename T>
 class IsMatrixAdt<DiagonalMatrix<N, T>> : public std::true_type {};
 
-}  // namespace matrix_types
-}  // namespace data_structures
+}  // namespace data_structures::matrix_types
