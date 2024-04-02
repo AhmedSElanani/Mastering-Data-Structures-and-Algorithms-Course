@@ -110,7 +110,7 @@ public:
 
   /// @brief method to display elements of the matrix
   /// @return elements surrounded by matrix symbol
-  [[nodiscard]] constexpr auto display() const noexcept -> std::string {
+  [[nodiscard]] constexpr auto display() const -> std::string {
     const auto stringifyRow{[&diagonalElements = m_elements](const auto& row) {
       constexpr auto kRowLength{N};
 

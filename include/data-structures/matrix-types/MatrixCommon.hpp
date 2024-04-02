@@ -2,12 +2,15 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <functional>
 #include <numeric>
 #include <type_traits>
 // NOLINTNEXTLINE(misc-include-cleaner)
 #include <vector>
 
-#include "common/Common.hpp"
+// TODO(salah): clean up this include.
+// Personally, I hate it, but clang tidy error was driving me crazy
+#include "../../common/Common.hpp"
 
 /// @brief namespace for matrices types
 namespace data_structures::matrix_types {
