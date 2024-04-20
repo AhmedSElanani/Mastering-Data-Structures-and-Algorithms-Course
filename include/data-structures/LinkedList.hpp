@@ -104,7 +104,8 @@ public:
     std::reference_wrapper<std::unique_ptr<Node>> nodeToCount{m_head};
     while (nodeToCount.get()) {
       ++numberOfNodes;
-      nodeToCount = nodeToCount.get()->nextNode();
+
+      advance(nodeToCount);
     }
 
     return numberOfNodes;
@@ -113,7 +114,7 @@ public:
   /// @brief method to display nodes' values in the list
   /// @return elements' values surrounded by square brackets
   auto display() const noexcept -> std::string {
-    const auto stringifyFrom{[](auto start) {
+    const auto stringifyFrom{[this](auto start) {
       std::string result;
 
       std::reference_wrapper<std::unique_ptr<Node>> nodeToRead{start};
@@ -121,7 +122,7 @@ public:
         result += std::to_string(nodeToRead.get()->value()) +
                   (nodeToRead.get()->isLastNode() ? "" : ",");
 
-        nodeToRead = nodeToRead.get()->nextNode();
+        advance(nodeToRead);
       }
 
       return result;
@@ -139,6 +140,14 @@ private:
 
   /// @brief non-owning reference  to the last element of the list
   std::reference_wrapper<std::unique_ptr<Node>> m_tail{m_first};
+
+  /// @brief helper method to advance node to the next one since similar code
+  ///        was called in many places
+  /// @param node the refernece to node to be advance
+  void advance(
+      std::reference_wrapper<std::unique_ptr<Node>>& node) const noexcept {
+    node = node.get()->nextNode();
+  }
 };
 
 }  // namespace data_structures
