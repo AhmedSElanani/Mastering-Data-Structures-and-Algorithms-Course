@@ -102,9 +102,24 @@ public:
       advance(nodeToCheck);
     }
 
-    // return next ptr to the last Node, which will be nullptr,
-    // and somehow close to the convention of returning end() in STL containers
-    return m_tail.get()->nextNode();
+    return end();
+  }
+
+  std::unique_ptr<Node>& getNodeAt(std::size_t position) noexcept {
+    if (isEmpty()) {
+      return m_first;
+    }
+
+    if (position >= m_length) {
+      return end();
+    }
+
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToTraverse{m_head};
+    while (position--) {
+      advance(nodeToTraverse);
+    }
+
+    return nodeToTraverse.get();
   }
 
   /// @brief method to return the value of first node in the list
@@ -147,7 +162,17 @@ public:
 
   /// @brief method to check if LinkedList is empty
   /// @return true if LinkedList has no nodes, false otherwise
-  bool isEmpty() const noexcept { return m_first == nullptr; }
+  constexpr bool isEmpty() const noexcept { return m_first == nullptr; }
+
+  /// @brief method that returns next ptr to the last Node by reference
+  ///        if the list wasn't empty, which will be nullptr in this case,
+  ///        or the first node if the list is empty, which will return nullptr
+  ///        as well. Hence, it behaves in a similar way to the convention of
+  ///        returning end() in STL containers
+  /// @return next ptr to the last Node which is nullptr
+  constexpr std::unique_ptr<Node>& end() noexcept {
+    return {isEmpty() ? m_first : m_tail.get()->nextNode()};
+  }
 
 private:
   /// @brief  pointer to the first node of the linked list
