@@ -20,6 +20,29 @@ TEST(TestingConstruction, ConstructingLinkedLists) {
   });
 }
 
+TEST(TestingSearch, SearchingEmptyLinkedLists) {
+  EXPECT_EQ((LinkedList<std::size_t>{}).search(0U), nullptr);
+  EXPECT_EQ((LinkedList<std::size_t>{}).search(1U), nullptr);
+  EXPECT_EQ((LinkedList<std::size_t>{}).search(2U), nullptr);
+}
+
+TEST(TestingSearch, SearchingLinkedListsForNonExistingValues) {
+  EXPECT_EQ((LinkedList<std::size_t>{1U}).search(42U), nullptr);
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U}).search(69U), nullptr);
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U, 3U}).search(666U), nullptr);
+}
+
+TEST(TestingSearch, SearchingLinkedListsForExistingValues) {
+  EXPECT_EQ((LinkedList<std::size_t>{1U}).search(1U)->value(), 1U);
+
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U}).search(1U)->value(), 1U);
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U}).search(2U)->value(), 2U);
+
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U, 3U}).search(1U)->value(), 1U);
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U, 3U}).search(2U)->value(), 2U);
+  EXPECT_EQ((LinkedList<std::size_t>{1U, 2U, 3U}).search(3U)->value(), 3U);
+}
+
 TEST(TestingHeadAndTail, ReadingHeadAndTailValues) {
   // empty LL
   EXPECT_EQ((LinkedList<std::size_t>{}).getHeadValue(), std::size_t{});

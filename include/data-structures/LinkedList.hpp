@@ -80,7 +80,28 @@ public:
     m_tail = nodeToExtend;
   }
 
-  // TODO: equality operator
+  /// @brief method to search for a node given the key
+  /// @param key value with which the node is searched
+  /// @return the first node holding a value equal to the key if found,
+  ///         or reference to nullptr otherwise
+  std::unique_ptr<Node>& search(T key) noexcept {
+    if (isEmpty()) {
+      return m_first;
+    }
+
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToCheck{m_head};
+    while (nodeToCheck.get()) {
+      if (nodeToCheck.get()->value() == key) {
+        return nodeToCheck.get();
+      }
+
+      advance(nodeToCheck);
+    }
+
+    // return next ptr to the last Node, which will be nullptr,
+    // and somehow close to the convention of returning end() in STL containers
+    return m_tail.get()->nextNode();
+  }
 
   /// @brief method to return the value of first node in the list
   /// @return value of first node in list if not empty,
@@ -130,6 +151,10 @@ public:
 
     return std::string{std::format("[{}]", stringifyFrom(m_head))};
   }
+
+  /// @brief method to check if LinkedList is empty
+  /// @return true if LinkedList has no nodes, false otherwise
+  bool isEmpty() const noexcept { return m_first == nullptr; }
 
 private:
   /// @brief  pointer to the first node of the linked list
