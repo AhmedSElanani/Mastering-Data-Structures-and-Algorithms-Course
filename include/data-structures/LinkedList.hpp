@@ -68,7 +68,10 @@ public:
   template <typename... Rem>
   constexpr explicit LinkedList(T&& firstValue, Rem&&... remValues)
       : m_first{std::make_unique<Node>(std::forward<T>(firstValue))} {
-    if (sizeof...(Rem) == 0U) {
+    m_length = 1U;
+
+    constexpr auto noOfRemainingElements{sizeof...(Rem)};
+    if (noOfRemainingElements == 0U) {
       return;
     }
 
@@ -78,6 +81,7 @@ public:
     }
 
     m_tail = nodeToExtend;
+    m_length += noOfRemainingElements;
   }
 
   /// @brief method to search for a node given the key
@@ -119,18 +123,7 @@ public:
 
   /// @brief method to show the number of nodes in the linked list
   /// @return the number of nodes in the linked list
-  constexpr std::size_t getLength() const noexcept {
-    std::size_t numberOfNodes{0U};
-
-    std::reference_wrapper<std::unique_ptr<Node>> nodeToCount{m_head};
-    while (nodeToCount.get()) {
-      ++numberOfNodes;
-
-      advance(nodeToCount);
-    }
-
-    return numberOfNodes;
-  }
+  constexpr std::size_t getLength() const noexcept { return m_length; }
 
   /// @brief method to display nodes' values in the list
   /// @return elements' values surrounded by square brackets
@@ -165,6 +158,9 @@ private:
 
   /// @brief non-owning reference  to the last element of the list
   std::reference_wrapper<std::unique_ptr<Node>> m_tail{m_first};
+
+  /// @brief data member to keep track of number of nodes in the list
+  std::size_t m_length{0U};
 
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places

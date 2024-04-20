@@ -89,6 +89,20 @@ TEST(TestingHeadAndTail, GettingLengthOfTheLinkedList) {
   EXPECT_EQ((LinkedList<std::size_t>{42U, 69U, 42U, 69U}).getLength(), 4U);
 }
 
+TEST(TestingGetLength, GetLengthofLinkedListsWithDifferentSizes) {
+  // empty LL
+  EXPECT_EQ((LinkedList<std::size_t>{}).getLength(), 0U);
+
+  // LL of one node
+  EXPECT_EQ((LinkedList<std::size_t>{42U}).getLength(), 1U);
+  EXPECT_EQ((LinkedList<std::size_t>{69U}).getLength(), 1U);
+
+  // LL of several nodes
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 42U}).getLength(), 2U);
+  EXPECT_EQ((LinkedList<std::size_t>{42U, 69U, 66U}).getLength(), 3U);
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 42U, 69U, 42U}).getLength(), 4U);
+}
+
 TEST(TestingDisplay, DisplayingLinkedLists) {
   // empty LL
   EXPECT_STREQ((LinkedList<std::size_t>{}).display().c_str(), "[]");
