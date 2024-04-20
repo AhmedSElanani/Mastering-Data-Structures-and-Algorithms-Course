@@ -30,6 +30,18 @@ class LinkedList {
       return m_next;
     }
 
+    /// @brief method to return value stored in this node
+    /// @return the value stored in this node
+    T value() const noexcept { return m_value; }
+
+    /// @brief method to return reference to next node in the list
+    /// @return reference to the next node in the list
+    std::unique_ptr<Node>& nextNode() noexcept { return m_next; }
+
+    /// @brief method to show whether this node is the last in the list or not
+    /// @return true if last node in the list, false otherwise
+    bool isLastNode() const noexcept { return m_next == nullptr; }
+
   private:
     /// @brief member to hold the data value of this node
     T m_value{};
