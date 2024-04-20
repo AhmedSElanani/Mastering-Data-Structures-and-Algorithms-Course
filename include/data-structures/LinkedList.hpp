@@ -61,6 +61,8 @@ public:
     for (auto&& val : std::vector<T>{remValues...}) {
       nodeToExtend = nodeToExtend.get()->append(std::move(val));
     }
+
+    m_tail = nodeToExtend;
   }
 
   // TODO: equality operator
