@@ -1,8 +1,11 @@
 #pragma once
 
+#include <format>
 #include <functional>
 #include <memory>
+#include <string>
 #include <utility>
+#include <vector>
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -79,7 +82,39 @@ public:
 
   // TODO: equality operator
 
-  // TODO: display
+  /// @brief method to display nodes' values in the list
+  /// @return elements' values surrounded by square brackets
+  auto display() const noexcept -> std::string {
+    const auto stringifyFrom{[](auto head) {
+      std::string result;
+
+      std::reference_wrapper<std::unique_ptr<Node>> nodeToRead{head};
+      while (nodeToRead.get()) {
+        result += std::to_string(nodeToRead.get()->value()) +
+                  (nodeToRead.get()->isLastNode() ? "" : ",");
+
+        nodeToRead = nodeToRead.get()->nextNode();
+      }
+
+      return result;
+    }};
+
+    return std::string{std::format("[{}]", stringifyFrom(m_head))};
+  }
+
+  /// @brief method to return the value of first node in the list
+  /// @return value of first node in list if not empty,
+  ///         default initialzed otherwise
+  constexpr T getHeadValue() const noexcept {
+    return {m_head.get() != nullptr ? m_head.get()->value() : T{}};
+  }
+
+  /// @brief method to return the value of last node in the list
+  /// @return value of last node in list if not empty,
+  ///         default initialzed otherwise
+  constexpr T getTailValue() const noexcept {
+    return {m_tail.get() != nullptr ? m_tail.get()->value() : T{}};
+  }
 
 private:
   /// @brief  pointer to the first node of the linked list
