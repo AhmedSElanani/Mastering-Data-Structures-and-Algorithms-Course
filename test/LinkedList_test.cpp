@@ -47,6 +47,25 @@ TEST(TestingHeadAndTail, ReadingHeadAndTailValues) {
   EXPECT_EQ((LinkedList<std::size_t>{133U, 42U, 69U}).getTailValue(), 69U);
 }
 
+TEST(TestingHeadAndTail, GettingLengthOfTheLinkedList) {
+  // empty LL
+  EXPECT_EQ((LinkedList<std::size_t>{}).getLength(), 0U);
+
+  // LL of one node
+  EXPECT_EQ((LinkedList<std::size_t>{42U}).getLength(), 1U);
+  EXPECT_EQ((LinkedList<std::size_t>{69U}).getLength(), 1U);
+
+  // LL of several nodes
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 42U}).getLength(), 2U);
+  EXPECT_EQ((LinkedList<std::size_t>{42U, 69U}).getLength(), 2U);
+
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 133U, 42U}).getLength(), 3U);
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 133U, 42U}).getLength(), 3U);
+
+  EXPECT_EQ((LinkedList<std::size_t>{69U, 42U, 69U, 42U}).getLength(), 4U);
+  EXPECT_EQ((LinkedList<std::size_t>{42U, 69U, 42U, 69U}).getLength(), 4U);
+}
+
 TEST(TestingDisplay, DisplayingLinkedLists) {
   // empty LL
   EXPECT_STREQ((LinkedList<std::size_t>{}).display().c_str(), "[]");

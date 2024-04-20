@@ -82,26 +82,6 @@ public:
 
   // TODO: equality operator
 
-  /// @brief method to display nodes' values in the list
-  /// @return elements' values surrounded by square brackets
-  auto display() const noexcept -> std::string {
-    const auto stringifyFrom{[](auto head) {
-      std::string result;
-
-      std::reference_wrapper<std::unique_ptr<Node>> nodeToRead{head};
-      while (nodeToRead.get()) {
-        result += std::to_string(nodeToRead.get()->value()) +
-                  (nodeToRead.get()->isLastNode() ? "" : ",");
-
-        nodeToRead = nodeToRead.get()->nextNode();
-      }
-
-      return result;
-    }};
-
-    return std::string{std::format("[{}]", stringifyFrom(m_head))};
-  }
-
   /// @brief method to return the value of first node in the list
   /// @return value of first node in list if not empty,
   ///         default initialzed otherwise
@@ -114,6 +94,40 @@ public:
   ///         default initialzed otherwise
   constexpr T getTailValue() const noexcept {
     return {m_tail.get() != nullptr ? m_tail.get()->value() : T{}};
+  }
+
+  /// @brief method to show the number of nodes in the linked list
+  /// @return the number of nodes in the linked list
+  constexpr std::size_t getLength() const noexcept {
+    std::size_t numberOfNodes{0U};
+
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToCount{m_head};
+    while (nodeToCount.get()) {
+      ++numberOfNodes;
+      nodeToCount = nodeToCount.get()->nextNode();
+    }
+
+    return numberOfNodes;
+  }
+
+  /// @brief method to display nodes' values in the list
+  /// @return elements' values surrounded by square brackets
+  auto display() const noexcept -> std::string {
+    const auto stringifyFrom{[](auto start) {
+      std::string result;
+
+      std::reference_wrapper<std::unique_ptr<Node>> nodeToRead{start};
+      while (nodeToRead.get()) {
+        result += std::to_string(nodeToRead.get()->value()) +
+                  (nodeToRead.get()->isLastNode() ? "" : ",");
+
+        nodeToRead = nodeToRead.get()->nextNode();
+      }
+
+      return result;
+    }};
+
+    return std::string{std::format("[{}]", stringifyFrom(m_head))};
   }
 
 private:
