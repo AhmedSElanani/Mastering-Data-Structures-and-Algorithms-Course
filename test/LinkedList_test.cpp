@@ -21,24 +21,24 @@ TEST(TestingConstruction, ConstructingLinkedLists) {
 }
 
 TEST(TestingSearch, SearchingEmptyLinkedLists) {
-  LinkedList<std::size_t> emptyLl1{};
+  LinkedList<std::size_t> const emptyLl1{};
   EXPECT_EQ(emptyLl1.search(0U), emptyLl1.end());
 
-  LinkedList<std::size_t> emptyLl2{};
+  LinkedList<std::size_t> const emptyLl2{};
   EXPECT_EQ(emptyLl2.search(1U), emptyLl2.end());
 
-  LinkedList<std::size_t> emptyLl3{};
+  LinkedList<std::size_t> const emptyLl3{};
   EXPECT_EQ(emptyLl3.search(2U), emptyLl3.end());
 }
 
 TEST(TestingSearch, SearchingLinkedListsForNonExistingValues) {
-  LinkedList<std::size_t> nonEmptyLl1{1U};
+  LinkedList<std::size_t> const nonEmptyLl1{1U};
   EXPECT_EQ(nonEmptyLl1.search(42U), nonEmptyLl1.end());
 
-  LinkedList<std::size_t> nonEmptyLl2{1U, 2U};
+  LinkedList<std::size_t> const nonEmptyLl2{1U, 2U};
   EXPECT_EQ(nonEmptyLl2.search(69U), nonEmptyLl2.end());
 
-  LinkedList<std::size_t> nonEmptyLl3{1U, 2U, 3U};
+  LinkedList<std::size_t> const nonEmptyLl3{1U, 2U, 3U};
   EXPECT_EQ(nonEmptyLl3.search(666U), nonEmptyLl3.end());
 }
 
@@ -66,23 +66,23 @@ TEST(TestingIndexingNodes, ReadingNodesValuesAtWithinBoundsIndex) {
 
 TEST(TestingIndexingNodes, ReadingNodesValuesAtOutOfBoundIndex) {
   // empty linkedlists
-  LinkedList<std::size_t> emptyLl1{};
+  LinkedList<std::size_t> const emptyLl1{};
   EXPECT_EQ(emptyLl1.getNodeAt(0U), emptyLl1.end());
 
-  LinkedList<std::size_t> emptyLl2{};
+  LinkedList<std::size_t> const emptyLl2{};
   EXPECT_EQ(emptyLl2.getNodeAt(1U), emptyLl2.end());
 
-  LinkedList<std::size_t> emptyLl3{};
+  LinkedList<std::size_t> const emptyLl3{};
   EXPECT_EQ(emptyLl3.getNodeAt(2U), emptyLl3.end());
 
   // non-empty linkedlists
-  LinkedList<std::size_t> nonEmptyLl1{1U};
+  LinkedList<std::size_t> const nonEmptyLl1{1U};
   EXPECT_EQ(nonEmptyLl1.getNodeAt(1U), nonEmptyLl1.end());
 
-  LinkedList<std::size_t> nonEmptyLl2{1U, 2U};
+  LinkedList<std::size_t> const nonEmptyLl2{1U, 2U};
   EXPECT_EQ(nonEmptyLl2.getNodeAt(2U), nonEmptyLl2.end());
 
-  LinkedList<std::size_t> nonEmptyLl3{1U, 2U, 3U};
+  LinkedList<std::size_t> const nonEmptyLl3{1U, 2U, 3U};
   EXPECT_EQ(nonEmptyLl3.getNodeAt(3U), nonEmptyLl3.end());
 }
 

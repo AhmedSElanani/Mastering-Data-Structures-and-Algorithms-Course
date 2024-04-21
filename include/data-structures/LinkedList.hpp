@@ -39,7 +39,7 @@ class LinkedList {
 
     /// @brief method to return reference to next node in the list
     /// @return reference to the next node in the list
-    std::unique_ptr<Node>& nextNode() noexcept { return m_next; }
+    std::unique_ptr<Node> const& nextNode() const noexcept { return m_next; }
 
     /// @brief method to show whether this node is the last in the list or not
     /// @return true if last node in the list, false otherwise
@@ -67,7 +67,7 @@ public:
   /// @note this guarantees that first and remaining values are of same type
   template <typename... Rem>
   constexpr explicit LinkedList(T&& firstValue, Rem&&... remValues)
-      : m_first{std::make_unique<Node>(std::forward<T>(firstValue))} {
+      : m_head{std::make_unique<Node>(std::forward<T>(firstValue))} {
     m_length = 1U;
 
     constexpr auto noOfRemainingElements{sizeof...(Rem)};
@@ -75,7 +75,7 @@ public:
       return;
     }
 
-    std::reference_wrapper<std::unique_ptr<Node>> nodeToExtend{m_first};
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToExtend{m_head};
     for (auto&& val : std::vector<T>{remValues...}) {
       nodeToExtend = nodeToExtend.get()->append(std::move(val));
     }
@@ -88,12 +88,12 @@ public:
   /// @param key value with which the node is searched
   /// @return the first node holding a value equal to the key if found,
   ///         or reference to nullptr otherwise
-  std::unique_ptr<Node>& search(T key) noexcept {
+  std::unique_ptr<Node> const& search(T key) const noexcept {
     if (isEmpty()) {
-      return m_first;
+      return m_head;
     }
 
-    std::reference_wrapper<std::unique_ptr<Node>> nodeToCheck{m_head};
+    std::reference_wrapper<std::unique_ptr<Node> const> nodeToCheck{m_head};
     while (nodeToCheck.get()) {
       if (nodeToCheck.get()->value() == key) {
         return nodeToCheck.get();
@@ -105,16 +105,16 @@ public:
     return end();
   }
 
-  std::unique_ptr<Node>& getNodeAt(std::size_t position) noexcept {
+  std::unique_ptr<Node> const& getNodeAt(std::size_t position) const noexcept {
     if (isEmpty()) {
-      return m_first;
+      return m_head;
     }
 
     if (position >= m_length) {
       return end();
     }
 
-    std::reference_wrapper<std::unique_ptr<Node>> nodeToTraverse{m_head};
+    std::reference_wrapper<std::unique_ptr<Node> const> nodeToTraverse{m_head};
     while (position--) {
       advance(nodeToTraverse);
     }
@@ -126,7 +126,7 @@ public:
   /// @return value of first node in list if not empty,
   ///         default initialzed otherwise
   constexpr T getHeadValue() const noexcept {
-    return {m_head.get() != nullptr ? m_head.get()->value() : T{}};
+    return {m_head != nullptr ? m_head->value() : T{}};
   }
 
   /// @brief method to return the value of last node in the list
@@ -143,10 +143,10 @@ public:
   /// @brief method to display nodes' values in the list
   /// @return elements' values surrounded by square brackets
   auto display() const noexcept -> std::string {
-    const auto stringifyFrom{[this](auto start) {
+    auto const stringifyFrom{[this](auto const& start) {
       std::string result;
 
-      std::reference_wrapper<std::unique_ptr<Node>> nodeToRead{start};
+      std::reference_wrapper<std::unique_ptr<Node> const> nodeToRead{start};
       while (nodeToRead.get()) {
         result += std::to_string(nodeToRead.get()->value()) +
                   (nodeToRead.get()->isLastNode() ? "" : ",");
@@ -162,7 +162,7 @@ public:
 
   /// @brief method to check if LinkedList is empty
   /// @return true if LinkedList has no nodes, false otherwise
-  constexpr bool isEmpty() const noexcept { return m_first == nullptr; }
+  constexpr bool isEmpty() const noexcept { return m_head == nullptr; }
 
   /// @brief method that returns next ptr to the last Node by reference
   ///        if the list wasn't empty, which will be nullptr in this case,
@@ -170,19 +170,16 @@ public:
   ///        as well. Hence, it behaves in a similar way to the convention of
   ///        returning end() in STL containers
   /// @return next ptr to the last Node which is nullptr
-  constexpr std::unique_ptr<Node>& end() noexcept {
-    return {isEmpty() ? m_first : m_tail.get()->nextNode()};
+  constexpr std::unique_ptr<Node> const& end() const noexcept {
+    return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
 private:
-  /// @brief  pointer to the first node of the linked list
-  std::unique_ptr<Node> m_first{nullptr};
-
-  /// @brief non-owning reference  to the first element of the list
-  std::reference_wrapper<std::unique_ptr<Node>> m_head{m_first};
+  /// @brief owning pointer to the first node of the linked list
+  std::unique_ptr<Node> m_head{nullptr};
 
   /// @brief non-owning reference  to the last element of the list
-  std::reference_wrapper<std::unique_ptr<Node>> m_tail{m_first};
+  std::reference_wrapper<std::unique_ptr<Node>> m_tail{m_head};
 
   /// @brief data member to keep track of number of nodes in the list
   std::size_t m_length{0U};
@@ -190,8 +187,8 @@ private:
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places
   /// @param node the refernece to node to be advance
-  void advance(
-      std::reference_wrapper<std::unique_ptr<Node>>& node) const noexcept {
+  void advance(std::reference_wrapper<std::unique_ptr<Node> const>& node)
+      const noexcept {
     node = node.get()->nextNode();
   }
 };
