@@ -71,17 +71,16 @@ public:
   /// @note this guarantees that first and remaining values are of same type
   template <typename... Rem>
   constexpr explicit LinkedList(T&& firstValue, Rem&&... remValues)
-      : m_head{std::make_unique<Node>(std::forward<T>(firstValue))} {
-    m_length = 1U;
-
+      : m_head{std::make_unique<Node>(std::forward<T>(firstValue))},
+        m_length{1U} {
     constexpr auto noOfRemainingElements{sizeof...(Rem)};
-    if (noOfRemainingElements == 0U) {
+    if constexpr (noOfRemainingElements == 0U) {
       return;
     }
 
     std::reference_wrapper<std::unique_ptr<Node>> nodeToExtend{m_head};
     for (auto&& val : std::vector<T>{remValues...}) {
-      nodeToExtend = nodeToExtend.get()->append(std::move(val));
+      nodeToExtend = nodeToExtend.get()->append(std::forward<T>(val));
     }
 
     m_tail = nodeToExtend;
