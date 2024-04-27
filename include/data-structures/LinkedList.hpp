@@ -39,6 +39,10 @@ class LinkedList {
 
     /// @brief method to return reference to next node in the list
     /// @return reference to the next node in the list
+    std::unique_ptr<Node>& nextNode() noexcept { return m_next; }
+
+    /// @brief the const overload of nextNode() method
+    /// @return const reference to the next node in the list
     std::unique_ptr<Node> const& nextNode() const noexcept { return m_next; }
 
     /// @brief method to show whether this node is the last in the list or not
@@ -102,7 +106,7 @@ public:
       advance(nodeToCheck);
     }
 
-    return end();
+    return cend();
   }
 
   std::unique_ptr<Node> const& getNodeAt(std::size_t position) const noexcept {
@@ -111,7 +115,7 @@ public:
     }
 
     if (position >= m_length) {
-      return end();
+      return cend();
     }
 
     std::reference_wrapper<std::unique_ptr<Node> const> nodeToTraverse{m_head};
@@ -170,7 +174,14 @@ public:
   ///        as well. Hence, it behaves in a similar way to the convention of
   ///        returning end() in STL containers
   /// @return next ptr to the last Node which is nullptr
-  constexpr std::unique_ptr<Node> const& end() const noexcept {
+  constexpr std::unique_ptr<Node>& end() noexcept {
+    return {isEmpty() ? m_head : m_tail.get()->nextNode()};
+  }
+
+  /// @brief the const version of end(), where it calls the const overload of
+  ///        nextNode() method in Node class
+  /// @return const next ptr to the last Node which is nullptr
+  constexpr std::unique_ptr<Node> const& cend() const noexcept {
     return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
