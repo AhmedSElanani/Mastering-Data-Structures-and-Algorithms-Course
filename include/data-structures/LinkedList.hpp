@@ -108,6 +108,36 @@ public:
     return cend();
   }
 
+  /// @brief enhanced search does the same as search method, but also moves the
+  ///        found node to the front for higher probability it will be searched
+  ///        for again, and hence found more quickly
+  /// @param key value with which the node is searched
+  /// @return the first node holding a value equal to the key if found, where it
+  ///         gets moved to the front in this case,
+  ///         or reference to nullptr otherwise
+  std::unique_ptr<Node> const& enhancedSearch(T key) noexcept {
+    if (isEmpty()) {
+      return m_head;
+    }
+
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToCheck{m_head};
+    std::reference_wrapper<std::unique_ptr<Node>> prevNode{end()};
+    while (nodeToCheck.get()) {
+      if (nodeToCheck.get()->value() == key) {
+        // the key difference in this search algorithm
+        moveNodeToFront(prevNode, nodeToCheck);
+
+        return m_head;
+      }
+
+      prevNode = nodeToCheck;
+      advance(nodeToCheck);
+    }
+
+    return cend();
+  }
+
+
   std::unique_ptr<Node> const& getNodeAt(std::size_t position) const noexcept {
     if (isEmpty()) {
       return m_head;
@@ -197,9 +227,59 @@ private:
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places
   /// @param node the refernece to node to be advance
-  void advance(std::reference_wrapper<std::unique_ptr<Node> const>& node)
-      const noexcept {
-    node = node.get()->nextNode();
+  void advance(auto& node) const noexcept { node = node.get()->nextNode(); }
+
+  /// @brief helper method to move a node to the beginning of the linked list
+  /// @param nodeToMove the node to be moved to the front
+  /// @param prevNode the previous node to it, as it would be needed in singly
+  ///                 linked list implementation
+  void moveNodeToFront(
+      std::reference_wrapper<std::unique_ptr<Node>>& prevNode,
+      std::reference_wrapper<std::unique_ptr<Node>>& nodeToMove) {
+    if (nodeToMove.get() == m_head) {
+      // node to be moved is already at the front
+      return;
+    }
+
+    // check if tail would be modified
+    const bool nodeToMoveIsTail{nodeToMove.get() == m_tail.get()};
+    const bool nodeNextShallBeTail{isTailNode(nodeToMove.get()->nextNode())};
+
+    // start moving the node to the front
+    std::unique_ptr<Node> nextNode{std::move(nodeToMove.get()->nextNode())};
+    nodeToMove.get()->nextNode() = std::move(m_head);
+    m_head = std::move(nodeToMove.get());
+
+    // check overlapp between prevNode reference and head, as the rest of the
+    // implementation assumes previous node is beyond the head
+    // Note: It's fine if there's overlap with nodeToMove reference as it's
+    //       no longer needed in this method
+    if (prevNode.get() == m_head) {
+      advance(prevNode);
+    }
+
+    if (nextNode.get()) {
+      prevNode.get()->nextNode() = std::move(nextNode);
+    }
+
+    if (nodeToMoveIsTail) {
+      // point tail to the previous node
+      m_tail = prevNode.get();
+      return;
+    }
+
+    if (nodeNextShallBeTail) {
+      // point tail to the final destination of nextNode
+      m_tail = prevNode.get()->nextNode();
+      return;
+    }
+  }
+
+  /// @brief helper method to check whether a given node is the tail node or not
+  /// @param node candidate node to be checked if it is the tail node
+  /// @return true if it is indeed the tail node, false otherwise
+  bool isTailNode(std::unique_ptr<Node>& node) const noexcept {
+    return node.get() == m_tail.get().get();
   }
 };
 
