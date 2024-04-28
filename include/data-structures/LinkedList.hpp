@@ -137,17 +137,16 @@ public:
     return cend();
   }
 
-
-  std::unique_ptr<Node> const& getNodeAt(std::size_t position) const noexcept {
+  std::unique_ptr<Node>& getNodeAt(std::size_t position) noexcept {
     if (isEmpty()) {
       return m_head;
     }
 
     if (position >= m_length) {
-      return cend();
+      return end();
     }
 
-    std::reference_wrapper<std::unique_ptr<Node> const> nodeToTraverse{m_head};
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToTraverse{m_head};
     while (position--) {
       advance(nodeToTraverse);
     }
