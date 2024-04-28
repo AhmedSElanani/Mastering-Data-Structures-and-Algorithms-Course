@@ -187,6 +187,194 @@ TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesFiveNodes) {
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
                (LinkedListType{5U, 4U, 3U, 2U, 1U}).display().c_str());
 }
+
+TEST(TestingInsertingNodes, InsertingNodesAtInvalidPositions) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+  const std::size_t currentListLength{nonEmptyLl.getLength()};
+
+  EXPECT_FALSE(nonEmptyLl.insertAt(42U, currentListLength + 1U));
+  EXPECT_FALSE(nonEmptyLl.insertAt(42U, currentListLength + 2U));
+  EXPECT_FALSE(nonEmptyLl.insertAt(42U, currentListLength + 3U));
+
+  // confirm linked list wasn't modified
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U, 5U}).display().c_str());
+}
+
+TEST(TestingInsertingNodes, InsertingNodesNearHead) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{3U, 4U, 5U};
+  EXPECT_TRUE(nonEmptyLl.insertAt(1U, 0U));
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 4U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 3U, 4U, 5U}).display().c_str());
+
+  EXPECT_TRUE(nonEmptyLl.insertAt(2U, 1U));
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U, 5U}).display().c_str());
+}
+
+TEST(TestingInsertingNodes, InsertingNodesNearTail) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U};
+
+  // insert at the end of the list
+  EXPECT_TRUE(nonEmptyLl.insertAt(3U, nonEmptyLl.getLength()));
+  EXPECT_TRUE(nonEmptyLl.insertAt(5U, nonEmptyLl.getLength()));
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 4U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 5U}).display().c_str());
+
+  // insert just before the tail
+  EXPECT_TRUE(nonEmptyLl.insertAt(4U, 3U));
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U, 5U}).display().c_str());
+}
+
+TEST(TestingInsertingNodes, InsertingNodesToEmptyLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  LinkedListType emptyLl{};
+
+  // check negative scenario
+  EXPECT_FALSE(emptyLl.insertAt(1U, 1U));
+  EXPECT_FALSE(emptyLl.insertAt(2U, 2U));
+  EXPECT_FALSE(emptyLl.insertAt(3U, 3U));
+
+  EXPECT_TRUE(emptyLl.isEmpty());
+
+  EXPECT_EQ(emptyLl.getHeadValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getTailValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getLength(), 0U);
+
+  EXPECT_STREQ(emptyLl.display().c_str(), (LinkedListType{}).display().c_str());
+
+  // check positive scenario
+  EXPECT_TRUE(emptyLl.insertAt(1U, 0U));
+  EXPECT_TRUE(emptyLl.insertAt(2U, 1U));
+  EXPECT_TRUE(emptyLl.insertAt(3U, 2U));
+
+  EXPECT_FALSE(emptyLl.isEmpty());
+
+  EXPECT_EQ(emptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(emptyLl.getTailValue(), 3U);
+  EXPECT_EQ(emptyLl.getLength(), 3U);
+
+  EXPECT_STREQ(emptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U}).display().c_str());
+}
+
+TEST(TestingInsertingNodes, InsertingNodesToOneNodeLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  LinkedListType oneNodeLl{1U};
+
+  // check negative scenario
+  EXPECT_FALSE(oneNodeLl.insertAt(2U, 3U));
+  EXPECT_FALSE(oneNodeLl.insertAt(3U, 4U));
+  EXPECT_FALSE(oneNodeLl.insertAt(4U, 5U));
+
+  EXPECT_EQ(oneNodeLl.getHeadValue(), 1U);
+  EXPECT_EQ(oneNodeLl.getTailValue(), 1U);
+  EXPECT_EQ(oneNodeLl.getLength(), 1U);
+
+  EXPECT_STREQ(oneNodeLl.display().c_str(),
+               (LinkedListType{1U}).display().c_str());
+
+  // check positive scenario
+  EXPECT_TRUE(oneNodeLl.insertAt(2U, 1U));
+  EXPECT_TRUE(oneNodeLl.insertAt(3U, 2U));
+  EXPECT_TRUE(oneNodeLl.insertAt(4U, 3U));
+
+  EXPECT_EQ(oneNodeLl.getHeadValue(), 1U);
+  EXPECT_EQ(oneNodeLl.getTailValue(), 4U);
+  EXPECT_EQ(oneNodeLl.getLength(), 4U);
+
+  EXPECT_STREQ(oneNodeLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U}).display().c_str());
+}
+
+TEST(TestingInsertingNodes, InsertingNodesToHeadAndTailOnlyLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // test insertion at head
+    LinkedListType headAndTailOnlyLl{2U, 3U};
+
+    headAndTailOnlyLl.insertAt(1U, 0U);
+
+    EXPECT_EQ(headAndTailOnlyLl.getHeadValue(), 1U);
+    EXPECT_EQ(headAndTailOnlyLl.getTailValue(), 3U);
+    EXPECT_EQ(headAndTailOnlyLl.getLength(), 3U);
+
+    EXPECT_STREQ(headAndTailOnlyLl.display().c_str(),
+                 (LinkedListType{1U, 2U, 3U}).display().c_str());
+  }
+
+  {
+    // test insertion at tail
+    LinkedListType headAndTailOnlyLl{1U, 2U};
+
+    headAndTailOnlyLl.insertAt(3U, 2U);
+
+    EXPECT_EQ(headAndTailOnlyLl.getHeadValue(), 1U);
+    EXPECT_EQ(headAndTailOnlyLl.getTailValue(), 3U);
+    EXPECT_EQ(headAndTailOnlyLl.getLength(), 3U);
+
+    EXPECT_STREQ(headAndTailOnlyLl.display().c_str(),
+                 (LinkedListType{1U, 2U, 3U}).display().c_str());
+  }
+}
+
+TEST(TestingInsertingNodes, InsertingNodesInTheMiddle) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 5U, 6U};
+  nonEmptyLl.insertAt(3U, 2U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 6U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 5U, 6U}).display().c_str());
+
+  nonEmptyLl.insertAt(4U, 3U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 6U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 6U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U, 5U, 6U}).display().c_str());
 }
 
 TEST(TestingIndexingNodes, ReadingNodesValuesAtWithinBoundsIndex) {

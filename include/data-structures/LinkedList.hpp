@@ -137,6 +137,39 @@ public:
     return cend();
   }
 
+  /// @brief method that inserts a new node at a given index
+  /// @param value data to be stored in that new node
+  /// @param position index at which this node shall be inserted
+  /// @return true, if the node was inserted successfully, false otherwise
+  bool insertAt(T&& value, std::size_t position) {
+    if (position > m_length) {
+      return false;
+    }
+
+    if (position == 0U) {
+      // inserting at head position
+      m_head =
+          std::make_unique<Node>(std::forward<T>(value), std::move(m_head));
+
+      ++m_length;
+      return true;
+    }
+
+    std::unique_ptr<Node>& nodeToExtend{getNodeAt(position - 1U)};
+    nodeToExtend->nextNode() = std::make_unique<Node>(
+        std::forward<T>(value), std::move(nodeToExtend->nextNode()));
+
+    if (position >= m_length - 1U) {
+      // this means either the inserted node will be the new tail, or just
+      // before the tail, hence, in either case, the tail reference need to be
+      // shifted forward by one step
+      advance(m_tail);
+    }
+
+    ++m_length;
+    return true;
+  }
+
   std::unique_ptr<Node>& getNodeAt(std::size_t position) noexcept {
     if (isEmpty()) {
       return m_head;
