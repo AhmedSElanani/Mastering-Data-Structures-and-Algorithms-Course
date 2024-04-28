@@ -85,99 +85,108 @@ TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesOneNode) {
 }
 
 TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesTwoNodes) {
-  LinkedList<std::size_t> nonEmptyLl{1U, 2U};
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U};
   EXPECT_EQ(nonEmptyLl.enhancedSearch(1U)->value(), 1U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 2U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{1U, 2U}).display().c_str());
+               (LinkedListType{1U, 2U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(2U)->value(), 2U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{2U, 1U}).display().c_str());
+               (LinkedListType{2U, 1U}).display().c_str());
 }
 
 TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesThreeNodes) {
-  LinkedList<std::size_t> nonEmptyLl{1U, 2U, 3U};
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U};
   EXPECT_EQ(nonEmptyLl.enhancedSearch(1U)->value(), 1U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{1U, 2U, 3U}).display().c_str());
+               (LinkedListType{1U, 2U, 3U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(2U)->value(), 2U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{2U, 1U, 3U}).display().c_str());
+               (LinkedListType{2U, 1U, 3U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(3U)->value(), 3U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 3U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{3U, 2U, 1U}).display().c_str());
+               (LinkedListType{3U, 2U, 1U}).display().c_str());
 }
 
 TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesFourNodes) {
-  LinkedList<std::size_t> nonEmptyLl{1U, 2U, 3U, 4U};
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U};
   EXPECT_EQ(nonEmptyLl.enhancedSearch(1U)->value(), 1U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 4U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{1U, 2U, 3U, 4U}).display().c_str());
+               (LinkedListType{1U, 2U, 3U, 4U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(2U)->value(), 2U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 4U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{2U, 1U, 3U, 4U}).display().c_str());
+               (LinkedListType{2U, 1U, 3U, 4U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(3U)->value(), 3U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 3U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 4U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{3U, 2U, 1U, 4U}).display().c_str());
+               (LinkedListType{3U, 2U, 1U, 4U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(4U)->value(), 4U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 4U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{4U, 3U, 2U, 1U}).display().c_str());
+               (LinkedListType{4U, 3U, 2U, 1U}).display().c_str());
 }
 
 TEST(TestingEnhancedSearch, SearchingLinkedListsForExistingValuesFiveNodes) {
-  LinkedList<std::size_t> nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
   EXPECT_EQ(nonEmptyLl.enhancedSearch(1U)->value(), 1U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{1U, 2U, 3U, 4U, 5U}).display().c_str());
+               (LinkedListType{1U, 2U, 3U, 4U, 5U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(2U)->value(), 2U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{2U, 1U, 3U, 4U, 5U}).display().c_str());
+               (LinkedListType{2U, 1U, 3U, 4U, 5U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(3U)->value(), 3U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 3U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{3U, 2U, 1U, 4U, 5U}).display().c_str());
+               (LinkedListType{3U, 2U, 1U, 4U, 5U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(4U)->value(), 4U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 4U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{4U, 3U, 2U, 1U, 5U}).display().c_str());
+               (LinkedListType{4U, 3U, 2U, 1U, 5U}).display().c_str());
 
   EXPECT_EQ(nonEmptyLl.enhancedSearch(5U)->value(), 5U);
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 5U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
   EXPECT_STREQ(nonEmptyLl.display().c_str(),
-               (LinkedList<std::size_t>{5U, 4U, 3U, 2U, 1U}).display().c_str());
+               (LinkedListType{5U, 4U, 3U, 2U, 1U}).display().c_str());
+}
 }
 
 TEST(TestingIndexingNodes, ReadingNodesValuesAtWithinBoundsIndex) {
@@ -214,30 +223,33 @@ TEST(TestingIndexingNodes, ReadingNodesValuesAtOutOfBoundIndex) {
 }
 
 TEST(TestingHeadAndTail, ReadingHeadAndTailValues) {
-  // empty LL
-  EXPECT_EQ((LinkedList<std::size_t>{}).getHeadValue(), std::size_t{});
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
 
-  EXPECT_EQ((LinkedList<std::size_t>{}).getTailValue(), std::size_t{});
+  // empty LL
+  EXPECT_EQ((LinkedListType{}).getHeadValue(), ValueType{});
+
+  EXPECT_EQ((LinkedListType{}).getTailValue(), ValueType{});
 
   // LL of one node
-  EXPECT_EQ((LinkedList<std::size_t>{42U}).getHeadValue(), 42U);
-  EXPECT_EQ((LinkedList<std::size_t>{42U}).getTailValue(), 42U);
+  EXPECT_EQ((LinkedListType{42U}).getHeadValue(), 42U);
+  EXPECT_EQ((LinkedListType{42U}).getTailValue(), 42U);
 
-  EXPECT_EQ((LinkedList<std::size_t>{69U}).getHeadValue(), 69U);
-  EXPECT_EQ((LinkedList<std::size_t>{69U}).getTailValue(), 69U);
+  EXPECT_EQ((LinkedListType{69U}).getHeadValue(), 69U);
+  EXPECT_EQ((LinkedListType{69U}).getTailValue(), 69U);
 
   // LL of several nodes
-  EXPECT_EQ((LinkedList<std::size_t>{69U, 133U, 42U}).getHeadValue(), 69U);
-  EXPECT_EQ((LinkedList<std::size_t>{69U, 133U, 42U}).getTailValue(), 42U);
+  EXPECT_EQ((LinkedListType{69U, 133U, 42U}).getHeadValue(), 69U);
+  EXPECT_EQ((LinkedListType{69U, 133U, 42U}).getTailValue(), 42U);
 
-  EXPECT_EQ((LinkedList<std::size_t>{42U, 133U, 69U}).getHeadValue(), 42U);
-  EXPECT_EQ((LinkedList<std::size_t>{42U, 133U, 69U}).getTailValue(), 69U);
+  EXPECT_EQ((LinkedListType{42U, 133U, 69U}).getHeadValue(), 42U);
+  EXPECT_EQ((LinkedListType{42U, 133U, 69U}).getTailValue(), 69U);
 
-  EXPECT_EQ((LinkedList<std::size_t>{133U, 69U, 42U}).getHeadValue(), 133U);
-  EXPECT_EQ((LinkedList<std::size_t>{133U, 69U, 42U}).getTailValue(), 42U);
+  EXPECT_EQ((LinkedListType{133U, 69U, 42U}).getHeadValue(), 133U);
+  EXPECT_EQ((LinkedListType{133U, 69U, 42U}).getTailValue(), 42U);
 
-  EXPECT_EQ((LinkedList<std::size_t>{133U, 42U, 69U}).getHeadValue(), 133U);
-  EXPECT_EQ((LinkedList<std::size_t>{133U, 42U, 69U}).getTailValue(), 69U);
+  EXPECT_EQ((LinkedListType{133U, 42U, 69U}).getHeadValue(), 133U);
+  EXPECT_EQ((LinkedListType{133U, 42U, 69U}).getTailValue(), 69U);
 }
 
 TEST(TestingHeadAndTail, GettingLengthOfTheLinkedList) {
