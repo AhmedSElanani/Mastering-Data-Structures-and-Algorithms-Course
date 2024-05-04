@@ -175,6 +175,52 @@ public:
     return true;
   }
 
+  /// @brief method to delete node at a given position if valid
+  /// @param position 0-indexed position of the node to be deleted
+  /// @return the deleted node if position was valid,
+  ///          or nullptr which can be checked against end() otherwise
+  auto deleteNodeAt(std::size_t position) -> std::unique_ptr<Node> {
+    if (position >= m_length) {
+      return std::move(end());
+    }
+
+    // If tail was nulled due to a delete or shift to previous position, it will
+    // need to be updated.
+    const auto adjustTailIfNeeded{[](auto& tail, auto& prevNode) {
+      if (tail.get() == nullptr) {
+        tail = prevNode->nextNode() != nullptr
+                   // this means the node before tail was removed and hence
+                   // tail was shifted one step backwards
+                   ? prevNode->nextNode()
+                   // this means the tail node was removed and hence its
+                   // predecessor node  shall be the tail now
+                   : prevNode;
+      }
+    }};
+
+    if (position == 0U) {
+      std::unique_ptr<Node> nodeToRemove{std::move(m_head)};
+      m_head = std::move(nodeToRemove->nextNode());
+      --m_length;
+
+      // if there are still other nodes, maybe the tail needs adjustment
+      if (m_length != 0U) {
+        adjustTailIfNeeded(m_tail, m_head);
+      }
+
+      return nodeToRemove;
+    }
+
+    std::unique_ptr<Node>& prevNode{getNodeAt(position - 1U)};
+    std::unique_ptr<Node> nodeToRemove{std::move(prevNode->nextNode())};
+    prevNode->nextNode() = std::move(nodeToRemove->nextNode());
+    --m_length;
+
+    adjustTailIfNeeded(m_tail, prevNode);
+
+    return nodeToRemove;
+  }
+
   auto getNodeAt(std::size_t position) noexcept -> std::unique_ptr<Node>& {
     if (isEmpty()) {
       return m_head;

@@ -376,6 +376,168 @@ TEST(TestingInsertingNodes, InsertingNodesInTheMiddle) {
                (LinkedListType{1U, 2U, 3U, 4U, 5U, 6U}).display().c_str());
 }
 
+TEST(TestingDeletingNodes, DeletingNodesFromEmptyLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  LinkedListType emptyLl{};
+
+  for (const auto index : {0U, 1U, 2U, 3U, 4U}) {
+    EXPECT_EQ(emptyLl.deleteNodeAt(index), emptyLl.end());
+  }
+
+  EXPECT_EQ(emptyLl.getHeadValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getTailValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getLength(), 0U);
+
+  EXPECT_STREQ(emptyLl.display().c_str(), (LinkedListType{}).display().c_str());
+}
+
+TEST(TestingDeletingNodes, DeletingNodesAtInvalidPositions) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+  const std::size_t currentListLength{nonEmptyLl.getLength()};
+
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength), nonEmptyLl.end());
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength + 1U), nonEmptyLl.end());
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength + 2U), nonEmptyLl.end());
+
+  // confirm linked list wasn't modified
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U, 4U, 5U}).display().c_str());
+}
+
+TEST(TestingDeletingNodes, DeletingNodesNearHead) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+
+  // remove head node
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(0U)->value(), 1U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 4U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{2U, 3U, 4U, 5U}).display().c_str());
+
+  // remove head's next node
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(1U)->value(), 3U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 3U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{2U, 4U, 5U}).display().c_str());
+}
+
+TEST(TestingDeletingNodes, DeletingNodesNearTail) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U};
+
+  // delete the tail node
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(3U)->value(), 4U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 3U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 3U}).display().c_str());
+
+  // delete the node just before the tail
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(1U)->value(), 2U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 2U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 3U}).display().c_str());
+}
+
+TEST(TestingDeletingNodes, DeletingNodesFromOneNodeLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  LinkedListType oneNodeLl{42U};
+
+  // delete the only node the exists
+  EXPECT_EQ(oneNodeLl.deleteNodeAt(0U)->value(), 42U);
+
+  EXPECT_EQ(oneNodeLl.getHeadValue(), ValueType{});
+  EXPECT_EQ(oneNodeLl.getTailValue(), ValueType{});
+  EXPECT_EQ(oneNodeLl.getLength(), 0U);
+
+  EXPECT_STREQ(oneNodeLl.display().c_str(),
+               (LinkedListType{}).display().c_str());
+
+  // try one mode time after deletion (It should behave as an empty list)
+  EXPECT_EQ(oneNodeLl.deleteNodeAt(0U), oneNodeLl.end());
+
+  EXPECT_EQ(oneNodeLl.getHeadValue(), ValueType{});
+  EXPECT_EQ(oneNodeLl.getTailValue(), ValueType{});
+  EXPECT_EQ(oneNodeLl.getLength(), 0U);
+
+  EXPECT_STREQ(oneNodeLl.display().c_str(),
+               (LinkedListType{}).display().c_str());
+}
+
+TEST(TestingDeletingNodes, DeletingNodesFromHeadAndTailOnlyLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // test deletion of head
+    LinkedListType nonEmptyLl{42U, 69U};
+
+    EXPECT_EQ(nonEmptyLl.deleteNodeAt(0)->value(), 42U);
+
+    EXPECT_EQ(nonEmptyLl.getHeadValue(), 69U);
+    EXPECT_EQ(nonEmptyLl.getTailValue(), 69U);
+    EXPECT_EQ(nonEmptyLl.getLength(), 1U);
+
+    EXPECT_STREQ(nonEmptyLl.display().c_str(),
+                 (LinkedListType{69U}).display().c_str());
+  }
+
+  {
+    // test deletion of tail
+    LinkedListType nonEmptyLl{42U, 69U};
+
+    EXPECT_EQ(nonEmptyLl.deleteNodeAt(1)->value(), 69U);
+
+    EXPECT_EQ(nonEmptyLl.getHeadValue(), 42U);
+    EXPECT_EQ(nonEmptyLl.getTailValue(), 42U);
+    EXPECT_EQ(nonEmptyLl.getLength(), 1U);
+
+    EXPECT_STREQ(nonEmptyLl.display().c_str(),
+                 (LinkedListType{42U}).display().c_str());
+  }
+}
+
+TEST(TestingDeletingNodes, DeletingNodesFromTheMiddle) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+
+  EXPECT_EQ(nonEmptyLl.deleteNodeAt(2U)->value(), 3U);
+
+  EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
+  EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
+  EXPECT_EQ(nonEmptyLl.getLength(), 4U);
+
+  EXPECT_STREQ(nonEmptyLl.display().c_str(),
+               (LinkedListType{1U, 2U, 4U, 5U}).display().c_str());
+}
+
 TEST(TestingIndexingNodes, ReadingNodesValuesAtWithinBoundsIndex) {
   EXPECT_EQ((LinkedList<std::size_t>{1U}).getNodeAt(0U)->value(), 1U);
 
