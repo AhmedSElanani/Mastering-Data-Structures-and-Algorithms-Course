@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdlib>
 #include <format>
 #include <functional>
 #include <memory>
@@ -26,7 +27,7 @@ class LinkedList {
     /// @brief method to append a new node given to data to this node
     /// @param value the data to be held in the new appended node
     /// @return reference to the newly appended node
-    std::unique_ptr<Node>& append(T&& value) {
+    auto append(T&& value) -> std::unique_ptr<Node>& {
       m_next =
           std::make_unique<Node>(std::forward<T>(value), std::move(m_next));
 
@@ -35,19 +36,23 @@ class LinkedList {
 
     /// @brief method to return value stored in this node
     /// @return the value stored in this node
-    T value() const noexcept { return m_value; }
+    auto value() const noexcept -> T { return m_value; }
 
     /// @brief method to return reference to next node in the list
     /// @return reference to the next node in the list
-    std::unique_ptr<Node>& nextNode() noexcept { return m_next; }
+    auto nextNode() noexcept -> std::unique_ptr<Node>& { return m_next; }
 
     /// @brief the const overload of nextNode() method
     /// @return const reference to the next node in the list
-    std::unique_ptr<Node> const& nextNode() const noexcept { return m_next; }
+    auto nextNode() const noexcept -> std::unique_ptr<Node> const& {
+      return m_next;
+    }
 
     /// @brief method to show whether this node is the last in the list or not
     /// @return true if last node in the list, false otherwise
-    bool isLastNode() const noexcept { return m_next == nullptr; }
+    [[nodiscard]] auto isLastNode() const noexcept -> bool {
+      return m_next == nullptr;
+    }
 
   private:
     /// @brief member to hold the data value of this node
@@ -73,8 +78,8 @@ public:
   constexpr explicit LinkedList(T&& firstValue, Rem&&... remValues)
       : m_head{std::make_unique<Node>(std::forward<T>(firstValue))},
         m_length{1U} {
-    constexpr auto noOfRemainingElements{sizeof...(Rem)};
-    if constexpr (noOfRemainingElements == 0U) {
+    constexpr auto kNoOfRemainingElements{sizeof...(Rem)};
+    if constexpr (kNoOfRemainingElements == 0U) {
       return;
     }
 
@@ -84,14 +89,14 @@ public:
     }
 
     m_tail = nodeToExtend;
-    m_length += noOfRemainingElements;
+    m_length += kNoOfRemainingElements;
   }
 
   /// @brief method to search for a node given the key
   /// @param key value with which the node is searched
   /// @return the first node holding a value equal to the key if found,
   ///         or reference to nullptr otherwise
-  std::unique_ptr<Node> const& search(T key) const noexcept {
+  auto search(T key) const noexcept -> std::unique_ptr<Node> const& {
     if (isEmpty()) {
       return m_head;
     }
@@ -115,7 +120,7 @@ public:
   /// @return the first node holding a value equal to the key if found, where it
   ///         gets moved to the front in this case,
   ///         or reference to nullptr otherwise
-  std::unique_ptr<Node> const& enhancedSearch(T key) noexcept {
+  auto enhancedSearch(T key) noexcept -> std::unique_ptr<Node> const& {
     if (isEmpty()) {
       return m_head;
     }
@@ -141,7 +146,7 @@ public:
   /// @param value data to be stored in that new node
   /// @param position index at which this node shall be inserted
   /// @return true, if the node was inserted successfully, false otherwise
-  bool insertAt(T&& value, std::size_t position) {
+  auto insertAt(T&& value, std::size_t position) -> bool {
     if (position > m_length) {
       return false;
     }
@@ -170,7 +175,7 @@ public:
     return true;
   }
 
-  std::unique_ptr<Node>& getNodeAt(std::size_t position) noexcept {
+  auto getNodeAt(std::size_t position) noexcept -> std::unique_ptr<Node>& {
     if (isEmpty()) {
       return m_head;
     }
@@ -180,7 +185,7 @@ public:
     }
 
     std::reference_wrapper<std::unique_ptr<Node>> nodeToTraverse{m_head};
-    while (position--) {
+    while ((position--) != 0U) {
       advance(nodeToTraverse);
     }
 
@@ -190,24 +195,26 @@ public:
   /// @brief method to return the value of first node in the list
   /// @return value of first node in list if not empty,
   ///         default initialzed otherwise
-  constexpr T getHeadValue() const noexcept {
+  constexpr auto getHeadValue() const noexcept -> T {
     return {m_head != nullptr ? m_head->value() : T{}};
   }
 
   /// @brief method to return the value of last node in the list
   /// @return value of last node in list if not empty,
   ///         default initialzed otherwise
-  constexpr T getTailValue() const noexcept {
+  constexpr auto getTailValue() const noexcept -> T {
     return {m_tail.get() != nullptr ? m_tail.get()->value() : T{}};
   }
 
   /// @brief method to show the number of nodes in the linked list
   /// @return the number of nodes in the linked list
-  constexpr std::size_t getLength() const noexcept { return m_length; }
+  [[nodiscard]] constexpr auto getLength() const noexcept -> std::size_t {
+    return m_length;
+  }
 
   /// @brief method to display nodes' values in the list
   /// @return elements' values surrounded by square brackets
-  auto display() const noexcept -> std::string {
+  [[nodiscard]] auto display() const noexcept -> std::string {
     auto const stringifyFrom{[this](auto const& start) {
       std::string result;
 
@@ -227,7 +234,9 @@ public:
 
   /// @brief method to check if LinkedList is empty
   /// @return true if LinkedList has no nodes, false otherwise
-  constexpr bool isEmpty() const noexcept { return m_head == nullptr; }
+  [[nodiscard]] constexpr auto isEmpty() const noexcept -> bool {
+    return m_head == nullptr;
+  }
 
   /// @brief method that returns next ptr to the last Node by reference
   ///        if the list wasn't empty, which will be nullptr in this case,
@@ -235,14 +244,14 @@ public:
   ///        as well. Hence, it behaves in a similar way to the convention of
   ///        returning end() in STL containers
   /// @return next ptr to the last Node which is nullptr
-  constexpr std::unique_ptr<Node>& end() noexcept {
+  constexpr auto end() noexcept -> std::unique_ptr<Node>& {
     return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
   /// @brief the const version of end(), where it calls the const overload of
   ///        nextNode() method in Node class
   /// @return const next ptr to the last Node which is nullptr
-  constexpr std::unique_ptr<Node> const& cend() const noexcept {
+  constexpr auto cend() const noexcept -> std::unique_ptr<Node> const& {
     return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
@@ -310,7 +319,7 @@ private:
   /// @brief helper method to check whether a given node is the tail node or not
   /// @param node candidate node to be checked if it is the tail node
   /// @return true if it is indeed the tail node, false otherwise
-  bool isTailNode(std::unique_ptr<Node>& node) const noexcept {
+  auto isTailNode(std::unique_ptr<Node>& node) const noexcept -> bool {
     return node.get() == m_tail.get().get();
   }
 };

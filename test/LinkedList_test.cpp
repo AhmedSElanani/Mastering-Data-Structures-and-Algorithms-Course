@@ -15,9 +15,8 @@ TEST(TestingConstruction, ConstructingLinkedLists) {
 
   // LL of several nodes
   EXPECT_NO_THROW({ (LinkedList<std::size_t>{42U, 69U, 133U}); });
-  EXPECT_NO_THROW({
-    (LinkedList<char>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'});
-  });
+  EXPECT_NO_THROW(
+      { (LinkedList<char>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}); });
 }
 
 TEST(TestingSearch, SearchingEmptyLinkedLists) {
