@@ -221,6 +221,37 @@ public:
     return nodeToRemove;
   }
 
+  /// @brief a method to reverse the singly linked list, so that each node
+  ///        points to its predecessor instead, while keeping its size and
+  ///        switching its head and tail
+  void reverse() noexcept {
+    if (m_length < 2U) {
+      // either an empty or one-node list
+      return;
+    }
+
+    std::unique_ptr<Node> nodeToReverse{std::move(m_head)};
+    std::unique_ptr<Node> prevNode{std::move(end())};
+    std::unique_ptr<Node> nextNode;
+
+    while (nodeToReverse != end()) {
+      nextNode = std::move(nodeToReverse->nextNode());
+      nodeToReverse->nextNode() = std::move(prevNode);
+      prevNode = std::move(nodeToReverse);
+      nodeToReverse = std::move(nextNode);
+    }
+
+    // Adjust the head node
+    // Note: nodeToReverse is pointing to nullptr now,
+    //       while prevNode is still valid
+    m_head = std::move(prevNode);
+
+    // Adjust the tail node
+    std::reference_wrapper<std::unique_ptr<Node>> newTail{m_head};
+    advance(newTail, m_length - 1U);
+    m_tail = newTail;
+  }
+
   /// @brief method to return the node at a given position
   /// @param position 0-indexed position at which the node shall be read
   /// @return the node at the given index if valid, end() otherwise
