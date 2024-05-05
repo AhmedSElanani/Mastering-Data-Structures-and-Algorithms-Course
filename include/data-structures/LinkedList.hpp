@@ -221,6 +221,9 @@ public:
     return nodeToRemove;
   }
 
+  /// @brief method to return the node at a given position
+  /// @param position 0-indexed position at which the node shall be read
+  /// @return the node at the given index if valid, end() otherwise
   auto getNodeAt(std::size_t position) noexcept -> std::unique_ptr<Node>& {
     if (isEmpty()) {
       return m_head;
