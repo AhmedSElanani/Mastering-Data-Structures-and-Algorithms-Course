@@ -234,9 +234,7 @@ public:
     }
 
     std::reference_wrapper<std::unique_ptr<Node>> nodeToTraverse{m_head};
-    while ((position--) != 0U) {
-      advance(nodeToTraverse);
-    }
+    advance(nodeToTraverse, position);
 
     return nodeToTraverse.get();
   }
@@ -317,7 +315,13 @@ private:
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places
   /// @param node the refernece to node to be advance
-  void advance(auto& node) const noexcept { node = node.get()->nextNode(); }
+  /// @param positions the number of positions to advance the node, the default
+  ///                  is one position
+  void advance(auto& node, std::size_t positions = 1U) const noexcept {
+    while ((positions--) != 0U) {
+      node = node.get()->nextNode();
+    }
+  }
 
   /// @brief helper method to move a node to the beginning of the linked list
   /// @param nodeToMove the node to be moved to the front
