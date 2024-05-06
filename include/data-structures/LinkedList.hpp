@@ -348,7 +348,8 @@ private:
   /// @param node the refernece to node to be advance
   /// @param positions the number of positions to advance the node, the default
   ///                  is one position
-  void advance(auto& node, std::size_t positions = 1U) const noexcept {
+  void advance(std::reference_wrapper<auto>& node,
+               std::size_t positions = 1U) const noexcept {
     while ((positions--) != 0U) {
       node = node.get()->nextNode();
     }
