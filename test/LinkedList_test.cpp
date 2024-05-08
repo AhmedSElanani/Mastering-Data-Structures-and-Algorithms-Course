@@ -568,7 +568,20 @@ TEST(TestingReversingLinkedLists, ReversingOneNodeLinkedLists) {
                (LinkedListType{42U}).display().c_str());
 }
 
-TEST(TestingReversingLinkedLists, ReversingHeadAndTailOnlyLinkedLists) {}
+TEST(TestingReversingLinkedLists, ReversingHeadAndTailOnlyLinkedLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType headAndTailLl{42U, 69U};
+
+  EXPECT_NO_THROW({ headAndTailLl.reverse(); });
+
+  EXPECT_EQ(headAndTailLl.getHeadValue(), 69U);
+  EXPECT_EQ(headAndTailLl.getTailValue(), 42U);
+  EXPECT_EQ(headAndTailLl.getLength(), 2U);
+
+  EXPECT_STREQ(headAndTailLl.display().c_str(),
+               (LinkedListType{69U, 42U}).display().c_str());
+}
 
 TEST(TestingReversingLinkedLists, ReversingArbitraryLongerLinkedLists) {
   using LinkedListType = LinkedList<std::size_t>;
