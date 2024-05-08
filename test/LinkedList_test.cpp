@@ -708,6 +708,178 @@ TEST(TestingReversingLinkedLists, ReversingBackAndForthLinkedLists) {
   }
 }
 
+TEST(TestingRecursiveReversingLinkedLists, RReversingEmptyLinkedLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  LinkedListType emptyLl{};
+
+  EXPECT_NO_THROW({ emptyLl.rReverse(); });
+
+  EXPECT_EQ(emptyLl.getHeadValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getTailValue(), ValueType{});
+  EXPECT_EQ(emptyLl.getLength(), ValueType{});
+
+  EXPECT_STREQ(emptyLl.display().c_str(), (LinkedListType{}).display().c_str());
+}
+
+TEST(TestingRecursiveReversingLinkedLists, RReversingOneNodeLinkedLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType oneNodeLl{42U};
+
+  EXPECT_NO_THROW({ oneNodeLl.rReverse(); });
+
+  EXPECT_EQ(oneNodeLl.getHeadValue(), 42U);
+  EXPECT_EQ(oneNodeLl.getTailValue(), 42U);
+  EXPECT_EQ(oneNodeLl.getLength(), 1U);
+
+  EXPECT_STREQ(oneNodeLl.display().c_str(),
+               (LinkedListType{42U}).display().c_str());
+}
+
+TEST(TestingRecursiveReversingLinkedLists,
+     RecursiveReversingHeadAndTailOnlyLinkedLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  LinkedListType headAndTailLl{42U, 69U};
+
+  EXPECT_NO_THROW({ headAndTailLl.rReverse(); });
+
+  EXPECT_EQ(headAndTailLl.getHeadValue(), 69U);
+  EXPECT_EQ(headAndTailLl.getTailValue(), 42U);
+  EXPECT_EQ(headAndTailLl.getLength(), 2U);
+
+  EXPECT_STREQ(headAndTailLl.display().c_str(),
+               (LinkedListType{69U, 42U}).display().c_str());
+}
+
+TEST(TestingRecursiveReversingLinkedLists,
+     RecursiveReversingArbitraryLongerLinkedLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // three nodes
+    LinkedListType nonEmptyLl{1U, 2U, 3U};
+
+    EXPECT_NO_THROW({ nonEmptyLl.rReverse(); });
+
+    EXPECT_EQ(nonEmptyLl.getHeadValue(), 3U);
+    EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
+    EXPECT_EQ(nonEmptyLl.getLength(), 3U);
+
+    EXPECT_STREQ(nonEmptyLl.display().c_str(),
+                 (LinkedListType{3U, 2U, 1U}).display().c_str());
+  }
+
+  {
+    // four nodes
+    LinkedListType nonEmptyLl{1U, 2U, 3U, 4U};
+
+    EXPECT_NO_THROW({ nonEmptyLl.rReverse(); });
+
+    EXPECT_EQ(nonEmptyLl.getHeadValue(), 4U);
+    EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
+    EXPECT_EQ(nonEmptyLl.getLength(), 4U);
+
+    EXPECT_STREQ(nonEmptyLl.display().c_str(),
+                 (LinkedListType{4U, 3U, 2U, 1U}).display().c_str());
+  }
+
+  {
+    // five nodes
+    LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
+
+    EXPECT_NO_THROW({ nonEmptyLl.rReverse(); });
+
+    EXPECT_EQ(nonEmptyLl.getHeadValue(), 5U);
+    EXPECT_EQ(nonEmptyLl.getTailValue(), 1U);
+    EXPECT_EQ(nonEmptyLl.getLength(), 5U);
+
+    EXPECT_STREQ(nonEmptyLl.display().c_str(),
+                 (LinkedListType{5U, 4U, 3U, 2U, 1U}).display().c_str());
+  }
+}
+
+TEST(TestingRecursiveReversingLinkedLists, RReversingBackAndForthLinkedLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // empty
+    LinkedListType before{};
+    LinkedListType after{};
+
+    EXPECT_NO_THROW({ before.rReverse(); });
+    EXPECT_NO_THROW({ before.rReverse(); });
+
+    EXPECT_EQ(before.getHeadValue(), after.getHeadValue());
+    EXPECT_EQ(before.getTailValue(), after.getTailValue());
+    EXPECT_EQ(before.getLength(), after.getLength());
+
+    EXPECT_STREQ(before.display().c_str(), after.display().c_str());
+  }
+
+  {
+    // one node
+    LinkedListType before{69U};
+    LinkedListType after{69U};
+
+    EXPECT_NO_THROW({ before.rReverse(); });
+    EXPECT_NO_THROW({ before.rReverse(); });
+
+    EXPECT_EQ(before.getHeadValue(), after.getHeadValue());
+    EXPECT_EQ(before.getTailValue(), after.getTailValue());
+    EXPECT_EQ(before.getLength(), after.getLength());
+
+    EXPECT_STREQ(before.display().c_str(), after.display().c_str());
+  }
+
+  {
+    // head and tail
+    LinkedListType before{42U, 69U};
+    LinkedListType after{42U, 69U};
+
+    EXPECT_NO_THROW({ before.rReverse(); });
+    EXPECT_NO_THROW({ before.rReverse(); });
+
+    EXPECT_EQ(before.getHeadValue(), after.getHeadValue());
+    EXPECT_EQ(before.getTailValue(), after.getTailValue());
+    EXPECT_EQ(before.getLength(), after.getLength());
+
+    EXPECT_STREQ(before.display().c_str(), after.display().c_str());
+  }
+
+  {
+    // three nodes
+    LinkedListType before{1U, 2U, 3U};
+    LinkedListType after{1U, 2U, 3U};
+
+    EXPECT_NO_THROW({ before.rReverse(); });
+    EXPECT_NO_THROW({ before.rReverse(); });
+
+    EXPECT_EQ(before.getHeadValue(), after.getHeadValue());
+    EXPECT_EQ(before.getTailValue(), after.getTailValue());
+    EXPECT_EQ(before.getLength(), after.getLength());
+
+    EXPECT_STREQ(before.display().c_str(), after.display().c_str());
+  }
+
+  {
+    // six nodes
+    LinkedListType before{1U, 2U, 3U, 4U, 5U, 6U};
+    LinkedListType after{1U, 2U, 3U, 4U, 5U, 6U};
+
+    EXPECT_NO_THROW({ before.rReverse(); });
+    EXPECT_NO_THROW({ before.rReverse(); });
+
+    EXPECT_EQ(before.getHeadValue(), after.getHeadValue());
+    EXPECT_EQ(before.getTailValue(), after.getTailValue());
+    EXPECT_EQ(before.getLength(), after.getLength());
+
+    EXPECT_STREQ(before.display().c_str(), after.display().c_str());
+  }
+}
+
 TEST(TestingIndexingNodes, ReadingNodesValuesAtWithinBoundsIndex) {
   EXPECT_EQ((LinkedList<std::size_t>{1U}).getNodeAt(0U)->value(), 1U);
 

@@ -252,6 +252,37 @@ public:
     m_tail = newTail;
   }
 
+  /// @brief method to reverse the singly linked list but in implemented
+  ///        using recursion
+  void rReverse() noexcept {
+    if (m_length < 2U) {
+      // either an empty or one-node list
+      return;
+    }
+
+    using reverseHelperFunction_t =
+        std::function<std::unique_ptr<Node>&(std::unique_ptr<Node>)>;
+
+    const reverseHelperFunction_t recursiveReverse{
+        [this, &recursiveReverse](
+            std::unique_ptr<Node> currentHead) -> std::unique_ptr<Node>& {
+          if (currentHead->nextNode() == end()) {
+            // this means you found the last node, which shall be the new
+            // tail
+            m_head = std::move(currentHead);
+            return m_head;
+          }
+
+          auto& reversedRestOfList{
+              recursiveReverse(std::move(currentHead->nextNode()))};
+
+          reversedRestOfList->nextNode() = std::move(currentHead);
+          return reversedRestOfList->nextNode();
+        }};
+
+    m_tail = recursiveReverse(std::move(m_head));
+  }
+
   /// @brief method to return the node at a given position
   /// @param position 0-indexed position at which the node shall be read
   /// @return the node at the given index if valid, end() otherwise
