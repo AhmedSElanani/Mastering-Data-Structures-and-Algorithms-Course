@@ -92,6 +92,37 @@ public:
     m_length += kNoOfRemainingElements;
   }
 
+  /// @brief deleted copy constructor for LinkedList class
+  LinkedList(const LinkedList&) = delete;
+
+  /// @brief deleted copy assignment operator for LinkedList class
+  LinkedList& operator=(const LinkedList&) = delete;
+
+  /// @brief move constructor for LinkedList class
+  /// @param other the object to be moved from to this class
+  LinkedList(LinkedList&& other) noexcept
+      : m_head{std::move(other.m_head)},
+        m_tail{other.m_length < 2U ? std::ref(m_head)
+                                   : std::move(other.m_tail)},
+        m_length{std::move(other.m_length)} {}
+
+  /// @brief move assignment operator for LinkedList class
+  /// @param other the object to be moved from to this class
+  /// @return reference to this object to support chain assignment
+  LinkedList& operator=(LinkedList&& other) noexcept {
+    if (this == &other) {
+      return *this;
+    }
+
+    LinkedList tmp{std::move(other)};
+    swap(tmp);
+
+    return *this;
+  }
+
+  /// @brief default destructor for LinkedList class
+  ~LinkedList() = default;
+
   /// @brief method to search for a node given the key
   /// @param key value with which the node is searched
   /// @return the first node holding a value equal to the key if found,
@@ -373,6 +404,16 @@ private:
 
   /// @brief data member to keep track of number of nodes in the list
   std::size_t m_length{0U};
+
+  /// @brief swap method for LinkedList class
+  /// @param other the other linked list object to be swapped with
+  /// @note this swap method can be used in assignments operators for example,
+  ///       and is encouraged by C.83
+  void swap(LinkedList& other) noexcept {
+    std::swap(m_head, other.m_head);
+    std::swap(m_tail, other.m_tail);
+    std::swap(m_length, other.m_length);
+  }
 
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places
