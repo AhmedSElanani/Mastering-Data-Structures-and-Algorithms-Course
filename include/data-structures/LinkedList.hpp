@@ -395,6 +395,39 @@ public:
     return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
+  /// @brief a static helper method to concatenate two linked lists together
+  /// @param firstList first linked lists to be concatenated, where its
+  ///                  ownership need to be transferred
+  /// @param secondList  second and last linked lists to be concatenated, where
+  ///                    its ownership need to be transferred
+  /// @return result of concatenating both linked lists
+  static LinkedList concatenate(LinkedList firstList,
+                                LinkedList secondList) noexcept {
+    if (firstList.isEmpty()) {
+      return secondList;
+    }
+
+    if (secondList.isEmpty()) {
+      return firstList;
+    }
+
+    firstList.m_tail.get()->nextNode() = std::move(secondList.m_head);
+    firstList.m_length += secondList.m_length;
+
+    // adjusting the new tail
+    if (secondList.m_length == 1U) {
+      // this means second list's head and tail were the same, and tail is now
+      // nulled out from the head move, but we know all it takes is just
+      // advancing the tail by one step
+      advance(firstList.m_tail);
+
+    } else {
+      // this is the generic case for lists with two or more nodes
+      firstList.m_tail = std::move(secondList.m_tail);
+    }
+
+    return firstList;
+  }
 private:
   /// @brief owning pointer to the first node of the linked list
   std::unique_ptr<Node> m_head{nullptr};
@@ -420,8 +453,8 @@ private:
   /// @param node the refernece to node to be advance
   /// @param positions the number of positions to advance the node, the default
   ///                  is one position
-  void advance(std::reference_wrapper<auto>& node,
-               std::size_t positions = 1U) const noexcept {
+  static void advance(std::reference_wrapper<auto>& node,
+                      std::size_t positions = 1U) noexcept {
     while ((positions--) != 0U) {
       node = node.get()->nextNode();
     }

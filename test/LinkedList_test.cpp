@@ -913,6 +913,150 @@ TEST(TestingIndexingNodes, ReadingNodesValuesAtOutOfBoundIndex) {
   EXPECT_EQ(nonEmptyLl3.getNodeAt(3U), nonEmptyLl3.end());
 }
 
+TEST(TestingConcatenate, ConcatenateEmptyLists) {
+  using ValueType = std::size_t;
+  using LinkedListType = LinkedList<ValueType>;
+
+  {
+    // both input lists are empty
+    const auto result{
+        LinkedListType::concatenate(LinkedListType{}, LinkedListType{})};
+
+    LinkedListType expectedResult{};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // first input list are empty
+    const auto result{LinkedListType::concatenate(
+        LinkedListType{}, LinkedListType{42U, 69U, 666U})};
+
+    LinkedListType expectedResult{42U, 69U, 666U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // second input list are empty
+    LinkedListType emptyLl1{};
+    LinkedListType nonEmptyLl1{42U, 69U, 666U};
+    LinkedListType expectedResult{42U, 69U, 666U};
+
+    const auto result{LinkedListType::concatenate(std::move(nonEmptyLl1),
+                                                  std::move(emptyLl1))};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+}
+
+TEST(TestingConcatenate, ConcatenateSingleNodeLists) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // both are single node lists
+    const auto result{
+        LinkedListType::concatenate(LinkedListType{42U}, LinkedListType{69U})};
+
+    LinkedListType expectedResult{42U, 69U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // First list is single node list
+    const auto result{LinkedListType::concatenate(
+        LinkedListType{1U}, LinkedListType{42U, 69U, 666U})};
+
+    LinkedListType expectedResult{1U, 42U, 69U, 666U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // Second list is single node list
+    const auto result{LinkedListType::concatenate(
+        LinkedListType{42U, 69U, 666U}, LinkedListType{1U})};
+
+    LinkedListType expectedResult{42U, 69U, 666U, 1U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+}
+
+TEST(TestingConcatenate, ConcatenateListsOfArbitraryLengths) {
+  using LinkedListType = LinkedList<std::size_t>;
+
+  {
+    // concatenate 2-node list to 3-node list
+    const auto result{LinkedListType::concatenate(LinkedListType{42U, 69U},
+                                                  LinkedListType{1U, 2U, 3U})};
+
+    LinkedListType expectedResult{42U, 69U, 1U, 2U, 3U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // concatenate 4-node list to 5-node list
+    const auto result{LinkedListType::concatenate(
+        LinkedListType{2U, 4U, 6U, 8U}, LinkedListType{1U, 3U, 5U, 7U, 9U})};
+
+    LinkedListType expectedResult{2U, 4U, 6U, 8U, 1U, 3U, 5U, 7U, 9U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+
+  {
+    // concatenate 6-node list to 8-node list
+    const auto result{LinkedListType::concatenate(
+        LinkedListType{2U, 3U, 5U, 7U, 11U, 13U},        // prime numbers
+        LinkedListType{0U, 1U, 1U, 2U, 3U, 5U, 8U, 13U}  // Fibonacci numbers
+        )};
+
+    LinkedListType expectedResult{2U, 3U, 5U, 7U, 11U, 13U, 0U,
+                                  1U, 1U, 2U, 3U, 5U,  8U,  13U};
+
+    EXPECT_EQ(result.getHeadValue(), expectedResult.getHeadValue());
+    EXPECT_EQ(result.getTailValue(), expectedResult.getTailValue());
+    EXPECT_EQ(result.getLength(), expectedResult.getLength());
+
+    EXPECT_STREQ(result.display().c_str(), expectedResult.display().c_str());
+  }
+}
+
 TEST(TestingHeadAndTail, ReadingHeadAndTailValues) {
   using ValueType = std::size_t;
   using LinkedListType = LinkedList<ValueType>;
