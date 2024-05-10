@@ -395,7 +395,7 @@ public:
     return {isEmpty() ? m_head : m_tail.get()->nextNode()};
   }
 
-  /// @brief a static helper method to concatenate two linked lists together
+  /// @brief a class method to concatenate two linked lists together
   /// @param firstList first linked lists to be concatenated, where its
   ///                  ownership need to be transferred
   /// @param secondList  second and last linked lists to be concatenated, where
@@ -428,6 +428,55 @@ public:
 
     return firstList;
   }
+
+  /// @brief a class method that merges two linked lists together by taking a
+  ///        node from each one
+  /// @param firstList first linked list to be merged
+  /// @param secondList second linked list to be merged
+  /// @return a linked list consists of both lists merged together
+  static LinkedList merge(LinkedList firstList,
+                          LinkedList secondList) noexcept {
+    if (firstList.isEmpty()) {
+      return secondList;
+    }
+
+    if (secondList.isEmpty()) {
+      return firstList;
+    }
+
+    LinkedList result;
+    std::size_t positionToInsert{0U};
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToTakeFromFirstList{
+        firstList.getNodeAt(0U)};
+    std::reference_wrapper<std::unique_ptr<Node>> nodeToTakeFromSecondList{
+        secondList.getNodeAt(0U)};
+
+    bool nodeInserted{true};
+    while (nodeInserted) {
+      nodeInserted = false;
+
+      if (nodeToTakeFromFirstList.get() != nullptr) {
+        result.insertAt(nodeToTakeFromFirstList.get()->value(),
+                        positionToInsert);
+        nodeInserted = true;
+
+        ++positionToInsert;
+        advance(nodeToTakeFromFirstList);
+      }
+
+      if (nodeToTakeFromSecondList.get() != nullptr) {
+        result.insertAt(nodeToTakeFromSecondList.get()->value(),
+                        positionToInsert);
+        nodeInserted = true;
+
+        ++positionToInsert;
+        advance(nodeToTakeFromSecondList);
+      }
+    }
+
+    return result;
+  }
+
 private:
   /// @brief owning pointer to the first node of the linked list
   std::unique_ptr<Node> m_head{nullptr};
