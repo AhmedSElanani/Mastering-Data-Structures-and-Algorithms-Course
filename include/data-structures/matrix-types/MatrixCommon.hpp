@@ -10,7 +10,7 @@
 
 // TODO(salah): clean up this include.
 // Personally, I hate it, but clang tidy error was driving me crazy
-#include "../../common/Common.hpp"
+#include "../../common/Common.hpp"  // NOLINT(misc-include-cleaner)
 
 /// @brief namespace for matrices types
 namespace data_structures::matrix_types {

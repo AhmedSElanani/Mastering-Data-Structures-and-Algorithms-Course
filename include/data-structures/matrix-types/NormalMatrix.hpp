@@ -11,7 +11,7 @@
 #include <type_traits>
 #include <utility>
 
-#include "common/Common.hpp"
+#include "common/Common.hpp"  // NOLINT(misc-include-cleaner)
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 
 /// @brief namespace for matrices types

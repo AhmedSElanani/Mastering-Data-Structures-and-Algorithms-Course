@@ -8,7 +8,7 @@
 #include <string>
 #include <type_traits>
 
-#include "common/Common.hpp"
+#include "common/Common.hpp"  // NOLINT(misc-include-cleaner)
 #include "data-structures/matrix-types/MatrixCommon.hpp"
 #include "data-structures/matrix-types/NormalMatrix.hpp"
 
