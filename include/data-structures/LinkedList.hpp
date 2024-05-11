@@ -21,13 +21,17 @@ class LinkedList {
     /// @brief parametrized constructor of the class accepting value and
     ///        optional pointer to the next node
     /// @param value the data to be held by the node
-    constexpr explicit Node(T&& value, std::unique_ptr<Node> next = nullptr)
+    constexpr explicit Node(
+        T&& value,  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+        std::unique_ptr<Node> next = nullptr)
         : m_value{std::forward<T>(value)}, m_next{std::move(next)} {}
 
     /// @brief method to append a new node given to data to this node
     /// @param value the data to be held in the new appended node
     /// @return reference to the newly appended node
-    auto append(T&& value) -> std::unique_ptr<Node>& {
+    auto append(
+        T&& value  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+        ) -> std::unique_ptr<Node>& {
       m_next =
           std::make_unique<Node>(std::forward<T>(value), std::move(m_next));
 
@@ -75,7 +79,9 @@ public:
   /// @param ...remValues data to initialize the remaining nodes if any
   /// @note this guarantees that first and remaining values are of same type
   template <typename... Rem>
-  constexpr explicit LinkedList(T&& firstValue, Rem&&... remValues)
+  constexpr explicit LinkedList(
+      // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+      T&& firstValue, Rem&&... remValues)
       : m_head{std::make_unique<Node>(std::forward<T>(firstValue))},
         m_length{1U} {
     constexpr auto kNoOfRemainingElements{sizeof...(Rem)};
@@ -96,7 +102,7 @@ public:
   LinkedList(const LinkedList&) = delete;
 
   /// @brief deleted copy assignment operator for LinkedList class
-  LinkedList& operator=(const LinkedList&) = delete;
+  auto operator=(const LinkedList&) -> LinkedList& = delete;
 
   /// @brief move constructor for LinkedList class
   /// @param other the object to be moved from to this class
@@ -109,7 +115,7 @@ public:
   /// @brief move assignment operator for LinkedList class
   /// @param other the object to be moved from to this class
   /// @return reference to this object to support chain assignment
-  LinkedList& operator=(LinkedList&& other) noexcept {
+  auto operator=(LinkedList&& other) noexcept -> LinkedList& {
     if (this == &other) {
       return *this;
     }
@@ -156,18 +162,17 @@ public:
       return m_head;
     }
 
-    std::reference_wrapper<std::unique_ptr<Node>> nodeToCheck{m_head};
-    std::reference_wrapper<std::unique_ptr<Node>> prevNode{end()};
-    while (nodeToCheck.get()) {
-      if (nodeToCheck.get()->value() == key) {
+    AdjacentNodes adjacentNodes{end(), m_head};
+    while (adjacentNodes.currentNode.get()) {
+      if (adjacentNodes.currentNode.get()->value() == key) {
         // the key difference in this search algorithm
-        moveNodeToFront(prevNode, nodeToCheck);
+        moveNodeToFront(adjacentNodes);
 
         return m_head;
       }
 
-      prevNode = nodeToCheck;
-      advance(nodeToCheck);
+      adjacentNodes.prevNode = adjacentNodes.currentNode;
+      advance(adjacentNodes.currentNode);
     }
 
     return cend();
@@ -177,7 +182,9 @@ public:
   /// @param value data to be stored in that new node
   /// @param position index at which this node shall be inserted
   /// @return true, if the node was inserted successfully, false otherwise
-  auto insertAt(T&& value, std::size_t position) -> bool {
+  auto insertAt(
+      T&& value,  // NOLINT(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+      std::size_t position) -> bool {
     if (position > m_length) {
       return false;
     }
@@ -404,8 +411,8 @@ public:
   /// @param secondList  second and last linked lists to be concatenated, where
   ///                    its ownership need to be transferred
   /// @return result of concatenating both linked lists
-  static LinkedList concatenate(LinkedList firstList,
-                                LinkedList secondList) noexcept {
+  static auto concatenate(LinkedList firstList,
+                          LinkedList secondList) noexcept -> LinkedList {
     if (firstList.isEmpty()) {
       return secondList;
     }
@@ -437,8 +444,8 @@ public:
   /// @param firstList first linked list to be merged
   /// @param secondList second linked list to be merged
   /// @return a linked list consists of both lists merged together
-  static LinkedList merge(LinkedList firstList,
-                          LinkedList secondList) noexcept {
+  static auto merge(LinkedList firstList,
+                    LinkedList secondList) noexcept -> LinkedList {
     if (firstList.isEmpty()) {
       return secondList;
     }
@@ -490,6 +497,13 @@ private:
   /// @brief data member to keep track of number of nodes in the list
   std::size_t m_length{0U};
 
+  /// @brief struct definition for two reference wrappers to unique pointers to
+  ///        nodes to represent to adjacent pointer that can be passed together
+  struct AdjacentNodes {
+    std::reference_wrapper<std::unique_ptr<Node>> prevNode;
+    std::reference_wrapper<std::unique_ptr<Node>> currentNode;
+  };
+
   /// @brief swap method for LinkedList class
   /// @param other the other linked list object to be swapped with
   /// @note this swap method can be used in assignments operators for example,
@@ -502,10 +516,13 @@ private:
 
   /// @brief helper method to advance node to the next one since similar code
   ///        was called in many places
+  /// @tparam Node generic type for the unique pointer referred to as it could
+  ///         be const or not const
   /// @param node the refernece to node to be advance
   /// @param positions the number of positions to advance the node, the default
   ///                  is one position
-  static void advance(std::reference_wrapper<auto>& node,
+  template <typename Node>
+  static void advance(std::reference_wrapper<Node>& node,
                       std::size_t positions = 1U) noexcept {
     while ((positions--) != 0U && node.get() != nullptr) {
       node = node.get()->nextNode();
@@ -516,44 +533,45 @@ private:
   /// @param nodeToMove the node to be moved to the front
   /// @param prevNode the previous node to it, as it would be needed in singly
   ///                 linked list implementation
-  void moveNodeToFront(
-      std::reference_wrapper<std::unique_ptr<Node>>& prevNode,
-      std::reference_wrapper<std::unique_ptr<Node>>& nodeToMove) {
-    if (nodeToMove.get() == m_head) {
+  void moveNodeToFront(AdjacentNodes adjacentNodes) {
+    if (adjacentNodes.currentNode.get() == m_head) {
       // node to be moved is already at the front
       return;
     }
 
     // check if tail would be modified
-    const bool nodeToMoveIsTail{nodeToMove.get() == m_tail.get()};
-    const bool nodeNextShallBeTail{isTailNode(nodeToMove.get()->nextNode())};
+    const bool nodeToMoveIsTail{adjacentNodes.currentNode.get() ==
+                                m_tail.get()};
+    const bool nodeNextShallBeTail{
+        isTailNode(adjacentNodes.currentNode.get()->nextNode())};
 
     // start moving the node to the front
-    std::unique_ptr<Node> nextNode{std::move(nodeToMove.get()->nextNode())};
-    nodeToMove.get()->nextNode() = std::move(m_head);
-    m_head = std::move(nodeToMove.get());
+    std::unique_ptr<Node> nextNode{
+        std::move(adjacentNodes.currentNode.get()->nextNode())};
+    adjacentNodes.currentNode.get()->nextNode() = std::move(m_head);
+    m_head = std::move(adjacentNodes.currentNode.get());
 
     // check overlapp between prevNode reference and head, as the rest of the
     // implementation assumes previous node is beyond the head
     // Note: It's fine if there's overlap with nodeToMove reference as it's
     //       no longer needed in this method
-    if (prevNode.get() == m_head) {
-      advance(prevNode);
+    if (adjacentNodes.prevNode.get() == m_head) {
+      advance(adjacentNodes.prevNode);
     }
 
     if (nextNode.get()) {
-      prevNode.get()->nextNode() = std::move(nextNode);
+      adjacentNodes.prevNode.get()->nextNode() = std::move(nextNode);
     }
 
     if (nodeToMoveIsTail) {
       // point tail to the previous node
-      m_tail = prevNode.get();
+      m_tail = adjacentNodes.prevNode.get();
       return;
     }
 
     if (nodeNextShallBeTail) {
       // point tail to the final destination of nextNode
-      m_tail = prevNode.get()->nextNode();
+      m_tail = adjacentNodes.prevNode.get()->nextNode();
       return;
     }
   }
