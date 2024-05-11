@@ -212,7 +212,10 @@ public:
   ///          or nullptr which can be checked against end() otherwise
   auto deleteNodeAt(std::size_t position) -> std::unique_ptr<Node> {
     if (position >= m_length) {
-      return std::move(end());
+      // just avoided: return std::move(...) to keep copy and move ellision
+      // optimization
+      std::unique_ptr<Node> tmp{std::move(end())};
+      return tmp;
     }
 
     // If tail was nulled due to a delete or shift to previous position, it will
@@ -558,7 +561,7 @@ private:
   /// @brief helper method to check whether a given node is the tail node or not
   /// @param node candidate node to be checked if it is the tail node
   /// @return true if it is indeed the tail node, false otherwise
-  auto isTailNode(std::unique_ptr<Node>& node) const noexcept -> bool {
+  auto isTailNode(std::unique_ptr<Node> const& node) const noexcept -> bool {
     return node.get() == m_tail.get().get();
   }
 };
