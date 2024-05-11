@@ -504,7 +504,7 @@ private:
   ///                  is one position
   static void advance(std::reference_wrapper<auto>& node,
                       std::size_t positions = 1U) noexcept {
-    while ((positions--) != 0U) {
+    while ((positions--) != 0U && node.get() != nullptr) {
       node = node.get()->nextNode();
     }
   }
