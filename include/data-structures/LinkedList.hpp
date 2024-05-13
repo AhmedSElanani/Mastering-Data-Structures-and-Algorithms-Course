@@ -349,18 +349,20 @@ public:
     return {m_head != nullptr ? m_head->value() : T{}};
   }
 
+  /// @brief another API that does the exact same thing as getHeadValue,
+  ///         just having a more generic name
+  /// @return value of last node in list if not empty,
+  ///         default initialzed otherwise
+  constexpr auto getFirstElement() const noexcept -> T {
+    return getHeadValue();
+  }
+
   /// @brief method to return the value of last node in the list
   /// @return value of last node in list if not empty,
   ///         default initialzed otherwise
   constexpr auto getTailValue() const noexcept -> T {
     return {m_tail.get() != nullptr ? m_tail.get()->value() : T{}};
   }
-
-  /// @brief another API that does the exact same thing as getTailValue, just
-  ///        having a more generic name
-  /// @return value of last node in list if not empty,
-  ///         default initialzed otherwise
-  constexpr auto getLastElement() const noexcept -> T { return getTailValue(); }
 
   /// @brief method to show the number of nodes in the linked list
   /// @return the number of nodes in the linked list

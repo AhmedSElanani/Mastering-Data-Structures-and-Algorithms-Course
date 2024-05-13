@@ -40,13 +40,13 @@ TEST(TestingReadingTopValue, ReadingTopValueOfArbitrarySizesOfStacks) {
   using ValueType = std::size_t;
   using ContainerType = LinkedList<ValueType>;
 
-  EXPECT_EQ((Stack<ContainerType>{42U, 69U, 666U}).top(), 666U);
-  EXPECT_EQ((Stack<ContainerType>{666U, 42U, 69U}).top(), 69U);
-  EXPECT_EQ((Stack<ContainerType>{69U, 666U, 42U}).top(), 42U);
+  EXPECT_EQ((Stack<ContainerType>{666U, 42U, 69U}).top(), 666U);
+  EXPECT_EQ((Stack<ContainerType>{69U, 666U, 42U}).top(), 69U);
+  EXPECT_EQ((Stack<ContainerType>{42U, 69U, 666U}).top(), 42U);
 
-  EXPECT_EQ((Stack<ContainerType>{1U, 2U, 3U, 4U}).top(), 4U);
-  EXPECT_EQ((Stack<ContainerType>{1U, 2U, 3U, 4U, 5U}).top(), 5U);
-  EXPECT_EQ((Stack<ContainerType>{1U, 2U, 3U, 4U, 5U, 6U}).top(), 6U);
+  EXPECT_EQ((Stack<ContainerType>{4U, 3U, 2U, 1U}).top(), 4U);
+  EXPECT_EQ((Stack<ContainerType>{5U, 4U, 3U, 2U, 1U}).top(), 5U);
+  EXPECT_EQ((Stack<ContainerType>{6U, 5U, 4U, 3U, 2U, 1U}).top(), 6U);
 }
 
 TEST(TestingIsEmpty, CheckingIsEmptyOfArbitrarySizesOfStacks) {
@@ -148,7 +148,7 @@ TEST(TestingPopOnly, PoppingNonEmptyStack) {
   using ValueType = std::size_t;
   using ContainerType = LinkedList<ValueType>;
 
-  Stack<ContainerType> stack{1U, 2U, 3U, 4U, 5U};
+  Stack<ContainerType> stack{5U, 4U, 3U, 2U, 1U};
 
   EXPECT_EQ(stack.size(), 5U);
   EXPECT_FALSE(stack.isEmpty());

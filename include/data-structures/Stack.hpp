@@ -11,7 +11,7 @@ template <typename T>
 concept Stackable = requires(T container) {
   typename T::value_type;
 
-  container.getLastElement();
+  container.getHeadValue();
   container.isEmpty();
   container.getLength();
 
@@ -52,7 +52,7 @@ public:
   /// @brief a method to return the top element in the stack
   /// @return the value of the top element if the stack is not empty, otherwise
   ///         it returns default initialized element
-  ElementType top() const noexcept { return m_container.getLastElement(); }
+  ElementType top() const noexcept { return m_container.getHeadValue(); }
 
   /// @brief a method to show whether the stack is empty or not
   /// @return true if the stack is empty, false otherwise
@@ -65,16 +65,19 @@ public:
   /// @brief a method to push a new element at the top of the stack
   /// @param element the element to be pushed at the top of the stack
   void push(ElementType element) noexcept {
-    m_container.insertAt(std::move(element), m_container.getLength());
+    // inserting at the front would always be more efficient for the different
+    // underlying containers that could be used
+    m_container.insertAt(std::move(element), 0U);
   }
 
   /// @brief a method to remove the last element at the stack
   /// @return the popped element if the stack wasn't empty,
   ///         otherwise a default initialized element
   ElementType pop() noexcept {
-    return {m_container.isEmpty() == false
-                ? m_container.deleteAt(m_container.getLength() - 1U)->value()
-                : ElementType{}};
+    // deleting at the front would always be more efficient for the different
+    // underlying containers that could be used
+    return {m_container.isEmpty() ? ElementType{}
+                                  : m_container.deleteAt(0U)->value()};
   }
 
 private:
