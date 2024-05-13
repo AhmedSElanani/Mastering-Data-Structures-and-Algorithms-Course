@@ -217,7 +217,7 @@ public:
   /// @param position 0-indexed position of the node to be deleted
   /// @return the deleted node if position was valid,
   ///          or nullptr which can be checked against end() otherwise
-  auto deleteNodeAt(std::size_t position) -> std::unique_ptr<Node> {
+  auto deleteAt(std::size_t position) -> std::unique_ptr<Node> {
     if (position >= m_length) {
       // just avoided: return std::move(...) to keep copy and move ellision
       // optimization
@@ -356,6 +356,12 @@ public:
     return {m_tail.get() != nullptr ? m_tail.get()->value() : T{}};
   }
 
+  /// @brief another API that does the exact same thing as getTailValue, just
+  ///        having a more generic name
+  /// @return value of last node in list if not empty,
+  ///         default initialzed otherwise
+  constexpr auto getLastElement() const noexcept -> T { return getTailValue(); }
+
   /// @brief method to show the number of nodes in the linked list
   /// @return the number of nodes in the linked list
   [[nodiscard]] constexpr auto getLength() const noexcept -> std::size_t {
@@ -486,6 +492,9 @@ public:
 
     return result;
   }
+
+  /// @brief type alias for T, can be used in other dependent code
+  using value_type = T;
 
 private:
   /// @brief owning pointer to the first node of the linked list

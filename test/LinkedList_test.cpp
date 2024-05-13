@@ -383,7 +383,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromEmptyLists) {
   LinkedListType emptyLl{};
 
   for (const auto index : {0U, 1U, 2U, 3U, 4U}) {
-    EXPECT_EQ(emptyLl.deleteNodeAt(index), emptyLl.end());
+    EXPECT_EQ(emptyLl.deleteAt(index), emptyLl.end());
   }
 
   EXPECT_EQ(emptyLl.getHeadValue(), ValueType{});
@@ -399,9 +399,9 @@ TEST(TestingDeletingNodes, DeletingNodesAtInvalidPositions) {
   LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
   const std::size_t currentListLength{nonEmptyLl.getLength()};
 
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength), nonEmptyLl.end());
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength + 1U), nonEmptyLl.end());
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(currentListLength + 2U), nonEmptyLl.end());
+  EXPECT_EQ(nonEmptyLl.deleteAt(currentListLength), nonEmptyLl.end());
+  EXPECT_EQ(nonEmptyLl.deleteAt(currentListLength + 1U), nonEmptyLl.end());
+  EXPECT_EQ(nonEmptyLl.deleteAt(currentListLength + 2U), nonEmptyLl.end());
 
   // confirm linked list wasn't modified
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
@@ -418,7 +418,7 @@ TEST(TestingDeletingNodes, DeletingNodesNearHead) {
   LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
 
   // remove head node
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(0U)->value(), 1U);
+  EXPECT_EQ(nonEmptyLl.deleteAt(0U)->value(), 1U);
 
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
@@ -428,7 +428,7 @@ TEST(TestingDeletingNodes, DeletingNodesNearHead) {
                (LinkedListType{2U, 3U, 4U, 5U}).display().c_str());
 
   // remove head's next node
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(1U)->value(), 3U);
+  EXPECT_EQ(nonEmptyLl.deleteAt(1U)->value(), 3U);
 
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 2U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
@@ -444,7 +444,7 @@ TEST(TestingDeletingNodes, DeletingNodesNearTail) {
   LinkedListType nonEmptyLl{1U, 2U, 3U, 4U};
 
   // delete the tail node
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(3U)->value(), 4U);
+  EXPECT_EQ(nonEmptyLl.deleteAt(3U)->value(), 4U);
 
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
@@ -454,7 +454,7 @@ TEST(TestingDeletingNodes, DeletingNodesNearTail) {
                (LinkedListType{1U, 2U, 3U}).display().c_str());
 
   // delete the node just before the tail
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(1U)->value(), 2U);
+  EXPECT_EQ(nonEmptyLl.deleteAt(1U)->value(), 2U);
 
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 3U);
@@ -471,7 +471,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromOneNodeLists) {
   LinkedListType oneNodeLl{42U};
 
   // delete the only node the exists
-  EXPECT_EQ(oneNodeLl.deleteNodeAt(0U)->value(), 42U);
+  EXPECT_EQ(oneNodeLl.deleteAt(0U)->value(), 42U);
 
   EXPECT_EQ(oneNodeLl.getHeadValue(), ValueType{});
   EXPECT_EQ(oneNodeLl.getTailValue(), ValueType{});
@@ -481,7 +481,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromOneNodeLists) {
                (LinkedListType{}).display().c_str());
 
   // try one mode time after deletion (It should behave as an empty list)
-  EXPECT_EQ(oneNodeLl.deleteNodeAt(0U), oneNodeLl.end());
+  EXPECT_EQ(oneNodeLl.deleteAt(0U), oneNodeLl.end());
 
   EXPECT_EQ(oneNodeLl.getHeadValue(), ValueType{});
   EXPECT_EQ(oneNodeLl.getTailValue(), ValueType{});
@@ -498,7 +498,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromHeadAndTailOnlyLists) {
     // test deletion of head
     LinkedListType nonEmptyLl{42U, 69U};
 
-    EXPECT_EQ(nonEmptyLl.deleteNodeAt(0)->value(), 42U);
+    EXPECT_EQ(nonEmptyLl.deleteAt(0)->value(), 42U);
 
     EXPECT_EQ(nonEmptyLl.getHeadValue(), 69U);
     EXPECT_EQ(nonEmptyLl.getTailValue(), 69U);
@@ -512,7 +512,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromHeadAndTailOnlyLists) {
     // test deletion of tail
     LinkedListType nonEmptyLl{42U, 69U};
 
-    EXPECT_EQ(nonEmptyLl.deleteNodeAt(1)->value(), 69U);
+    EXPECT_EQ(nonEmptyLl.deleteAt(1)->value(), 69U);
 
     EXPECT_EQ(nonEmptyLl.getHeadValue(), 42U);
     EXPECT_EQ(nonEmptyLl.getTailValue(), 42U);
@@ -528,7 +528,7 @@ TEST(TestingDeletingNodes, DeletingNodesFromTheMiddle) {
 
   LinkedListType nonEmptyLl{1U, 2U, 3U, 4U, 5U};
 
-  EXPECT_EQ(nonEmptyLl.deleteNodeAt(2U)->value(), 3U);
+  EXPECT_EQ(nonEmptyLl.deleteAt(2U)->value(), 3U);
 
   EXPECT_EQ(nonEmptyLl.getHeadValue(), 1U);
   EXPECT_EQ(nonEmptyLl.getTailValue(), 5U);
