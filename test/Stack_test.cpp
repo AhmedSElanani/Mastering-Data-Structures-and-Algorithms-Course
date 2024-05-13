@@ -127,4 +127,68 @@ TEST(TestingPushOnly, CheckingPushToStackBehavior) {
   EXPECT_EQ(stack.top(), 5U);
 }
 
+TEST(TestingPopOnly, PoppingEmptyStack) {
+  using ValueType = std::size_t;
+  using ContainerType = LinkedList<ValueType>;
+
+  Stack<ContainerType> stack;
+
+  EXPECT_EQ(stack.size(), 0U);
+  EXPECT_TRUE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), ValueType{});
+
+  EXPECT_EQ(stack.pop(), ValueType{});
+
+  EXPECT_EQ(stack.size(), 0U);
+  EXPECT_TRUE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), ValueType{});
+}
+
+TEST(TestingPopOnly, PoppingNonEmptyStack) {
+  using ValueType = std::size_t;
+  using ContainerType = LinkedList<ValueType>;
+
+  Stack<ContainerType> stack{1U, 2U, 3U, 4U, 5U};
+
+  EXPECT_EQ(stack.size(), 5U);
+  EXPECT_FALSE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), 5U);
+
+  EXPECT_EQ(stack.pop(), 5U);
+
+  EXPECT_EQ(stack.size(), 4U);
+  EXPECT_FALSE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), 4U);
+
+  EXPECT_EQ(stack.pop(), 4U);
+
+  EXPECT_EQ(stack.size(), 3U);
+  EXPECT_FALSE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), 3U);
+
+  EXPECT_EQ(stack.pop(), 3U);
+
+  EXPECT_EQ(stack.size(), 2U);
+  EXPECT_FALSE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), 2U);
+
+  EXPECT_EQ(stack.pop(), 2U);
+
+  EXPECT_EQ(stack.size(), 1U);
+  EXPECT_FALSE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), 1U);
+
+  EXPECT_EQ(stack.pop(), 1U);
+
+  EXPECT_EQ(stack.size(), 0U);
+  EXPECT_TRUE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), ValueType{});
+
+  EXPECT_EQ(stack.pop(), ValueType{});
+
+  EXPECT_EQ(stack.size(), 0U);
+  EXPECT_TRUE(stack.isEmpty());
+  EXPECT_EQ(stack.top(), ValueType{});
+}
+
 }  // namespace data_structures_test::stack_test

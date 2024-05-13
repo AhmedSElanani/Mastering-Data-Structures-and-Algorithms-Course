@@ -16,6 +16,8 @@ concept Stackable = requires(T container) {
   container.getLength();
 
   container.insertAt({}, std::size_t{});
+
+  container.deleteAt(std::size_t{})->value();
 };
 
 /// @brief defining a concept for checking a type against a parameter pack
@@ -65,6 +67,16 @@ public:
   void push(ElementType element) noexcept {
     m_container.insertAt(std::move(element), m_container.getLength());
   }
+
+  /// @brief a method to remove the last element at the stack
+  /// @return the popped element if the stack wasn't empty,
+  ///         otherwise a default initialized element
+  ElementType pop() noexcept {
+    return {m_container.isEmpty() == false
+                ? m_container.deleteAt(m_container.getLength() - 1U)->value()
+                : ElementType{}};
+  }
+
 private:
   /// @brief the underlying container that implements the stack ADT
   CONTAINER m_container{};
