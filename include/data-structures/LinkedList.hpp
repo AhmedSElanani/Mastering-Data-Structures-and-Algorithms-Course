@@ -217,7 +217,7 @@ public:
   /// @param position 0-indexed position of the node to be deleted
   /// @return the deleted node if position was valid,
   ///          or nullptr which can be checked against end() otherwise
-  auto deleteNodeAt(std::size_t position) -> std::unique_ptr<Node> {
+  auto deleteAt(std::size_t position) -> std::unique_ptr<Node> {
     if (position >= m_length) {
       // just avoided: return std::move(...) to keep copy and move ellision
       // optimization
@@ -347,6 +347,14 @@ public:
   ///         default initialzed otherwise
   constexpr auto getHeadValue() const noexcept -> T {
     return {m_head != nullptr ? m_head->value() : T{}};
+  }
+
+  /// @brief another API that does the exact same thing as getHeadValue,
+  ///         just having a more generic name
+  /// @return value of last node in list if not empty,
+  ///         default initialzed otherwise
+  constexpr auto getFirstElement() const noexcept -> T {
+    return getHeadValue();
   }
 
   /// @brief method to return the value of last node in the list
@@ -486,6 +494,9 @@ public:
 
     return result;
   }
+
+  /// @brief type alias for T, can be used in other dependent code
+  using value_type = T;
 
 private:
   /// @brief owning pointer to the first node of the linked list
