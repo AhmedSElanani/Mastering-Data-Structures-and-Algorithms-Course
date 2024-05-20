@@ -3,6 +3,8 @@
 #include <concepts>
 #include <utility>
 
+#include "common/Common.hpp"
+
 /// @brief namespace for data structures implemented
 namespace data_structures {
 
@@ -19,11 +21,6 @@ concept Stackable = requires(T container) {
 
   container.deleteAt(std::size_t{})->value();
 };
-
-/// @brief defining a concept for checking a type against a parameter pack
-///        whether they're not the same or not
-template <typename T, typename... U>
-concept NotSameType = (sizeof...(U) > 1U || std::is_same_v<T, U...> == false);
 
 /// @brief class definition for Stack data structure
 /// @tparam CONTAINER stackable container type of values to hold
@@ -42,7 +39,7 @@ public:
   /// @note the constraint expression is used to avoid this universal reference
   ///       overload to take over the copy and move constructors
   template <typename... Elems>
-    requires(NotSameType<Stack, Elems...>)
+    requires(common::NotSameType<Stack, Elems...>)
   constexpr explicit Stack(Elems&&... elems)
       : m_container{std::forward<Elems>(elems)...} {}
 
