@@ -1,6 +1,6 @@
 #pragma once
 
-#include <concepts>
+#include <cstddef>
 #include <utility>
 
 #include "common/Common.hpp"
@@ -49,15 +49,15 @@ public:
   /// @brief a method to return the top element in the stack
   /// @return the value of the top element if the stack is not empty, otherwise
   ///         it returns default initialized element
-  ElementType top() const noexcept { return m_container.getHeadValue(); }
+  auto top() const noexcept -> ElementType { return m_container.getHeadValue(); }
 
   /// @brief a method to show whether the stack is empty or not
   /// @return true if the stack is empty, false otherwise
-  bool isEmpty() const noexcept { return m_container.isEmpty(); }
+  [[nodiscard]] auto isEmpty() const noexcept -> bool { return m_container.isEmpty(); }
 
   /// @brief a method to show the number of elements stored in the stack
   /// @return the number of elements in the stack
-  std::size_t size() const noexcept { return m_container.getLength(); }
+  [[nodiscard]] auto size() const noexcept -> std::size_t { return m_container.getLength(); }
 
   /// @brief a method to push a new element at the top of the stack
   /// @param element the element to be pushed at the top of the stack
@@ -70,7 +70,7 @@ public:
   /// @brief a method to remove the last element at the stack
   /// @return the popped element if the stack wasn't empty,
   ///         otherwise a default initialized element
-  ElementType pop() noexcept {
+  auto pop() noexcept -> ElementType {
     // deleting at the front would always be more efficient for the different
     // underlying containers that could be used
     return {m_container.isEmpty() ? ElementType{}

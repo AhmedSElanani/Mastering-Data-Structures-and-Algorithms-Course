@@ -1,9 +1,8 @@
 #pragma once
 
 #include <array>
-#include <concepts>
+#include <cstddef>
 #include <format>
-#include <memory>
 #include <string>
 #include <utility>
 
@@ -141,15 +140,15 @@ public:
   ///        be dequeued next)
   /// @return the first element in the queue if not empty, otherwise a default
   ///         initialzed object
-  constexpr T firstElement() const noexcept {
-    return {isEmpty() == false ? m_data[m_front.value()] : T{}};
+  constexpr auto firstElement() const noexcept -> T {
+    return {!static_cast<bool>(isEmpty()) ? m_data[m_front.value()] : T{}};
   }
 
   /// @brief method to read the last element inserted to the queue
   /// @return the last element in the queue if not empty, otherwise a default
   ///         initialzed object
-  constexpr T lastElement() const noexcept {
-    return {isEmpty() == false ? m_data[m_rear.value()] : T{}};
+  constexpr auto lastElement() const noexcept -> T {
+    return {!static_cast<bool>(isEmpty()) ? m_data[m_rear.value()] : T{}};
   }
 
   /// @brief method that returns the number of elements currently stored in
