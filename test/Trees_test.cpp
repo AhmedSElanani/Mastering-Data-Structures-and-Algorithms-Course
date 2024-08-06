@@ -19,4 +19,24 @@ TEST(TestingConstruction, ConstructingBinaryTree) {
       { (BinaryTree<char>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}); });
 }
 
+TEST(TestingTraversals, TraversingPreOrderOfBinaryTree) {
+  using ValueType = char;
+
+  // empty tree
+  EXPECT_EQ((BinaryTree<ValueType>{}).traversePreOrder(),
+            std::vector<ValueType>{});
+
+  // one-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'x'}).traversePreOrder(),
+            std::vector<ValueType>{'x'});
+
+  // multi-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'})
+                .traversePreOrder(),
+            (std::vector<ValueType>{'D', 'E', 'D', 'F', 'B', 'A', 'E', 'E'}));
+
+  // custom constructed tree
+  // TODO
+}
+
 }  // namespace data_structures_test::trees_test

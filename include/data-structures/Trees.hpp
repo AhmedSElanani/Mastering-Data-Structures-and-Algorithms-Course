@@ -3,6 +3,8 @@
 #include <functional>
 #include <memory>
 #include <queue>
+#include <ranges>
+#include <vector>
 
 /// @brief namespace for data structures implemented
 namespace data_structures {
@@ -101,6 +103,35 @@ public:
                                          // second turn in the queue
       }
     }
+  }
+  /// @brief method to traverse the tree in PreOrder
+  /// @return vector of the nodes' values in PreOrder
+  std::vector<T> traversePreOrder() const noexcept {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    std::function<std::vector<T>(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        traversePreOrderInternal{[&traversePreOrderInternal](
+                                     auto const& startNode) {
+          if (startNode == nullptr) {
+            return std::vector<T>{};
+          }
+
+          std::vector<T> nodesValues;
+          nodesValues.emplace_back(startNode->value());
+
+          std::ranges::move(traversePreOrderInternal(startNode->leftChild()),
+                            std::back_inserter(nodesValues));
+
+          std::ranges::move(traversePreOrderInternal(startNode->rightChild()),
+                            std::back_inserter(nodesValues));
+
+          return nodesValues;
+        }};
+
+    return traversePreOrderInternal(m_root);
   }
 private:
   /// @brief owning pointer to the root of the tree
