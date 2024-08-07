@@ -195,6 +195,37 @@ public:
 
     return traversePostOrderInternal(m_root);
   }
+
+  /// @brief method to traverse the tree in level order
+  /// @return vector of the nodes' values in level order
+  std::vector<T> traverseLevelOrder() const noexcept {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    std::queue<std::reference_wrapper<
+        std::unique_ptr<trees_internal::BinaryNode<T>> const>>
+        helperQueue;
+    helperQueue.push(m_root);
+
+    std::vector<T> nodesValues;
+    while (helperQueue.empty() == false) {
+      const auto& currentNode{helperQueue.front().get()};
+
+      if (currentNode->leftChild()) {
+        helperQueue.push(currentNode->leftChild());
+      }
+
+      if (currentNode->rightChild()) {
+        helperQueue.push(currentNode->rightChild());
+      }
+
+      nodesValues.emplace_back(currentNode->value());
+      helperQueue.pop();
+    }
+
+    return nodesValues;
+  }
 private:
   /// @brief owning pointer to the root of the tree
   std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};

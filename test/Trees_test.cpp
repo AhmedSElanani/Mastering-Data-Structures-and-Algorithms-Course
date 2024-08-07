@@ -79,4 +79,28 @@ TEST(TestingTraversals, TraversingInOrderOfBinaryTree) {
   // TODO
 }
 
+TEST(TestingTraversals, TraversingLevelOrderOfBinaryTree) {
+  using ValueType = std::size_t;
+
+  // empty tree
+  EXPECT_EQ((BinaryTree<ValueType>{}).traverseLevelOrder(),
+            std::vector<ValueType>{});
+
+  // one-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{42U}).traverseLevelOrder(),
+            std::vector<ValueType>{42U});
+
+  // multi-node tree
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,  10U,
+                             11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U})
+          .traverseLevelOrder(),
+      (std::vector<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,
+                              8U,  9U,  10U, 11U, 12U, 13U, 14U,
+                              15U, 16U, 17U, 18U, 19U, 20U}));
+
+  // custom constructed tree
+  // TODO
+}
+
 }  // namespace data_structures_test::trees_test
