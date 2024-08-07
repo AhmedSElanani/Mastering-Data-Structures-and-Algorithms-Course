@@ -83,8 +83,8 @@ public:
 
     // Note: constructing the queue from root had to be done on two steps as
     // std::queue doesn't define a constructor that accepts element directly
-    std::queue<
-        std::reference_wrapper<std::unique_ptr<trees_internal::BinaryNode<T>>>>
+    std::queue<std::reference_wrapper<
+        std::unique_ptr<trees_internal::BinaryNode<T>> const>>
         helperQueue;
     helperQueue.push(m_root);
 
