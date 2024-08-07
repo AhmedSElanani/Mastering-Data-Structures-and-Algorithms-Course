@@ -1,5 +1,6 @@
 #pragma once
 
+#include <format>
 #include <functional>
 #include <memory>
 #include <queue>
@@ -226,6 +227,54 @@ public:
 
     return nodesValues;
   }
+
+  /// @brief enum class to be used as parameter to display method to specify the
+  ///        order of traversal
+  enum class traversalOrder : std::uint8_t {
+    preOrder,
+    inOrder,
+    postOrder,
+    levelOrder,
+  };
+
+  /// @brief method to display elements of the tree based on the traversal order
+  ///        passed
+  /// @param order
+  /// @return elements of the tree surrounded by braces
+  [[nodiscard]] constexpr auto display(traversalOrder order) const noexcept
+      -> std::string {
+    std::vector<T> nodesValues;
+    switch (order) {
+      case traversalOrder::preOrder: {
+        nodesValues = traversePreOrder();
+      } break;
+      case traversalOrder::inOrder: {
+        nodesValues = traverseInOrder();
+      } break;
+      case traversalOrder::postOrder: {
+        nodesValues = traversePostOrder();
+      } break;
+      case traversalOrder::levelOrder: {
+        nodesValues = traverseLevelOrder();
+      } break;
+
+      default: {
+        // keep the vector empty
+      } break;
+    }
+
+    const auto stringify{[](auto elements) {
+      std::string result;
+      for (auto it{elements.begin()}; it != elements.end(); ++it) {
+        result += std::to_string(*it) + (it == elements.end() - 1U ? "" : ",");
+      }
+
+      return result;
+    }};
+
+    return std::string{std::format("{{{}}}", stringify(nodesValues))};
+  }
+
 private:
   /// @brief owning pointer to the root of the tree
   std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
