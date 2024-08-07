@@ -39,4 +39,44 @@ TEST(TestingTraversals, TraversingPreOrderOfBinaryTree) {
   // TODO
 }
 
+TEST(TestingTraversals, TraversingPostOrderOfBinaryTree) {
+  using ValueType = char;
+
+  // empty tree
+  EXPECT_EQ((BinaryTree<ValueType>{}).traversePostOrder(),
+            std::vector<ValueType>{});
+
+  // one-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'x'}).traversePostOrder(),
+            std::vector<ValueType>{'x'});
+
+  // multi-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'})
+                .traversePostOrder(),
+            (std::vector<ValueType>{'F', 'D', 'B', 'E', 'E', 'E', 'A', 'D'}));
+
+  // custom constructed tree
+  // TODO
+}
+
+TEST(TestingTraversals, TraversingInOrderOfBinaryTree) {
+  using ValueType = char;
+
+  // empty tree
+  EXPECT_EQ((BinaryTree<ValueType>{}).traverseInOrder(),
+            std::vector<ValueType>{});
+
+  // one-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'x'}).traverseInOrder(),
+            std::vector<ValueType>{'x'});
+
+  // multi-node tree
+  EXPECT_EQ((BinaryTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'})
+                .traverseInOrder(),
+            (std::vector<ValueType>{'F', 'D', 'E', 'B', 'D', 'E', 'A', 'E'}));
+
+  // custom constructed tree
+  // TODO
+}
+
 }  // namespace data_structures_test::trees_test

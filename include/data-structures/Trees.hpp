@@ -133,6 +133,68 @@ public:
 
     return traversePreOrderInternal(m_root);
   }
+
+  /// @brief method to traverse the tree in order
+  /// @return vector of the nodes' values in order
+  std::vector<T> traverseInOrder() const noexcept {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    std::function<std::vector<T>(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        traverseInOrderInternal{[&traverseInOrderInternal](
+                                    auto const& startNode) {
+          if (startNode == nullptr) {
+            return std::vector<T>{};
+          }
+
+          std::vector<T> nodesValues;
+
+          std::ranges::move(traverseInOrderInternal(startNode->leftChild()),
+                            std::back_inserter(nodesValues));
+
+          nodesValues.emplace_back(startNode->value());
+
+          std::ranges::move(traverseInOrderInternal(startNode->rightChild()),
+                            std::back_inserter(nodesValues));
+
+          return nodesValues;
+        }};
+
+    return traverseInOrderInternal(m_root);
+  }
+
+  /// @brief method to traverse the tree in PostOrder
+  /// @return vector of the nodes' values in PostOrder
+  std::vector<T> traversePostOrder() const noexcept {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    std::function<std::vector<T>(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        traversePostOrderInternal{[&traversePostOrderInternal](
+                                      auto const& startNode) {
+          if (startNode == nullptr) {
+            return std::vector<T>{};
+          }
+
+          std::vector<T> nodesValues;
+
+          std::ranges::move(traversePostOrderInternal(startNode->leftChild()),
+                            std::back_inserter(nodesValues));
+
+          std::ranges::move(traversePostOrderInternal(startNode->rightChild()),
+                            std::back_inserter(nodesValues));
+
+          nodesValues.emplace_back(startNode->value());
+
+          return nodesValues;
+        }};
+
+    return traversePostOrderInternal(m_root);
+  }
 private:
   /// @brief owning pointer to the root of the tree
   std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
