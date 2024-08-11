@@ -3,6 +3,7 @@
 #include <format>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <queue>
 #include <ranges>
 #include <vector>
@@ -69,11 +70,21 @@ public:
   template <typename... Rem>
   constexpr explicit BinaryTree(
       // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
-      T&& firstValue, Rem&&... remValues)
-      : m_root{std::make_unique<trees_internal::BinaryNode<T>>(
-            std::forward<T>(firstValue))} {
+      std::optional<T>&& firstValue, Rem&&... remValues)
+      : m_root{{// Note: static assertion wasn't possible since firstValue is
+                // not a constant expression. The next best thing is adding a
+                // ternary operator for checking if the first argument has a
+                // value, followed by a null check for the tree root.
+                firstValue.has_value()
+                    ? std::make_unique<trees_internal::BinaryNode<T>>(
+                          std::forward<T>(firstValue.value()))
+                    : nullptr}} {
+    if (m_root == nullptr) {
+      return;
+    }
+
     // check if there are other elements passed after the root element
-    std::initializer_list<T> remainingElements{remValues...};
+    std::initializer_list<std::optional<T>> remainingElements{remValues...};
     if constexpr (constexpr auto kNoOfRemainingElements{
                       sizeof(remainingElements)};
                   kNoOfRemainingElements == 0U) {
@@ -89,22 +100,60 @@ public:
         helperQueue;
     helperQueue.push(m_root);
 
-    for (auto const& elem : remainingElements) {
-      auto& leftSubTree{helperQueue.front().get()->leftChild()};
-      if (leftSubTree == nullptr) {
-        leftSubTree = std::make_unique<trees_internal::BinaryNode<T>>(elem);
+    // define an enum for turns between subtrees and declare a variable of it
+    enum class subtreeTurn {
+      leftSubtree,
+      rightSubtree,
+    };
+
+    for (auto subtreeTurn{// init to right tree, so that on the first iteration
+                          // it switches and starts with left
+                          subtreeTurn::rightSubtree};
+         auto const& elem : remainingElements) {
+      if (helperQueue.empty()) {
+        // this means there are no leaf nodes available to hold remaining
+        // elements
+        break;
+      }
+
+      // Note: switching turns is done at the beginning and not the end so that
+      // if the iteration is skipped due to std::nullopt element, still turns
+      // are preserved
+      subtreeTurn = {subtreeTurn == subtreeTurn::leftSubtree
+                         ? subtreeTurn::rightSubtree
+                         : subtreeTurn::leftSubtree};
+
+      if (elem == std::nullopt) {
+        // this subtree will be skipped
+
+        if (subtreeTurn == subtreeTurn::rightSubtree) {
+          // if we reached the right side of this node, then it's done
+          helperQueue.pop();
+        }
+
+        continue;
+      }
+
+      if (subtreeTurn == subtreeTurn::leftSubtree) {
+        auto& leftSubTree{helperQueue.front().get()->leftChild()};
+        leftSubTree =
+            std::make_unique<trees_internal::BinaryNode<T>>(elem.value());
         helperQueue.push(leftSubTree);  // so that the left subtree takes the
                                         // first turn in the queue
       } else {
+        // assuming the only other possible option is right subtree
         auto& rightSubTree{helperQueue.front().get()->rightChild()};
-        rightSubTree = std::make_unique<trees_internal::BinaryNode<T>>(elem);
-        helperQueue.pop();  // as at this point, the queue front both children
-                            // are filled
+        rightSubTree =
+            std::make_unique<trees_internal::BinaryNode<T>>(elem.value());
         helperQueue.push(rightSubTree);  // so that the right subtree takes the
                                          // second turn in the queue
+
+        // if we reached the right side of this node, then it's done
+        helperQueue.pop();
       }
     }
   }
+
   /// @brief method to traverse the tree in PreOrder
   /// @return vector of the nodes' values in PreOrder
   std::vector<T> traversePreOrder() const noexcept {

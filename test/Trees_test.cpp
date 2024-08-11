@@ -6,7 +6,7 @@
 namespace data_structures_test::trees_test {
 using namespace ::data_structures;
 
-TEST(TestingConstruction, ConstructingBinaryTree) {
+TEST(TestingConstruction, ConstructingCompleteBinaryTree) {
   // empty BTree
   EXPECT_NO_THROW({ (BinaryTree<std::size_t>{}); });
 
@@ -17,6 +17,31 @@ TEST(TestingConstruction, ConstructingBinaryTree) {
   EXPECT_NO_THROW({ (BinaryTree<std::size_t>{42U, 69U, 133U}); });
   EXPECT_NO_THROW(
       { (BinaryTree<char>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}); });
+}
+
+TEST(TestingConstruction, ConstructingInCompleteBinaryTree) {
+  // empty BTree
+  EXPECT_NO_THROW({ (BinaryTree<std::size_t>{std::nullopt}); });
+  EXPECT_NO_THROW({ (BinaryTree<std::size_t>{std::nullopt, 1U, 2U, 3U}); });
+
+  // BTree of one node
+  EXPECT_NO_THROW({ (BinaryTree<std::size_t>{42U, std::nullopt}); });
+  EXPECT_NO_THROW(
+      { (BinaryTree<std::size_t>{42U, std::nullopt, std::nullopt}); });
+  EXPECT_NO_THROW({
+    (BinaryTree<std::size_t>{
+        42U,
+        std::nullopt,
+        std::nullopt,
+    });
+  });
+
+  // BTree of several nodes
+  EXPECT_NO_THROW({ (BinaryTree<std::size_t>{42U, std::nullopt, 69U, 133U}); });
+  EXPECT_NO_THROW({
+    (BinaryTree<std::size_t>{42U, std::nullopt, 69U, std::nullopt, std::nullopt,
+                             133U});
+  });
 }
 
 TEST(TestingTraversals, TraversingPreOrderOfBinaryTree) {
@@ -35,8 +60,18 @@ TEST(TestingTraversals, TraversingPreOrderOfBinaryTree) {
                 .traversePreOrder(),
             (std::vector<ValueType>{'D', 'E', 'D', 'F', 'B', 'A', 'E', 'E'}));
 
-  // custom constructed tree
-  // TODO
+  // custom constructed trees
+  EXPECT_EQ((BinaryTree<ValueType>{'A', 'B', std::nullopt, std::nullopt, 'C',
+                                   'D', 'E', std::nullopt})
+                .traversePreOrder(),
+            (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E'}));
+
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', 'B', 'C', std::nullopt, std::nullopt, 'D',
+                             'E', std::nullopt, std::nullopt, std::nullopt,
+                             std::nullopt, 'F', 'G', 'H', 'I'})
+          .traversePreOrder(),
+      (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E'}));
 }
 
 TEST(TestingTraversals, TraversingPostOrderOfBinaryTree) {
@@ -55,8 +90,27 @@ TEST(TestingTraversals, TraversingPostOrderOfBinaryTree) {
                 .traversePostOrder(),
             (std::vector<ValueType>{'F', 'D', 'B', 'E', 'E', 'E', 'A', 'D'}));
 
-  // custom constructed tree
-  // TODO
+  // custom constructed trees
+  EXPECT_EQ((BinaryTree<ValueType>{'A', std::nullopt, 'B', std::nullopt, 'C',
+                                   'D', 'E', std::nullopt})
+                .traversePostOrder(),
+            (std::vector<ValueType>{'D', 'E', 'C', 'B', 'A'}));
+
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', std::nullopt, 'B', std::nullopt, 'C',
+                             std::nullopt, 'D', std::nullopt, 'E', std::nullopt,
+                             'F', std::nullopt, 'G', std::nullopt, 'H',
+                             std::nullopt, 'I'})
+          .traversePostOrder(),
+      (std::vector<ValueType>{'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'}));
+
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', 'B', std::nullopt, 'C', std::nullopt, 'D',
+                             std::nullopt, 'E', std::nullopt, 'F', std::nullopt,
+                             'G', std::nullopt, 'H', std::nullopt, 'I',
+                             std::nullopt})
+          .traversePostOrder(),
+      (std::vector<ValueType>{'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'}));
 }
 
 TEST(TestingTraversals, TraversingInOrderOfBinaryTree) {
@@ -76,7 +130,11 @@ TEST(TestingTraversals, TraversingInOrderOfBinaryTree) {
             (std::vector<ValueType>{'F', 'D', 'E', 'B', 'D', 'E', 'A', 'E'}));
 
   // custom constructed tree
-  // TODO
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', 'B', 'C', std::nullopt, 'D', std::nullopt,
+                             'E', std::nullopt, std::nullopt, 'F', 'G'})
+          .traverseInOrder(),
+      (std::vector<ValueType>{'B', 'D', 'A', 'C', 'F', 'E', 'G'}));
 }
 
 TEST(TestingTraversals, TraversingLevelOrderOfBinaryTree) {
@@ -99,8 +157,22 @@ TEST(TestingTraversals, TraversingLevelOrderOfBinaryTree) {
                               8U,  9U,  10U, 11U, 12U, 13U, 14U,
                               15U, 16U, 17U, 18U, 19U, 20U}));
 
-  // custom constructed tree
-  // TODO
+  // custom constructed trees
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', std::nullopt, 'B', std::nullopt, 'C',
+                             std::nullopt, 'D', std::nullopt, 'E', std::nullopt,
+                             'F', std::nullopt, 'G', std::nullopt, 'H',
+                             std::nullopt, 'I'})
+          .traverseLevelOrder(),
+      (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'}));
+
+  EXPECT_EQ(
+      (BinaryTree<ValueType>{'A', 'B', std::nullopt, 'C', std::nullopt, 'D',
+                             std::nullopt, 'E', std::nullopt, 'F', std::nullopt,
+                             'G', std::nullopt, 'H', std::nullopt, 'I',
+                             std::nullopt})
+          .traverseLevelOrder(),
+      (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'}));
 }
 
 TEST(TestingDisplay, DisplayEmptyTree) {
@@ -172,7 +244,77 @@ TEST(TestingDisplay, DisplayMultiNodeTree) {
 }
 
 TEST(TestingDisplay, DisplayCustomConstructedTree) {
-  // TODO
+  using ValueType = std::size_t;
+  using traversalOrder = BinaryTree<ValueType>::traversalOrder;
+
+  // empty BTree
+  EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
+                   .display(traversalOrder::preOrder)
+                   .c_str(),
+               "{}");
+  EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
+                   .display(traversalOrder::inOrder)
+                   .c_str(),
+               "{}");
+  EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
+                   .display(traversalOrder::postOrder)
+                   .c_str(),
+               "{}");
+  EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
+                   .display(traversalOrder::levelOrder)
+                   .c_str(),
+               "{}");
+
+  // BTree of one node
+  EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
+                   .display(traversalOrder::preOrder)
+                   .c_str(),
+               "{1}");
+  EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
+                   .display(traversalOrder::inOrder)
+                   .c_str(),
+               "{1}");
+  EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
+                   .display(traversalOrder::postOrder)
+                   .c_str(),
+               "{1}");
+  EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
+                   .display(traversalOrder::levelOrder)
+                   .c_str(),
+               "{1}");
+
+  // BTree of several nodes
+  EXPECT_STREQ(
+      (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
+                             std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
+                             std::nullopt, std::nullopt, std::nullopt, 8U})
+          .display(traversalOrder::preOrder)
+          .c_str(),
+      "{1,2,4,3,5,6,7}");
+
+  EXPECT_STREQ(
+      (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
+                             std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
+                             std::nullopt, std::nullopt, std::nullopt, 8U})
+          .display(traversalOrder::inOrder)
+          .c_str(),
+      "{2,4,1,3,6,5,7}");
+
+  EXPECT_STREQ(
+      (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
+                             std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
+                             std::nullopt, std::nullopt, std::nullopt, 8U})
+          .display(traversalOrder::postOrder)
+          .c_str(),
+      "{4,2,6,7,5,3,1}");
+
+  EXPECT_STREQ(
+      (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
+                             std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
+                             std::nullopt, std::nullopt, std::nullopt, 8U})
+          .display(traversalOrder::levelOrder)
+          .c_str(),
+      "{1,2,3,4,5,6,7}");
 }
 
 }  // namespace data_structures_test::trees_test
