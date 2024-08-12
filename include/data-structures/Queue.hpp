@@ -44,7 +44,8 @@ class Queue {
     /// @param subtrahend the value that shall be subtracted from the index
     /// @return a new CircularIndex object that gets initialized with the
     ///         subtraction result
-    constexpr auto operator-(std::size_t subtrahend) const noexcept -> CircularIndex {
+    constexpr auto operator-(std::size_t subtrahend) const noexcept
+        -> CircularIndex {
       const auto normSub{subtrahend % m_cycleSize};
       const auto difference{m_index >= normSub ? m_index - normSub
                                                : m_cycleSize - normSub};
@@ -60,7 +61,9 @@ class Queue {
 
     /// @brief a method to access the current value of the index
     /// @return the current value of the index
-    [[nodiscard]] constexpr auto value() const noexcept -> std::size_t { return m_index; }
+    [[nodiscard]] constexpr auto value() const noexcept -> std::size_t {
+      return m_index;
+    }
 
   private:
     /// @brief the underlying index value

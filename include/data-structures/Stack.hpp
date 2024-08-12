@@ -49,15 +49,21 @@ public:
   /// @brief a method to return the top element in the stack
   /// @return the value of the top element if the stack is not empty, otherwise
   ///         it returns default initialized element
-  auto top() const noexcept -> ElementType { return m_container.getHeadValue(); }
+  auto top() const noexcept -> ElementType {
+    return m_container.getHeadValue();
+  }
 
   /// @brief a method to show whether the stack is empty or not
   /// @return true if the stack is empty, false otherwise
-  [[nodiscard]] auto isEmpty() const noexcept -> bool { return m_container.isEmpty(); }
+  [[nodiscard]] auto isEmpty() const noexcept -> bool {
+    return m_container.isEmpty();
+  }
 
   /// @brief a method to show the number of elements stored in the stack
   /// @return the number of elements in the stack
-  [[nodiscard]] auto size() const noexcept -> std::size_t { return m_container.getLength(); }
+  [[nodiscard]] auto size() const noexcept -> std::size_t {
+    return m_container.getLength();
+  }
 
   /// @brief a method to push a new element at the top of the stack
   /// @param element the element to be pushed at the top of the stack
