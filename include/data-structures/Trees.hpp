@@ -2,6 +2,7 @@
 
 #include <format>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <optional>
 #include <queue>
@@ -305,6 +306,40 @@ public:
     return countNodes(m_root);
   }
 
+  /// @brief method to return the height of nodes in the tree
+  /// @return the height of nodes in the tree. Where the height of root only
+  ///         tree is zero, and the height of empty tree is
+  ///         std::numeric_limits<std::size_t>::max()
+  /// @note another possible implementation is having an instance member that is
+  ///       incremented upon creating a new node and returning this member when
+  ///       calling this method
+  constexpr std::size_t height() const noexcept {
+    if (m_root == nullptr) {
+      // this means the tree is empty
+      return std::numeric_limits<std::size_t>::max();
+    }
+
+    std::function<std::size_t(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&,
+        std::size_t)> const checkHeight{
+        [&checkHeight](auto const& startNode, std::size_t currentHeight) {
+          if (startNode == nullptr) {
+            // this means you tried to branch of a leaf node
+            return currentHeight;
+          }
+
+          // count this new level
+          ++currentHeight;
+
+          // get the biggest height out of both branches
+          return std::max(checkHeight(startNode->leftChild(), currentHeight),
+                          checkHeight(startNode->rightChild(), currentHeight));
+        }};
+
+    // Note: This subtraction is needed as the height of the root node should
+    // equal zero. Another alternative is to pass -1 instead and cast the return
+    return checkHeight(m_root, 0U) - 1U;
+  }
 
   /// @brief enum class to be used as parameter to display method to specify the
   ///        order of traversal
