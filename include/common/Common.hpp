@@ -13,6 +13,7 @@ concept NaturalNumber = std::is_unsigned_v<T>;
 /// @brief defining a concept for checking a type against a parameter pack
 ///        whether they're not the same or not
 template <typename T, typename... U>
-concept NotSameType = (sizeof...(U) > 1U || !static_cast<bool>(std::is_same_v<T, U...>));
+concept NotSameType =
+    (sizeof...(U) > 1U || !static_cast<bool>(std::is_same_v<T, U...>));
 
 }  // namespace common

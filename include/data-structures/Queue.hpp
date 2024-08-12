@@ -44,7 +44,8 @@ class Queue {
     /// @param subtrahend the value that shall be subtracted from the index
     /// @return a new CircularIndex object that gets initialized with the
     ///         subtraction result
-    constexpr auto operator-(std::size_t subtrahend) const noexcept -> CircularIndex {
+    constexpr auto operator-(std::size_t subtrahend) const noexcept
+        -> CircularIndex {
       const auto normSub{subtrahend % m_cycleSize};
       const auto difference{m_index >= normSub ? m_index - normSub
                                                : m_cycleSize - normSub};
@@ -60,7 +61,9 @@ class Queue {
 
     /// @brief a method to access the current value of the index
     /// @return the current value of the index
-    [[nodiscard]] constexpr auto value() const noexcept -> std::size_t { return m_index; }
+    [[nodiscard]] constexpr auto value() const noexcept -> std::size_t {
+      return m_index;
+    }
 
   private:
     /// @brief the underlying index value
@@ -68,6 +71,7 @@ class Queue {
 
     /// @brief the cycle size which defines when the index overflows
     ///         and gets reset
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members,-warnings-as-errors)
     std::size_t const m_cycleSize;
   };
 
@@ -96,7 +100,9 @@ public:
   /// @return true if the queue wasn't full and the element was inserted
   ///         successfully,
   ///         false otherwise
-  constexpr auto enqueue(T&& element) noexcept -> bool {
+  constexpr auto enqueue(
+      // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+      T&& element) noexcept -> bool {
     if (isFull()) {
       return false;
     }
