@@ -306,6 +306,37 @@ public:
     return countNodes(m_root);
   }
 
+  /// @brief method to return the count of the leaf nodes in the tree
+  /// @return the count of the leaf nodes in the tree
+  constexpr std::size_t countLeafNodes() const noexcept {
+    if (m_root == nullptr) {
+      // this means the tree is empty
+      return 0U;
+    }
+
+    std::function<std::size_t(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        countLeafNodesInternal{
+            [&countLeafNodesInternal](auto const& startNode) {
+              if (startNode == nullptr) {
+                // this means you tried to branch of a leaf node
+                return static_cast<std::size_t>(0U);
+              }
+
+              if ((startNode->leftChild() == nullptr) &&
+                  (startNode->rightChild() == nullptr)) {
+                // this means that node is a leaf node
+                return static_cast<std::size_t>(1U);
+              }
+
+              // otherwise, count the leaf nodes of left and right subtrees
+              return countLeafNodesInternal(startNode->leftChild()) +
+                     countLeafNodesInternal(startNode->rightChild());
+            }};
+
+    return countLeafNodesInternal(m_root);
+  }
+
   /// @brief method to return the height of nodes in the tree
   /// @return the height of nodes in the tree. Where the height of root only
   ///         tree is zero, and the height of empty tree is

@@ -217,6 +217,48 @@ TEST(TestingCount, CountNodesinMultiNodeBinaryTrees) {
   EXPECT_EQ(multiNodeTree3.count(), 4U);
 }
 
+TEST(TestingCountLeafNodes, CountLeafNodesinEmptyBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> emptyTree1{};
+  EXPECT_EQ(emptyTree1.countLeafNodes(), 0U);
+
+  BinaryTree<ValueType> emptyTree2{std::nullopt, 1U, 2U, 3U};
+  EXPECT_EQ(emptyTree2.countLeafNodes(), 0U);
+}
+
+TEST(TestingCountLeafNodes, CountLeafNodesinSingleNodeBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> singleNodeTree1{42U};
+  EXPECT_EQ(singleNodeTree1.countLeafNodes(), 1U);
+
+  BinaryTree<ValueType> singleNodeTree2{69U, std::nullopt, std::nullopt,
+                                        1U,  2U,           3U};
+  EXPECT_EQ(singleNodeTree2.countLeafNodes(), 1U);
+}
+
+TEST(TestingCountLeafNodes, CountLeafNodesinMultiNodeBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> multiNodeTree1{1U, 2U, 3U, 4U, 5U, 6U};
+  EXPECT_EQ(multiNodeTree1.countLeafNodes(), 3U);
+
+  BinaryTree<ValueType> multiNodeTree2{
+      1U,           2U, 3U, std::nullopt, 4U, std::nullopt,
+      std::nullopt, 5U, 6U, std::nullopt, 7U, 8U};
+  EXPECT_EQ(multiNodeTree2.countLeafNodes(), 3U);
+
+  BinaryTree<ValueType> multiNodeTree3{1U,           2U,
+                                       3U,           std::nullopt,
+                                       4U,           std::nullopt,
+                                       std::nullopt, std::nullopt,
+                                       std::nullopt, 5U,
+                                       6U,           std::nullopt,
+                                       7U,           8U};
+  EXPECT_EQ(multiNodeTree3.countLeafNodes(), 2U);
+}
+
 TEST(TestingHeight, HeightOfNodesinEmptyBinaryTrees) {
   using ValueType = std::size_t;
 
