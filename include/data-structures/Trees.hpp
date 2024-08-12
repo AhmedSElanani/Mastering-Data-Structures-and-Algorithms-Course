@@ -277,6 +277,35 @@ public:
     return nodesValues;
   }
 
+  /// @brief method to return the count of nodes in the tree
+  /// @return the count of nodes in the tree
+  /// @note another possible implementation is having an instance member that is
+  ///       incremented upon creating a new node and returning this member when
+  ///       calling this method
+  constexpr std::size_t count() const noexcept {
+    if (m_root == nullptr) {
+      // this means the tree is empty
+      return 0U;
+    }
+
+    std::function<std::size_t(
+        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        countNodes{[&countNodes](auto const& startNode) {
+          if (startNode == nullptr) {
+            // this means you tried to branch of a leaf node
+            return static_cast<std::size_t>(0U);
+          }
+
+          // count this node plus nodes of left and right subtrees
+          return static_cast<std::size_t>(1U) +
+                 countNodes(startNode->leftChild()) +
+                 countNodes(startNode->rightChild());
+        }};
+
+    return countNodes(m_root);
+  }
+
+
   /// @brief enum class to be used as parameter to display method to specify the
   ///        order of traversal
   enum class traversalOrder : std::uint8_t {

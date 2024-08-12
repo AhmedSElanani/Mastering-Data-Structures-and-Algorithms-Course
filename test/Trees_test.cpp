@@ -175,6 +175,49 @@ TEST(TestingTraversals, TraversingLevelOrderOfBinaryTree) {
       (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'}));
 }
 
+TEST(TestingCount, CountNodesinEmptyBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> emptyTree1{};
+  EXPECT_EQ(emptyTree1.count(), 0U);
+
+  BinaryTree<ValueType> emptyTree2{std::nullopt, 1U, 2U, 3U};
+  EXPECT_EQ(emptyTree2.count(), 0U);
+}
+
+TEST(TestingCount, CountNodesinSingleNodeBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> singleNodeTree1{42U};
+  EXPECT_EQ(singleNodeTree1.count(), 1U);
+
+  BinaryTree<ValueType> singleNodeTree2{69U, std::nullopt, std::nullopt,
+                                        1U,  2U,           3U};
+  EXPECT_EQ(singleNodeTree2.count(), 1U);
+}
+
+TEST(TestingCount, CountNodesinMultiNodeBinaryTrees) {
+  using ValueType = std::size_t;
+
+  BinaryTree<ValueType> multiNodeTree1{1U, 2U, 3U, 4U, 5U, 6U};
+  EXPECT_EQ(multiNodeTree1.count(), 6U);
+
+  BinaryTree<ValueType> multiNodeTree2{
+      1U,           2U, 3U, std::nullopt, 4U, std::nullopt,
+      std::nullopt, 5U, 6U, std::nullopt, 7U, 8U};
+  EXPECT_EQ(multiNodeTree2.count(), 8U);
+
+  BinaryTree<ValueType> multiNodeTree3{1U,           2U,
+                                       3U,           std::nullopt,
+                                       4U,           std::nullopt,
+                                       std::nullopt, std::nullopt,
+                                       std::nullopt, 5U,
+                                       6U,           std::nullopt,
+                                       7U,           8U};
+  EXPECT_EQ(multiNodeTree3.count(), 4U);
+}
+
+
 TEST(TestingDisplay, DisplayEmptyTree) {
   using ValueType = std::size_t;
   using traversalOrder = BinaryTree<ValueType>::traversalOrder;
