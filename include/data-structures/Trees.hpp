@@ -1,12 +1,16 @@
 #pragma once
 
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <format>
 #include <functional>
+#include <initializer_list>
 #include <limits>
 #include <memory>
 #include <optional>
 #include <queue>
-#include <ranges>
+#include <string>
 #include <vector>
 
 /// @brief namespace for data structures implemented
@@ -71,7 +75,9 @@ public:
   template <typename... Rem>
   constexpr explicit BinaryTree(
       // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
-      std::optional<T>&& firstValue, Rem&&... remValues)
+      std::optional<T>&& firstValue,
+      Rem&&... remValues  // NOLINT(cppcoreguidelines-missing-std-forward,-warnings-as-errors)
+      )
       : m_root{{// Note: static assertion wasn't possible since firstValue is
                 // not a constant expression. The next best thing is adding a
                 // ternary operator for checking if the first argument has a
@@ -102,14 +108,14 @@ public:
     helperQueue.push(m_root);
 
     // define an enum for turns between subtrees and declare a variable of it
-    enum class subtreeTurn {
-      leftSubtree,
-      rightSubtree,
+    enum class subtreeTurn : std::uint8_t {
+      kLeftSubtree,
+      kRightSubtree,
     };
 
     for (auto subtreeTurn{// init to right tree, so that on the first iteration
                           // it switches and starts with left
-                          subtreeTurn::rightSubtree};
+                          subtreeTurn::kRightSubtree};
          auto const& elem : remainingElements) {
       if (helperQueue.empty()) {
         // this means there are no leaf nodes available to hold remaining
@@ -120,14 +126,14 @@ public:
       // Note: switching turns is done at the beginning and not the end so that
       // if the iteration is skipped due to std::nullopt element, still turns
       // are preserved
-      subtreeTurn = {subtreeTurn == subtreeTurn::leftSubtree
-                         ? subtreeTurn::rightSubtree
-                         : subtreeTurn::leftSubtree};
+      subtreeTurn = {subtreeTurn == subtreeTurn::kLeftSubtree
+                         ? subtreeTurn::kRightSubtree
+                         : subtreeTurn::kLeftSubtree};
 
       if (elem == std::nullopt) {
         // this subtree will be skipped
 
-        if (subtreeTurn == subtreeTurn::rightSubtree) {
+        if (subtreeTurn == subtreeTurn::kRightSubtree) {
           // if we reached the right side of this node, then it's done
           helperQueue.pop();
         }
@@ -135,7 +141,7 @@ public:
         continue;
       }
 
-      if (subtreeTurn == subtreeTurn::leftSubtree) {
+      if (subtreeTurn == subtreeTurn::kLeftSubtree) {
         auto& leftSubTree{helperQueue.front().get()->leftChild()};
         leftSubTree =
             std::make_unique<trees_internal::BinaryNode<T>>(elem.value());
@@ -157,7 +163,7 @@ public:
 
   /// @brief method to traverse the tree in PreOrder
   /// @return vector of the nodes' values in PreOrder
-  std::vector<T> traversePreOrder() const noexcept {
+  auto traversePreOrder() const noexcept -> std::vector<T> {
     if (m_root == nullptr) {
       return std::vector<T>{};
     }
@@ -187,7 +193,7 @@ public:
 
   /// @brief method to traverse the tree in order
   /// @return vector of the nodes' values in order
-  std::vector<T> traverseInOrder() const noexcept {
+  auto traverseInOrder() const noexcept -> std::vector<T> {
     if (m_root == nullptr) {
       return std::vector<T>{};
     }
@@ -218,7 +224,7 @@ public:
 
   /// @brief method to traverse the tree in PostOrder
   /// @return vector of the nodes' values in PostOrder
-  std::vector<T> traversePostOrder() const noexcept {
+  auto traversePostOrder() const noexcept -> std::vector<T> {
     if (m_root == nullptr) {
       return std::vector<T>{};
     }
@@ -249,7 +255,7 @@ public:
 
   /// @brief method to traverse the tree in level order
   /// @return vector of the nodes' values in level order
-  std::vector<T> traverseLevelOrder() const noexcept {
+  auto traverseLevelOrder() const noexcept -> std::vector<T> {
     if (m_root == nullptr) {
       return std::vector<T>{};
     }
@@ -260,7 +266,7 @@ public:
     helperQueue.push(m_root);
 
     std::vector<T> nodesValues;
-    while (helperQueue.empty() == false) {
+    while (!static_cast<bool>(helperQueue.empty())) {
       const auto& currentNode{helperQueue.front().get()};
 
       if (currentNode->leftChild()) {
@@ -283,7 +289,7 @@ public:
   /// @note another possible implementation is having an instance member that is
   ///       incremented upon creating a new node and returning this member when
   ///       calling this method
-  constexpr std::size_t count() const noexcept {
+  [[nodiscard]] constexpr auto count() const noexcept -> std::size_t {
     if (m_root == nullptr) {
       // this means the tree is empty
       return 0U;
@@ -308,7 +314,7 @@ public:
 
   /// @brief method to return the count of the leaf nodes in the tree
   /// @return the count of the leaf nodes in the tree
-  constexpr std::size_t countLeafNodes() const noexcept {
+  [[nodiscard]] constexpr auto countLeafNodes() const noexcept -> std::size_t {
     if (m_root == nullptr) {
       // this means the tree is empty
       return 0U;
@@ -344,7 +350,7 @@ public:
   /// @note another possible implementation is having an instance member that is
   ///       incremented upon creating a new node and returning this member when
   ///       calling this method
-  constexpr std::size_t height() const noexcept {
+  [[nodiscard]] constexpr auto height() const noexcept -> std::size_t {
     if (m_root == nullptr) {
       // this means the tree is empty
       return std::numeric_limits<std::size_t>::max();
@@ -375,10 +381,10 @@ public:
   /// @brief enum class to be used as parameter to display method to specify the
   ///        order of traversal
   enum class traversalOrder : std::uint8_t {
-    preOrder,
-    inOrder,
-    postOrder,
-    levelOrder,
+    kPreOrder,
+    kInOrder,
+    kPostOrder,
+    kLevelOrder,
   };
 
   /// @brief method to display elements of the tree based on the traversal order
@@ -389,16 +395,16 @@ public:
       -> std::string {
     std::vector<T> nodesValues;
     switch (order) {
-      case traversalOrder::preOrder: {
+      case traversalOrder::kPreOrder: {
         nodesValues = traversePreOrder();
       } break;
-      case traversalOrder::inOrder: {
+      case traversalOrder::kInOrder: {
         nodesValues = traverseInOrder();
       } break;
-      case traversalOrder::postOrder: {
+      case traversalOrder::kPostOrder: {
         nodesValues = traversePostOrder();
       } break;
-      case traversalOrder::levelOrder: {
+      case traversalOrder::kLevelOrder: {
         nodesValues = traverseLevelOrder();
       } break;
 

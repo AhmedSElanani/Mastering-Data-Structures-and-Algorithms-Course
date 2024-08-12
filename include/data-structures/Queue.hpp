@@ -71,6 +71,7 @@ class Queue {
 
     /// @brief the cycle size which defines when the index overflows
     ///         and gets reset
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members,-warnings-as-errors)
     std::size_t const m_cycleSize;
   };
 
@@ -99,7 +100,9 @@ public:
   /// @return true if the queue wasn't full and the element was inserted
   ///         successfully,
   ///         false otherwise
-  constexpr auto enqueue(T&& element) noexcept -> bool {
+  constexpr auto enqueue(
+      // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+      T&& element) noexcept -> bool {
     if (isFull()) {
       return false;
     }

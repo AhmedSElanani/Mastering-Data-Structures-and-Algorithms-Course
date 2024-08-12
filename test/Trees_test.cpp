@@ -306,15 +306,16 @@ TEST(TestingDisplay, DisplayEmptyTree) {
   using traversalOrder = BinaryTree<ValueType>::traversalOrder;
 
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{}).display(traversalOrder::preOrder).c_str(),
+      (BinaryTree<ValueType>{}).display(traversalOrder::kPreOrder).c_str(),
       "{}");
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{}).display(traversalOrder::inOrder).c_str(), "{}");
-  EXPECT_STREQ(
-      (BinaryTree<ValueType>{}).display(traversalOrder::postOrder).c_str(),
+      (BinaryTree<ValueType>{}).display(traversalOrder::kInOrder).c_str(),
       "{}");
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{}).display(traversalOrder::levelOrder).c_str(),
+      (BinaryTree<ValueType>{}).display(traversalOrder::kPostOrder).c_str(),
+      "{}");
+  EXPECT_STREQ(
+      (BinaryTree<ValueType>{}).display(traversalOrder::kLevelOrder).c_str(),
       "{}");
 }
 
@@ -323,16 +324,16 @@ TEST(TestingDisplay, DisplaySingleNodeTree) {
   using traversalOrder = BinaryTree<ValueType>::traversalOrder;
 
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{69U}).display(traversalOrder::preOrder).c_str(),
+      (BinaryTree<ValueType>{69U}).display(traversalOrder::kPreOrder).c_str(),
       "{69}");
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{69U}).display(traversalOrder::inOrder).c_str(),
+      (BinaryTree<ValueType>{69U}).display(traversalOrder::kInOrder).c_str(),
       "{69}");
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{69U}).display(traversalOrder::postOrder).c_str(),
+      (BinaryTree<ValueType>{69U}).display(traversalOrder::kPostOrder).c_str(),
       "{69}");
   EXPECT_STREQ(
-      (BinaryTree<ValueType>{69U}).display(traversalOrder::levelOrder).c_str(),
+      (BinaryTree<ValueType>{69U}).display(traversalOrder::kLevelOrder).c_str(),
       "{69}");
 }
 
@@ -343,28 +344,28 @@ TEST(TestingDisplay, DisplayMultiNodeTree) {
   EXPECT_STREQ(
       (BinaryTree<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,  10U,
                              11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U})
-          .display(traversalOrder::preOrder)
+          .display(traversalOrder::kPreOrder)
           .c_str(),
       "{1,2,4,8,16,17,9,18,19,5,10,20,11,3,6,12,13,7,14,15}");
 
   EXPECT_STREQ(
       (BinaryTree<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,  10U,
                              11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U})
-          .display(traversalOrder::inOrder)
+          .display(traversalOrder::kInOrder)
           .c_str(),
       "{16,8,17,4,18,9,19,2,20,10,5,11,1,12,6,13,3,14,7,15}");
 
   EXPECT_STREQ(
       (BinaryTree<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,  10U,
                              11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U})
-          .display(traversalOrder::postOrder)
+          .display(traversalOrder::kPostOrder)
           .c_str(),
       "{16,17,8,18,19,9,4,20,10,11,5,2,12,13,6,14,15,7,3,1}");
 
   EXPECT_STREQ(
       (BinaryTree<ValueType>{1U,  2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,  10U,
                              11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U})
-          .display(traversalOrder::levelOrder)
+          .display(traversalOrder::kLevelOrder)
           .c_str(),
       "{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}");
 }
@@ -375,37 +376,37 @@ TEST(TestingDisplay, DisplayCustomConstructedTree) {
 
   // empty BTree
   EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
-                   .display(traversalOrder::preOrder)
+                   .display(traversalOrder::kPreOrder)
                    .c_str(),
                "{}");
   EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
-                   .display(traversalOrder::inOrder)
+                   .display(traversalOrder::kInOrder)
                    .c_str(),
                "{}");
   EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
-                   .display(traversalOrder::postOrder)
+                   .display(traversalOrder::kPostOrder)
                    .c_str(),
                "{}");
   EXPECT_STREQ((BinaryTree<ValueType>{std::nullopt, 1U, 2U, 3U})
-                   .display(traversalOrder::levelOrder)
+                   .display(traversalOrder::kLevelOrder)
                    .c_str(),
                "{}");
 
   // BTree of one node
   EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
-                   .display(traversalOrder::preOrder)
+                   .display(traversalOrder::kPreOrder)
                    .c_str(),
                "{1}");
   EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
-                   .display(traversalOrder::inOrder)
+                   .display(traversalOrder::kInOrder)
                    .c_str(),
                "{1}");
   EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
-                   .display(traversalOrder::postOrder)
+                   .display(traversalOrder::kPostOrder)
                    .c_str(),
                "{1}");
   EXPECT_STREQ((BinaryTree<ValueType>{1U, std::nullopt, std::nullopt, 2U, 3U})
-                   .display(traversalOrder::levelOrder)
+                   .display(traversalOrder::kLevelOrder)
                    .c_str(),
                "{1}");
 
@@ -414,7 +415,7 @@ TEST(TestingDisplay, DisplayCustomConstructedTree) {
       (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
                              std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
                              std::nullopt, std::nullopt, std::nullopt, 8U})
-          .display(traversalOrder::preOrder)
+          .display(traversalOrder::kPreOrder)
           .c_str(),
       "{1,2,4,3,5,6,7}");
 
@@ -422,7 +423,7 @@ TEST(TestingDisplay, DisplayCustomConstructedTree) {
       (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
                              std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
                              std::nullopt, std::nullopt, std::nullopt, 8U})
-          .display(traversalOrder::inOrder)
+          .display(traversalOrder::kInOrder)
           .c_str(),
       "{2,4,1,3,6,5,7}");
 
@@ -430,7 +431,7 @@ TEST(TestingDisplay, DisplayCustomConstructedTree) {
       (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
                              std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
                              std::nullopt, std::nullopt, std::nullopt, 8U})
-          .display(traversalOrder::postOrder)
+          .display(traversalOrder::kPostOrder)
           .c_str(),
       "{4,2,6,7,5,3,1}");
 
@@ -438,7 +439,7 @@ TEST(TestingDisplay, DisplayCustomConstructedTree) {
       (BinaryTree<ValueType>{1U, 2U, 3U, std::nullopt, 4U, std::nullopt, 5U,
                              std::nullopt, std::nullopt, 6U, 7U, std::nullopt,
                              std::nullopt, std::nullopt, std::nullopt, 8U})
-          .display(traversalOrder::levelOrder)
+          .display(traversalOrder::kLevelOrder)
           .c_str(),
       "{1,2,3,4,5,6,7}");
 }
