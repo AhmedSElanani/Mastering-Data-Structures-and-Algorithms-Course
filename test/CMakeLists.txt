@@ -31,7 +31,7 @@ set(DS_ALGO_TEST_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/LinkedList_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Stack_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Queue_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Trees_test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/BinaryTrees_test.cpp)
 
 # set link libraries
 set(DS_ALGO_TEST_LINK_LIBRARIES gtest gmock)
