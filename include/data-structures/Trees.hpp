@@ -430,4 +430,68 @@ private:
   std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
 };
 
+/// @brief class definition for BinarySearchTree data structure
+/// @tparam T type of values to hold
+template <typename T>
+class BinarySearchTree {
+public:
+  /// @brief default constructor of the binary search tree, the state after it's
+  ///        called is having zero nodes in the tree
+  constexpr BinarySearchTree() = default;
+
+  /// @brief parametrized constructor to the binary search tree, accepting one
+  ///        or more values of the same type, where each of them will be
+  ///        represented by an individual node
+  /// @tparam ...Rem remaining values passed if any
+  /// @param firstValue data to initialize the root node
+  /// @param ...remValues data to initialize the remaining nodes in if any
+  /// @note this guarantees that first and remaining values are of same type
+  template <typename... Rem>
+  constexpr explicit BinarySearchTree(
+      // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved,-warnings-as-errors)
+      T&& firstValue,
+      Rem&&... remValues  // NOLINT(cppcoreguidelines-missing-std-forward,-warnings-as-errors)
+      )
+      : m_root{std::make_unique<trees_internal::BinaryNode<T>>(
+            std::forward<T>(firstValue))} {
+    // check if there are other elements passed after the root element
+    std::initializer_list<T> remainingElements{remValues...};
+    if constexpr (constexpr auto kNoOfRemainingElements{
+                      sizeof(remainingElements)};
+                  kNoOfRemainingElements == 0U) {
+      return;
+    }
+
+    // Below algorithm fills the binary search tree according to its definition
+    for (auto const& elem : remainingElements) {
+      std::reference_wrapper<std::unique_ptr<trees_internal::BinaryNode<T>>>
+          currentNode{m_root};
+
+      bool nodeInserted{false};
+      while (nodeInserted == false) {
+        auto const& currentNodeValue{currentNode.get()->value()};
+        if (elem == currentNodeValue) {
+          // Binary search tree can't have duplicates
+          break;
+        }
+
+        currentNode = {elem < currentNodeValue
+                           ? currentNode.get()->leftChild()
+                           : currentNode.get()->rightChild()};
+
+        if (currentNode.get() == nullptr) {
+          currentNode.get() =
+              std::make_unique<trees_internal::BinaryNode<T>>(elem);
+
+          nodeInserted = true;
+        }
+      }
+    }
+  }
+
+private:
+  /// @brief owning pointer to the root of the binary search tree
+  std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
+};
+
 }  // namespace data_structures
