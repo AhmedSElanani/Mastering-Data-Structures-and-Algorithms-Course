@@ -125,6 +125,41 @@ inline std::vector<T> traversePostOrderInternal(
   return nodesValues;
 }
 
+/// @brief internal inline method for levelOrder traversal for binary trees
+/// @tparam T type of data stored in each node in the binary tree
+/// @param startNode the node to begin traversal from
+/// @return a vector of values stored based on levelOrder traversal
+template <typename T>
+inline std::vector<T> traverseLevelOrderInternal(
+    std::unique_ptr<BinaryNode<T>> const& startNode) {
+  if (startNode == nullptr) {
+    return std::vector<T>{};
+  }
+
+  std::queue<std::reference_wrapper<
+      std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>>
+      helperQueue;
+  helperQueue.push(startNode);
+
+  std::vector<T> nodesValues;
+  while (!static_cast<bool>(helperQueue.empty())) {
+    const auto& currentNode{helperQueue.front().get()};
+
+    if (currentNode->leftChild()) {
+      helperQueue.push(currentNode->leftChild());
+    }
+
+    if (currentNode->rightChild()) {
+      helperQueue.push(currentNode->rightChild());
+    }
+
+    nodesValues.emplace_back(currentNode->value());
+    helperQueue.pop();
+  }
+
+  return nodesValues;
+}
+
 }  // namespace binary_trees_internal
 
 /// @brief class definition for BinaryTree data structure
@@ -269,28 +304,7 @@ public:
       return std::vector<T>{};
     }
 
-    std::queue<std::reference_wrapper<
-        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>>
-        helperQueue;
-    helperQueue.push(m_root);
-
-    std::vector<T> nodesValues;
-    while (!static_cast<bool>(helperQueue.empty())) {
-      const auto& currentNode{helperQueue.front().get()};
-
-      if (currentNode->leftChild()) {
-        helperQueue.push(currentNode->leftChild());
-      }
-
-      if (currentNode->rightChild()) {
-        helperQueue.push(currentNode->rightChild());
-      }
-
-      nodesValues.emplace_back(currentNode->value());
-      helperQueue.pop();
-    }
-
-    return nodesValues;
+    return binary_trees_internal::traverseLevelOrderInternal(m_root);
   }
 
   /// @brief method to return the count of nodes in the tree
