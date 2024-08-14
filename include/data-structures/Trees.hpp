@@ -17,7 +17,7 @@
 namespace data_structures {
 
 /// @brief namespace for internal trees implementation
-namespace trees_internal {
+namespace binary_trees_internal {
 
 /// @brief class definition for Node type that can have maximum degree of two
 /// @tparam T type of value to hold
@@ -125,7 +125,7 @@ inline std::vector<T> traversePostOrderInternal(
   return nodesValues;
 }
 
-}  // namespace trees_internal
+}  // namespace binary_trees_internal
 
 /// @brief class definition for BinaryTree data structure
 /// @tparam T type of values to hold
@@ -154,7 +154,7 @@ public:
                 // ternary operator for checking if the first argument has a
                 // value, followed by a null check for the tree root.
                 firstValue.has_value()
-                    ? std::make_unique<trees_internal::BinaryNode<T>>(
+                    ? std::make_unique<binary_trees_internal::BinaryNode<T>>(
                           std::forward<T>(firstValue.value()))
                     : nullptr}} {
     if (m_root == nullptr) {
@@ -174,7 +174,7 @@ public:
     // Note: constructing the queue from root had to be done on two steps as
     // std::queue doesn't define a constructor that accepts element directly
     std::queue<std::reference_wrapper<
-        std::unique_ptr<trees_internal::BinaryNode<T>> const>>
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>>
         helperQueue;
     helperQueue.push(m_root);
 
@@ -214,15 +214,15 @@ public:
 
       if (subtreeTurn == subtreeTurn::kLeftSubtree) {
         auto& leftSubTree{helperQueue.front().get()->leftChild()};
-        leftSubTree =
-            std::make_unique<trees_internal::BinaryNode<T>>(elem.value());
+        leftSubTree = std::make_unique<binary_trees_internal::BinaryNode<T>>(
+            elem.value());
         helperQueue.push(leftSubTree);  // so that the left subtree takes the
                                         // first turn in the queue
       } else {
         // assuming the only other possible option is right subtree
         auto& rightSubTree{helperQueue.front().get()->rightChild()};
-        rightSubTree =
-            std::make_unique<trees_internal::BinaryNode<T>>(elem.value());
+        rightSubTree = std::make_unique<binary_trees_internal::BinaryNode<T>>(
+            elem.value());
         helperQueue.push(rightSubTree);  // so that the right subtree takes the
                                          // second turn in the queue
 
@@ -239,7 +239,7 @@ public:
       return std::vector<T>{};
     }
 
-    return trees_internal::traversePreOrderInternal(m_root);
+    return binary_trees_internal::traversePreOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in order
@@ -249,7 +249,7 @@ public:
       return std::vector<T>{};
     }
 
-    return trees_internal::traverseInOrderInternal(m_root);
+    return binary_trees_internal::traverseInOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in PostOrder
@@ -259,7 +259,7 @@ public:
       return std::vector<T>{};
     }
 
-    return trees_internal::traversePostOrderInternal(m_root);
+    return binary_trees_internal::traversePostOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in level order
@@ -270,7 +270,7 @@ public:
     }
 
     std::queue<std::reference_wrapper<
-        std::unique_ptr<trees_internal::BinaryNode<T>> const>>
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>>
         helperQueue;
     helperQueue.push(m_root);
 
@@ -305,7 +305,7 @@ public:
     }
 
     std::function<std::size_t(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const&)> const
         countNodes{[&countNodes](auto const& startNode) {
           if (startNode == nullptr) {
             // this means you tried to branch of a leaf node
@@ -330,7 +330,7 @@ public:
     }
 
     std::function<std::size_t(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const&)> const
         countLeafNodesInternal{
             [&countLeafNodesInternal](auto const& startNode) {
               if (startNode == nullptr) {
@@ -366,7 +366,7 @@ public:
     }
 
     std::function<std::size_t(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&,
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>> const&,
         std::size_t)> const checkHeight{
         [&checkHeight](auto const& startNode, std::size_t currentHeight) {
           if (startNode == nullptr) {
@@ -436,7 +436,7 @@ public:
 
 private:
   /// @brief owning pointer to the root of the tree
-  std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
+  std::unique_ptr<binary_trees_internal::BinaryNode<T>> m_root{nullptr};
 };
 
 /// @brief class definition for BinarySearchTree data structure
@@ -461,7 +461,7 @@ public:
       T&& firstValue,
       Rem&&... remValues  // NOLINT(cppcoreguidelines-missing-std-forward,-warnings-as-errors)
       )
-      : m_root{std::make_unique<trees_internal::BinaryNode<T>>(
+      : m_root{std::make_unique<binary_trees_internal::BinaryNode<T>>(
             std::forward<T>(firstValue))} {
     // check if there are other elements passed after the root element
     std::initializer_list<T> remainingElements{remValues...};
@@ -473,7 +473,8 @@ public:
 
     // Below algorithm fills the binary search tree according to its definition
     for (auto const& elem : remainingElements) {
-      std::reference_wrapper<std::unique_ptr<trees_internal::BinaryNode<T>>>
+      std::reference_wrapper<
+          std::unique_ptr<binary_trees_internal::BinaryNode<T>>>
           currentNode{m_root};
 
       bool nodeInserted{false};
@@ -490,7 +491,7 @@ public:
 
         if (currentNode.get() == nullptr) {
           currentNode.get() =
-              std::make_unique<trees_internal::BinaryNode<T>>(elem);
+              std::make_unique<binary_trees_internal::BinaryNode<T>>(elem);
 
           nodeInserted = true;
         }
@@ -500,7 +501,7 @@ public:
 
 private:
   /// @brief owning pointer to the root of the binary search tree
-  std::unique_ptr<trees_internal::BinaryNode<T>> m_root{nullptr};
+  std::unique_ptr<binary_trees_internal::BinaryNode<T>> m_root{nullptr};
 };
 
 }  // namespace data_structures
