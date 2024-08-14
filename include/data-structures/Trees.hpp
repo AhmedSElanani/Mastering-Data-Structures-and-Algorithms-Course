@@ -54,6 +54,77 @@ private:
   std::unique_ptr<BinaryNode> m_rChild{nullptr};
 };
 
+/// @brief internal inline method for preOrder traversal for binary trees
+/// @tparam T type of data stored in each node in the binary tree
+/// @param startNode the node to begin traversal from
+/// @return a vector of values stored based on preOrder traversal
+template <typename T>
+inline std::vector<T> traversePreOrderInternal(
+    std::unique_ptr<BinaryNode<T>> const& startNode) {
+  if (startNode == nullptr) {
+    return std::vector<T>{};
+  }
+
+  std::vector<T> nodesValues;
+  nodesValues.emplace_back(startNode->value());
+
+  std::ranges::move(traversePreOrderInternal(startNode->leftChild()),
+                    std::back_inserter(nodesValues));
+
+  std::ranges::move(traversePreOrderInternal(startNode->rightChild()),
+                    std::back_inserter(nodesValues));
+
+  return nodesValues;
+}
+
+/// @brief internal inline method for inOrder traversal for binary trees
+/// @tparam T type of data stored in each node in the binary tree
+/// @param startNode the node to begin traversal from
+/// @return a vector of values stored based on inOrder traversal
+template <typename T>
+inline std::vector<T> traverseInOrderInternal(
+    std::unique_ptr<BinaryNode<T>> const& startNode) {
+  if (startNode == nullptr) {
+    return std::vector<T>{};
+  }
+
+  std::vector<T> nodesValues;
+
+  std::ranges::move(traverseInOrderInternal(startNode->leftChild()),
+                    std::back_inserter(nodesValues));
+
+  nodesValues.emplace_back(startNode->value());
+
+  std::ranges::move(traverseInOrderInternal(startNode->rightChild()),
+                    std::back_inserter(nodesValues));
+
+  return nodesValues;
+}
+
+/// @brief internal inline method for postOrder traversal for binary trees
+/// @tparam T type of data stored in each node in the binary tree
+/// @param startNode the node to begin traversal from
+/// @return a vector of values stored based on postOrder traversal
+template <typename T>
+inline std::vector<T> traversePostOrderInternal(
+    std::unique_ptr<BinaryNode<T>> const& startNode) {
+  if (startNode == nullptr) {
+    return std::vector<T>{};
+  }
+
+  std::vector<T> nodesValues;
+
+  std::ranges::move(traversePostOrderInternal(startNode->leftChild()),
+                    std::back_inserter(nodesValues));
+
+  std::ranges::move(traversePostOrderInternal(startNode->rightChild()),
+                    std::back_inserter(nodesValues));
+
+  nodesValues.emplace_back(startNode->value());
+
+  return nodesValues;
+}
+
 }  // namespace trees_internal
 
 /// @brief class definition for BinaryTree data structure
@@ -168,27 +239,7 @@ public:
       return std::vector<T>{};
     }
 
-    std::function<std::vector<T>(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
-        traversePreOrderInternal{[&traversePreOrderInternal](
-                                     auto const& startNode) {
-          if (startNode == nullptr) {
-            return std::vector<T>{};
-          }
-
-          std::vector<T> nodesValues;
-          nodesValues.emplace_back(startNode->value());
-
-          std::ranges::move(traversePreOrderInternal(startNode->leftChild()),
-                            std::back_inserter(nodesValues));
-
-          std::ranges::move(traversePreOrderInternal(startNode->rightChild()),
-                            std::back_inserter(nodesValues));
-
-          return nodesValues;
-        }};
-
-    return traversePreOrderInternal(m_root);
+    return trees_internal::traversePreOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in order
@@ -198,28 +249,7 @@ public:
       return std::vector<T>{};
     }
 
-    std::function<std::vector<T>(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
-        traverseInOrderInternal{[&traverseInOrderInternal](
-                                    auto const& startNode) {
-          if (startNode == nullptr) {
-            return std::vector<T>{};
-          }
-
-          std::vector<T> nodesValues;
-
-          std::ranges::move(traverseInOrderInternal(startNode->leftChild()),
-                            std::back_inserter(nodesValues));
-
-          nodesValues.emplace_back(startNode->value());
-
-          std::ranges::move(traverseInOrderInternal(startNode->rightChild()),
-                            std::back_inserter(nodesValues));
-
-          return nodesValues;
-        }};
-
-    return traverseInOrderInternal(m_root);
+    return trees_internal::traverseInOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in PostOrder
@@ -229,28 +259,7 @@ public:
       return std::vector<T>{};
     }
 
-    std::function<std::vector<T>(
-        std::unique_ptr<trees_internal::BinaryNode<T>> const&)> const
-        traversePostOrderInternal{[&traversePostOrderInternal](
-                                      auto const& startNode) {
-          if (startNode == nullptr) {
-            return std::vector<T>{};
-          }
-
-          std::vector<T> nodesValues;
-
-          std::ranges::move(traversePostOrderInternal(startNode->leftChild()),
-                            std::back_inserter(nodesValues));
-
-          std::ranges::move(traversePostOrderInternal(startNode->rightChild()),
-                            std::back_inserter(nodesValues));
-
-          nodesValues.emplace_back(startNode->value());
-
-          return nodesValues;
-        }};
-
-    return traversePostOrderInternal(m_root);
+    return trees_internal::traversePostOrderInternal(m_root);
   }
 
   /// @brief method to traverse the tree in level order
