@@ -499,6 +499,36 @@ public:
     }
   }
 
+  /// @brief method to traverse the tree in PreOrder
+  /// @return vector of the nodes' values in PreOrder
+  auto traversePreOrder() const noexcept -> std::vector<T> {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    return binary_trees_internal::traversePreOrderInternal(m_root);
+  }
+
+  /// @brief method to traverse the tree in InOrder
+  /// @return vector of the nodes' values in InOrder
+  auto traverseInOrder() const noexcept -> std::vector<T> {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    return binary_trees_internal::traverseInOrderInternal(m_root);
+  }
+
+  /// @brief method to traverse the tree in PostOrder
+  /// @return vector of the nodes' values in PostOrder
+  auto traversePostOrder() const noexcept -> std::vector<T> {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    return binary_trees_internal::traversePostOrderInternal(m_root);
+  }
+
 private:
   /// @brief owning pointer to the root of the binary search tree
   std::unique_ptr<binary_trees_internal::BinaryNode<T>> m_root{nullptr};
