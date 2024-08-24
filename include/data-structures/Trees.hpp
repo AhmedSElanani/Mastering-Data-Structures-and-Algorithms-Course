@@ -543,6 +543,16 @@ public:
     return binary_trees_internal::traversePostOrderInternal(m_root);
   }
 
+  /// @brief method to traverse the tree in level order
+  /// @return vector of the nodes' values in level order
+  auto traverseLevelOrder() const noexcept -> std::vector<T> {
+    if (m_root == nullptr) {
+      return std::vector<T>{};
+    }
+
+    return binary_trees_internal::traverseLevelOrderInternal(m_root);
+  }
+
 private:
   /// @brief owning pointer to the root of the binary search tree
   std::unique_ptr<binary_trees_internal::BinaryNode<T>> m_root{nullptr};

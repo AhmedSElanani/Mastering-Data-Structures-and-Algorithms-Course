@@ -111,4 +111,35 @@ TEST(TestingTraversals, TraversingInOrderOfBinarySearchTree) {
                               'T'}));
 }
 
+TEST(TestingTraversals, TraversingLevelOrderOfBinarySearchTree) {
+  using ValueType = char;
+
+  // empty tree
+  EXPECT_EQ((BinarySearchTree<ValueType>{}).traverseLevelOrder(),
+            std::vector<ValueType>{});
+
+  // one-node tree
+  EXPECT_EQ((BinarySearchTree<ValueType>{42U}).traverseLevelOrder(),
+            std::vector<ValueType>{42U});
+
+  // multi-node trees
+  EXPECT_EQ((BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                         'I', 'J'})
+                .traverseLevelOrder(),
+            (std::vector<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                                    'J'}));
+
+  EXPECT_EQ(
+      (BinarySearchTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'})
+          .traverseLevelOrder(),
+      (std::vector<ValueType>{'D', 'A', 'E', 'B', 'F'}));
+
+  EXPECT_EQ(
+      (BinarySearchTree<ValueType>{'B', 'I', 'N', 'A', 'R', 'S', 'E', 'A', 'R',
+                                   'C', 'H', 'T', 'R', 'E', 'E', 'S'})
+          .traverseLevelOrder(),
+      (std::vector<ValueType>{'B', 'A', 'I', 'E', 'N', 'C', 'H', 'R', 'S',
+                              'T'}));
+}
+
 }  // namespace data_structures_test::trees_test
