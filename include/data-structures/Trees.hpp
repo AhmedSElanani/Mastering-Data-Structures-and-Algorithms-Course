@@ -486,31 +486,51 @@ public:
     }
 
     // Below algorithm fills the binary search tree according to its definition
-    for (auto const& elem : remainingElements) {
-      std::reference_wrapper<
-          std::unique_ptr<binary_trees_internal::BinaryNode<T>>>
-          currentNode{m_root};
+    for (auto&& elem : remainingElements) {
+      insertNode(elem);
+    }
+  }
 
-      bool nodeInserted{false};
-      while (nodeInserted == false) {
-        auto const& currentNodeValue{currentNode.get()->value()};
-        if (elem == currentNodeValue) {
-          // Binary search tree can't have duplicates
-          break;
-        }
+  /// @brief method to insert a new node to the tree
+  /// @param value value to be stored in that node
+  /// @return true if a new node was created and inserted,
+  ///         false otherwise
+  bool insertNode(T value) {
+    if (m_root == nullptr) {
+      // this means the tree is still empty
+      m_root = std::make_unique<binary_trees_internal::BinaryNode<T>>(
+          std::move(value));
 
-        currentNode = {elem < currentNodeValue
-                           ? currentNode.get()->leftChild()
-                           : currentNode.get()->rightChild()};
+      return true;
+    }
 
-        if (currentNode.get() == nullptr) {
-          currentNode.get() =
-              std::make_unique<binary_trees_internal::BinaryNode<T>>(elem);
+    std::reference_wrapper<
+        std::unique_ptr<binary_trees_internal::BinaryNode<T>>>
+        currentNode{m_root};
 
-          nodeInserted = true;
-        }
+    bool nodeInserted{false};
+    while (nodeInserted == false) {
+      auto const& currentNodeValue{currentNode.get()->value()};
+      if (value == currentNodeValue) {
+        // Binary search tree can't have duplicates
+        break;
+      }
+
+      currentNode = {value < currentNodeValue
+                         ? currentNode.get()->leftChild()
+                         : currentNode.get()->rightChild()};
+
+      if (currentNode.get() == nullptr) {
+        currentNode.get() =
+            std::make_unique<binary_trees_internal::BinaryNode<T>>(
+                std::move(value));
+
+        nodeInserted = true;
       }
     }
+
+    return nodeInserted;
+  }
   }
 
   /// @brief method to traverse the tree in PreOrder
