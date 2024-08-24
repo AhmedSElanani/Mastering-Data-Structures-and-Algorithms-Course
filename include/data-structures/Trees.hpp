@@ -531,6 +531,46 @@ public:
 
     return nodeInserted;
   }
+
+  /// @brief equality operator for binary search trees
+  /// @param other the other binary search tree to compare against
+  /// @return true if both trees hold the exact same values,
+  /// false otherwise
+  bool operator==(const BinarySearchTree& other) const noexcept {
+    std::function<bool(
+        std::reference_wrapper<
+            std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>,
+        std::reference_wrapper<
+            std::unique_ptr<binary_trees_internal::BinaryNode<T>> const>)> const
+        compareSubTrees{
+            [&compareSubTrees](auto leftSubTree, auto rightSubTree) {
+              const bool leftTreeEmptyness{leftSubTree.get() == nullptr};
+              const bool rightTreeEmptyness{rightSubTree.get() == nullptr};
+
+              if (leftTreeEmptyness != rightTreeEmptyness) {
+                // either of both trees is empty
+                return false;
+              }
+
+              if (leftTreeEmptyness && rightTreeEmptyness) {
+                // both trees are empty, and hence equal
+                return true;
+              }
+
+              // at this point, we know both trees are not empty
+              if (leftSubTree.get()->value() != rightSubTree.get()->value()) {
+                // this means the values of roots of both subtrees are not equal
+                return false;
+              }
+
+              // both roots are equal, check left and right sides
+              return compareSubTrees(leftSubTree.get()->leftChild(),
+                                     rightSubTree.get()->leftChild()) &&
+                     compareSubTrees(leftSubTree.get()->rightChild(),
+                                     rightSubTree.get()->rightChild());
+            }};
+
+    return compareSubTrees(m_root, other.m_root);
   }
 
   /// @brief method to traverse the tree in PreOrder

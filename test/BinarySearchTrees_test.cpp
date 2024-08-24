@@ -18,6 +18,52 @@ TEST(TestingConstruction, ConstructingCompleteBinarySearchTree) {
       { (BinarySearchTree<char>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}); });
 }
 
+TEST(TestingEqualityOperator, CompareSeveralBinarySearchTrees) {
+  using ValueType = char;
+
+  // comparing empty BSTs
+  EXPECT_EQ((BinarySearchTree<ValueType>{}), (BinarySearchTree<ValueType>{}));
+
+  // non-empty BST group 1
+  EXPECT_EQ((BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                         'I', 'J'}),
+            (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                         'I', 'J'}));
+  EXPECT_EQ(
+      (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}),
+      (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}));
+
+  EXPECT_NE(
+      (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                                   'J'}),
+      (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}));
+
+  // non-empty BST group 2
+  EXPECT_EQ(
+      (BinarySearchTree<ValueType>{'B', 'I', 'N', 'A', 'R', 'S', 'E', 'A', 'R',
+                                   'C', 'H', 'T', 'R', 'E', 'E', 'S'}),
+      (BinarySearchTree<ValueType>{'B', 'I', 'N', 'A', 'R', 'S', 'E', 'A', 'R',
+                                   'C', 'H', 'T', 'R', 'E', 'E', 'S'}));
+  EXPECT_EQ(
+      (BinarySearchTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}),
+      (BinarySearchTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}));
+
+  EXPECT_NE(
+      (BinarySearchTree<ValueType>{'B', 'I', 'N', 'A', 'R', 'S', 'E', 'A', 'R',
+                                   'C', 'H', 'T', 'R', 'E', 'E', 'S'}),
+      (BinarySearchTree<ValueType>{'D', 'E', 'A', 'D', 'B', 'E', 'E', 'F'}));
+
+  // non-empty BST group 3
+  EXPECT_EQ((BinarySearchTree<ValueType>{'S', 'T', 'E', 'V', 'E', 'N'}),
+            (BinarySearchTree<ValueType>{'S', 'T', 'E', 'V', 'E', 'N'}));
+
+  EXPECT_EQ((BinarySearchTree<ValueType>{'B', 'A', 'R', 'T', 'L', 'E', 'T'}),
+            (BinarySearchTree<ValueType>{'B', 'A', 'R', 'T', 'L', 'E', 'T'}));
+
+  EXPECT_NE((BinarySearchTree<ValueType>{'S', 'T', 'E', 'V', 'E', 'N'}),
+            (BinarySearchTree<ValueType>{'B', 'A', 'R', 'T', 'L', 'E', 'T'}));
+}
+
 TEST(TestingTraversals, TraversingPreOrderOfBinarySearchTree) {
   using ValueType = char;
 
