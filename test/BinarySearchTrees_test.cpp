@@ -64,6 +64,54 @@ TEST(TestingEqualityOperator, CompareSeveralBinarySearchTrees) {
             (BinarySearchTree<ValueType>{'B', 'A', 'R', 'T', 'L', 'E', 'T'}));
 }
 
+TEST(TestingInsertion, InsertNewValuesToBinarySearchTree) {
+  using ValueType = char;
+
+  //  start from empty tree
+  BinarySearchTree<ValueType> emptyTree{};
+
+  EXPECT_TRUE(emptyTree.insertNode('A'));
+  EXPECT_TRUE(emptyTree.insertNode('B'));
+  EXPECT_TRUE(emptyTree.insertNode('C'));
+
+  EXPECT_EQ(emptyTree, (BinarySearchTree<ValueType>{'A', 'B', 'C'}));
+
+  //  start from non-empty tree
+  BinarySearchTree<ValueType> nonEmptyTree{'A', 'B', 'C', 'D'};
+
+  EXPECT_TRUE(nonEmptyTree.insertNode('E'));
+  EXPECT_TRUE(nonEmptyTree.insertNode('F'));
+  EXPECT_TRUE(nonEmptyTree.insertNode('G'));
+  EXPECT_TRUE(nonEmptyTree.insertNode('H'));
+
+  EXPECT_EQ(nonEmptyTree, (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E',
+                                                       'F', 'G', 'H'}));
+}
+
+TEST(TestingInsertion, InsertDuplicateValuesToBinarySearchTree) {
+  using ValueType = char;
+
+  //  start from empty tree
+  BinarySearchTree<ValueType> emptyTree{};
+
+  EXPECT_TRUE(emptyTree.insertNode('A'));
+  EXPECT_FALSE(emptyTree.insertNode('A'));
+  EXPECT_FALSE(emptyTree.insertNode('A'));
+
+  EXPECT_EQ(emptyTree, (BinarySearchTree<ValueType>{'A'}));
+
+  //  start from non-empty tree
+  BinarySearchTree<ValueType> nonEmptyTree{'A', 'B', 'C', 'D'};
+
+  EXPECT_FALSE(nonEmptyTree.insertNode('C'));
+  EXPECT_FALSE(nonEmptyTree.insertNode('D'));
+  EXPECT_TRUE(nonEmptyTree.insertNode('E'));
+  EXPECT_TRUE(nonEmptyTree.insertNode('F'));
+
+  EXPECT_EQ(nonEmptyTree,
+            (BinarySearchTree<ValueType>{'A', 'B', 'C', 'D', 'E', 'F'}));
+}
+
 TEST(TestingTraversals, TraversingPreOrderOfBinarySearchTree) {
   using ValueType = char;
 
